@@ -29,3 +29,16 @@ export const getAllMovies = () => {
   const stmt = db.prepare("SELECT * FROM movies");
   return stmt.all();
 };
+
+export const deleteMovie = (movieId) => {
+  try {
+    const stmt = db.prepare("DELETE FROM movies WHERE movie_id = ?");
+    const info = stmt.run(movieId);
+    if (info.changes === 0) {
+      throw new Error("Filmen hittades inte");
+    }
+    return info;
+  } catch (error) {
+    throw error;
+  }
+};

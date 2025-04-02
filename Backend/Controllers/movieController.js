@@ -53,3 +53,20 @@ export const getAllMoviesHandler = (req, res) => {
     res.status(500).json({ error: "Något gick fel" });
   }
 };
+
+export const deleteMovieHandler = (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ error: "Filmens id saknas" });
+    }
+    const result = deleteMovie(id);
+    res.status(200).json({ message: "Film raderad", result });
+  } catch (error) {
+    console.error("Fel vid radering av film:", error);
+    if (error.message === "Filmen hittades inte") {
+      return res.status(404).json({ error: error.message });
+    }
+    res.status(500).json({ error: "Något gick fel vid radering av film" });
+  }
+};
