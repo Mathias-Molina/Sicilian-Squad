@@ -8,7 +8,6 @@ import { Navbar } from "./Navbar";
       <>
         <Navbar />
         <Outlet />
-        
       </>
     );
   }
