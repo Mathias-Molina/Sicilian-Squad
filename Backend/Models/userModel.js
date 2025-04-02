@@ -1,5 +1,11 @@
 import { db } from "../Config/database.js";
 
+export const checkIfUserExist = (username) => {
+  const stmt = db.prepare("SELECT * FROM users WHERE user_username = ? ");
+  const user = stmt.get(username);
+  return user || null;
+};
+
 export const createUser = (name, username, password) => {
   try {
     const stmt = db.prepare(

@@ -1,4 +1,4 @@
-import { getUser, createUser } from "../Models/userModel.js";
+import { getUser, createUser, checkIfUserExist } from "../Models/userModel.js";
 
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
@@ -15,7 +15,14 @@ function generateJWT(userId, username) {
 }
 
 export const registerUser = (req, res) => {
-  const { name, username, password } = req.body;
+  let { name, username, password } = req.body;
+  username = username.toLowerCase();
+  name = name.charAt(0).toUpperCase() + name.slice(1);
+
+  const userExist = checkIfUserExist(username);
+  if (userExist) {
+    return res.status(409).send("User already exists");
+  }
 
   if (!name || !username || !password) {
     return res.status(400).send("All fields required");
@@ -40,8 +47,9 @@ export const registerUser = (req, res) => {
   });
 };
 
-export const loginUser = (req, res) => {
-  const { username, password } = req.body;
+export const loginUser = async (req, res) => {
+  let { username, password } = req.body;
+  username = username.toLowerCase();
 
   if (!username || !password) {
     return res.status(400).send("All fields required");
@@ -50,7 +58,13 @@ export const loginUser = (req, res) => {
   try {
     const user = getUser(username);
 
-    if (user && password === user.user_password) {
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.user_password);
+
+    if (isMatch) {
       const token = generateJWT(user.user_id, user.user_username);
       res.json({ message: "Login succesful", token });
     } else {
