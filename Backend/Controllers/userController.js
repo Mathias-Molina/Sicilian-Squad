@@ -23,7 +23,7 @@ export const loginUser = (req, res) => {
   try {
     const user = getUser(username);
 
-    if (user && password === user.password) {
+    if (user && password === user.user_password) {
       const token = generateJWT(user.user_id, user.user_username);
       res.json({ message: "Login succesful", token });
     } else {
