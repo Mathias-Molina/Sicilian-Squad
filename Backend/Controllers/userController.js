@@ -17,7 +17,7 @@ function generateJWT(userId, username) {
 function loggedIn(res, user) {
   const token = generateJWT(user.user_id, user.user_username);
 
-  res.cookie("jwt", token, {
+  res.cookie("token", token, {
     httpOnly: true, // Prevents client-side access (XSS protection)
     secure: true, // Use HTTPS in production
     sameSite: "Strict",
@@ -84,4 +84,9 @@ export const loginUser = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const logoutUser = (req, res) => {
+  res.clearCookie("token");
+  res.send("Logged out succesfully");
 };
