@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+
 import { getMovieHandler } from "./controllers/movieController.js";
 import { movieRouter } from "./Routes/movieRoutes.js";
 import { userRouter } from "./Routes/userRoutes.js";
@@ -14,6 +16,7 @@ app.use(
   })
 );
 
+app.use(cookieParser());
 app.use(express.json());
 
 app.use("/movies", movieRouter);

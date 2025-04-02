@@ -14,7 +14,7 @@ function generateJWT(userId, username) {
   return token;
 }
 
-function loggedIn(res, user) {
+function createTokenCookie(res, user) {
   const token = generateJWT(user.user_id, user.user_username);
 
   res.cookie("token", token, {
@@ -49,7 +49,7 @@ export const registerUser = (req, res) => {
       const user = createUser(name, username, hash);
 
       if (user) {
-        loggedIn(res, user);
+        createTokenCookie(res, user);
         res.json({ message: "User Created" });
       }
     } catch (err) {
@@ -76,7 +76,7 @@ export const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.user_password);
 
     if (isMatch) {
-      loggedIn(res, user);
+      createTokenCookie(res, user);
       res.json({ message: "Login succesful" });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
