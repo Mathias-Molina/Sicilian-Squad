@@ -5,17 +5,18 @@ import bcrypt from "bcrypt";
 
 const SECRET_KEY = "secret_key";
 
-function generateJWT(userId, username) {
+function generateJWT(userId, username, isAdmin) {
   const payload = {
     id: userId,
     username: username,
+    isAdmin: isAdmin,
   };
-  const token = jwt.sign(payload, SECRET_KEY);
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "1h" });
   return token;
 }
 
 function createTokenCookie(res, user) {
-  const token = generateJWT(user.user_id, user.user_username);
+  const token = generateJWT(user.user_id, user.user_username, user.user_admin);
 
   res.cookie("token", token, {
     httpOnly: true, // Prevents client-side access (XSS protection)

@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 const SECRET_KEY = "secret_key";
 
 export const authMiddleware = (req, res, next) => {
-  console.log("Cookies:", req.cookies);
   const token = req.cookies.token;
 
   if (!token) {
