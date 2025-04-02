@@ -28,7 +28,9 @@ export const Hem = () => {
       <h1>Alla Filmer</h1>
       <div className="movie-cards-container">
         {movies.map(movie => (
-          <MovieCard key={movie.movie_id} movie={movie} />
+          <MovieCard key={movie.movie_id} movie={movie} 
+            movieTrailerId={movie.movieTrailerId} // Pass the movierTailerId to the MovieCard--Added by Maricel
+          />
         ))}
       </div>
     </div>
