@@ -23,8 +23,6 @@ function loggedIn(res, user) {
     sameSite: "Strict",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
-
-  res.json({ message: "Login succesful", token });
 }
 
 export const registerUser = (req, res) => {
@@ -52,6 +50,7 @@ export const registerUser = (req, res) => {
 
       if (user) {
         loggedIn(res, user);
+        res.json({ message: "User Created" });
       }
     } catch (err) {
       res.status(500).json({ message: "Internal server error" });
@@ -78,6 +77,7 @@ export const loginUser = async (req, res) => {
 
     if (isMatch) {
       loggedIn(res, user);
+      res.json({ message: "Login succesful" });
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
