@@ -14,6 +14,19 @@ function generateJWT(userId, username) {
   return token;
 }
 
+function loggedIn(res, user) {
+  const token = generateJWT(user.user_id, user.user_username);
+
+  res.cookie("jwt", token, {
+    httpOnly: true, // Prevents client-side access (XSS protection)
+    secure: true, // Use HTTPS in production
+    sameSite: "Strict",
+    maxAge: 60 * 60 * 1000, // 1 hour
+  });
+
+  res.json({ message: "Login succesful", token });
+}
+
 export const registerUser = (req, res) => {
   let { name, username, password } = req.body;
   username = username.toLowerCase();
@@ -38,8 +51,7 @@ export const registerUser = (req, res) => {
       const user = createUser(name, username, hash);
 
       if (user) {
-        const token = generateJWT(user.user_id, user.user_username);
-        res.json({ message: "User Created", token });
+        loggedIn(res, user);
       }
     } catch (err) {
       res.status(500).json({ message: "Internal server error" });
@@ -65,8 +77,7 @@ export const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.user_password);
 
     if (isMatch) {
-      const token = generateJWT(user.user_id, user.user_username);
-      res.json({ message: "Login succesful", token });
+      loggedIn(res, user);
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
