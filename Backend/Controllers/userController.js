@@ -20,11 +20,27 @@ function createTokenCookie(res, user) {
 
   res.cookie("token", token, {
     httpOnly: true, // Prevents client-side access (XSS protection)
-    secure: true, // Use HTTPS in production
+    secure: false, // Use HTTPS in production
     sameSite: "Strict",
     maxAge: 60 * 60 * 1000, // 1 hour
   });
 }
+
+export const whoAmI = (req, res) => {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "Not logged in" });
+  }
+
+  try {
+    const userInfo = jwt.verify(token, SECRET_KEY);
+    req.user = userInfo;
+    res.send(req.user);
+  } catch (err) {
+    res.status(403).json({ message: "Invalid or expired token." });
+  }
+};
 
 export const registerUser = (req, res) => {
   let { name, username, password } = req.body;
@@ -64,7 +80,7 @@ export const loginUser = async (req, res) => {
   username = username.toLowerCase();
 
   if (!username || !password) {
-    return res.status(400).send("All fields required");
+    return res.status(400).json({ message: "All fields required" });
   }
 
   try {
