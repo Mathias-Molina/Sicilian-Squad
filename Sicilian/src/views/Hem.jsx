@@ -52,7 +52,7 @@ export const Hem = () => {
   return (
     <div>
       <h1>Alla Filmer</h1>
-      {user && user.role === 'admin' && (
+      {user && user.isAdmin && (
         <button onClick={handleAddMovie} className='admin-add-button'>
           Lägg till film
         </button>
@@ -61,7 +61,7 @@ export const Hem = () => {
         {movies.map(movie => (
           <div key={movie.movie_id} className='movie-card-wrapper'>
             <MovieCard movie={movie} />
-            {user && user.role === 'admin' && (
+            {user && user.isAdmin && (
               <button
                 className='delete-button'
                 onClick={() => handleDelete(movie.movie_id)}
