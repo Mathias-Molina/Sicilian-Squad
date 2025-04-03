@@ -13,7 +13,7 @@ export const Hem = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate("/login");
+      navigate("/logga-in");
       return;
     }
     getMovies()
