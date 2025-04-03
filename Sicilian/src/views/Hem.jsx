@@ -1,12 +1,11 @@
-// Hem.js
-import React, { useState, useEffect } from "react";
-import { getMovies } from "../api/apiMovies";
-import { MovieCard } from "../components/MovieCards";
+import React, { useState, useEffect } from 'react';
+import { getMovies } from '../api/apiMovies';
+import { MovieCard } from '../components/MovieCards';
 
 export const Hem = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     getMovies()
@@ -15,7 +14,7 @@ export const Hem = () => {
         setLoading(false);
       })
       .catch(err => {
-        setError(err.message || "Något gick fel");
+        setError(err.message || 'Något gick fel');
         setLoading(false);
       });
   }, []);
@@ -26,7 +25,7 @@ export const Hem = () => {
   return (
     <div>
       <h1>Alla Filmer</h1>
-      <div className="movie-cards-container">
+      <div className='movie-cards-container'>
         {movies.map(movie => (
           <MovieCard key={movie.movie_id} movie={movie} />
         ))}

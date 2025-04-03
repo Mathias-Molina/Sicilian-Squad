@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export const MovieCard = ({ movie }) => {
+export const MovieCard = ({ movie, movieTrailerId }) => { // Pass the movieTrailerId as a prop--Maricel
   return (
     <Link to={`/movies/${movie.movie_id}`} className="movie-card__link">
       <div className="movie-card">
@@ -17,6 +17,21 @@ export const MovieCard = ({ movie }) => {
           <p className="movie-card__rating">Betyg: {movie.movie_rated}</p>
           <p className="movie-card__runtime">Speltid: {movie.movie_runtime}</p>
           <p className="movie-card__releaseDate">Released: {movie.movie_releaseDate}</p>
+
+          {movieTrailerId && ( // Check if movieTailerId is available, Added by Maricel, 
+            <div style={{ textAlign: "center", marginTop: "20px", marginBottom: "3git chec0px" }}> 
+              <iframe
+                width="560"
+                height="315"
+                src={`https://www.youtube.com/embed/${movieTrailerId}`}
+                title={`${movie.movie_title} Trailer`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+          )}
+
         </div>
       </div>
     </Link>

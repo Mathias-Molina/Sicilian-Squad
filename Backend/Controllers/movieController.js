@@ -1,5 +1,11 @@
 import fetch from "node-fetch";
-import { insertMovie, getAllMovies } from "../Models/movieModel.js";
+
+import {
+  insertMovie,
+  getAllMovies,
+  getMovieById,
+  deleteMovie,
+} from "../Models/movieModel.js";
 
 export const getMovieHandler = async (req, res) => {
   const { movieName } = req.params;
@@ -54,13 +60,30 @@ export const getAllMoviesHandler = (req, res) => {
   }
 };
 
-export const deleteMovieHandler = (req, res) => {
+export const getMovieByIdHandler = (req, res) => {
   try {
-    const { id } = req.params;
-    if (!id) {
+    const { movieId } = req.params;
+    if (!movieId) {
       return res.status(400).json({ error: "Filmens id saknas" });
     }
-    const result = deleteMovie(id);
+    const movie = getMovieById(movieId);
+    if (!movie) {
+      return res.status(404).json({ error: "Filmen hittades inte" });
+    }
+    res.json(movie);
+  } catch (error) {
+    console.error("Fel vid hämtning av film:", error);
+    res.status(500).json({ error: "Något gick fel" });
+  }
+};
+
+export const deleteMovieHandler = (req, res) => {
+  try {
+    const { movieId } = req.params;
+    if (!movieId) {
+      return res.status(400).json({ error: "Filmens id saknas" });
+    }
+    const result = deleteMovie(movieId);
     res.status(200).json({ message: "Film raderad", result });
   } catch (error) {
     console.error("Fel vid radering av film:", error);

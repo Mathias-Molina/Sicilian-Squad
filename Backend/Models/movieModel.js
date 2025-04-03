@@ -30,6 +30,11 @@ export const getAllMovies = () => {
   return stmt.all();
 };
 
+export const getMovieById = (movieId) => {
+  const stmt = db.prepare("SELECT * FROM movies WHERE movie_id = ?");
+  return stmt.get(movieId);
+}
+
 export const deleteMovie = (movieId) => {
   try {
     const stmt = db.prepare("DELETE FROM movies WHERE movie_id = ?");

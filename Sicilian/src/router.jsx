@@ -7,7 +7,6 @@ import { App } from "./components/App";
 import { Hem } from "./views/Hem";
 import { MinaBokningar } from "./views/MinaBokningar";
 import { LoggaIn } from "./views/LoggaIn";
-import { MovieDetailsView } from "./views/MovieDetailsView";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,7 +22,6 @@ export const router = createBrowserRouter(
       <Route path="/home" element={<Hem />} />
       <Route path="/min-sida" element={<MinaBokningar />} />
       <Route path="/logga-in" element={<LoggaIn />} />
-      <Route path="/movies/:id" component={<MovieDetailsView />} />
     </Route>
   )
 );
