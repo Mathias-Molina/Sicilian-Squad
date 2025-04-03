@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getMovies } from '../api/apiMovies';
+import { getMovies, deleteMovie } from '../api/apiMovies';
 import { MovieCard } from '../components/MovieCards';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
@@ -12,9 +12,11 @@ export const Hem = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
-  const isAdmin = user?.isLoggedIn && user?.role === 'admin'; //denna rad kan behöva kontrolleras utifrån vår usercontext
-
   useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
     getMovies()
       .then(data => {
         setMovies(data);
@@ -24,14 +26,24 @@ export const Hem = () => {
         setError(err.message || 'Något gick fel');
         setLoading(false);
       });
-  }, []);
+  }, [user]);
 
-  const handleDelete = movieId => {
-    deleteMovie(movieId); //Här kan vi behöva kolla upp API-metoden/koden om det behöver läggas tll mer
+  const handleDelete = async movieId => {
+    if (user?.role !== 'admin') {
+      setError('Du måste vara admin för att kunna radera filmer');
+      return;
+    }
+    try {
+      await deleteMovie(movieId);
+      // You might want to refresh the movies list after deletion
+      getMovies().then(data => setMovies(data));
+    } catch (err) {
+      setError(err.message || 'Något gick fel');
+    }
   };
 
   const handleAddMovie = () => {
-    navigate('/addmovie'); //Vad är URL för att addera?
+    navigate('/addmovie'); //Vad är API för att addera?
   };
 
   if (loading) return <div>Laddar filmer...</div>;
@@ -40,18 +52,16 @@ export const Hem = () => {
   return (
     <div>
       <h1>Alla Filmer</h1>
-
-      {isAdmin && (
+      {user && user.role === 'admin' && (
         <button onClick={handleAddMovie} className='admin-add-button'>
           Lägg till film
         </button>
       )}
-
       <div className='movie-cards-container'>
         {movies.map(movie => (
           <div key={movie.movie_id} className='movie-card-wrapper'>
             <MovieCard movie={movie} />
-            {isAdmin && (
+            {user && user.role === 'admin' && (
               <button
                 className='delete-button'
                 onClick={() => handleDelete(movie.movie_id)}

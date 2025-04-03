@@ -5,7 +5,7 @@ const UserContext = createContext();
 export { UserContext };
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     const checkUser = async () => {
