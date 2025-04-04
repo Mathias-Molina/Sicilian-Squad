@@ -20,6 +20,7 @@ export const MovieDetailsView = () => {
   if (error) return <div>Fel: {error.message || "Något gick fel"}</div>;
   if (!movie) return <div>Laddar...</div>;
 
+
   const videoId = movie.movie_trailer; //  Fetching from database --Maricel--
 
   return (
