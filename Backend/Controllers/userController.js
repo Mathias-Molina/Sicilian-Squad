@@ -16,7 +16,11 @@ function generateJWT(userId, username, isAdmin) {
 }
 
 function createTokenCookie(res, user) {
-  const token = generateJWT(user.user_id, user.user_username, user.user_admin);
+  const token = generateJWT(
+    user.user_id,
+    user.user_username,
+    user.user_isAdmin
+  );
 
   res.cookie('token', token, {
     httpOnly: true, // Prevents client-side access (XSS protection)
@@ -68,6 +72,8 @@ export const registerUser = (req, res) => {
       if (user) {
         createTokenCookie(res, user);
         res.json({ message: 'User Created' });
+
+        req.user = user;
       }
     } catch (err) {
       res.status(500).json({ message: 'Internal server error' });
@@ -97,8 +103,9 @@ export const loginUser = async (req, res) => {
       res.json({
         message: 'Login succesful',
         username: user.user_username,
-        isAdmin: user.user_admin,
+        isAdmin: user.user_isAdmin,
       });
+      req.user = user;
     } else {
       res.status(401).json({ message: 'Invalid credentials' });
     }
