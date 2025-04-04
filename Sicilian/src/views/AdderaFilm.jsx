@@ -1,7 +1,7 @@
 export const AdderaFilm = () => {
-    return (
-        <section>
-            <h1>Addera film</h1>
-        </section>
-    );
-}
+  return (
+    <section>
+      <h1>Lägg till film</h1>
+    </section>
+  );
+};

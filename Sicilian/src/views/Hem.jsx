@@ -12,10 +12,6 @@ export const Hem = () => {
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/logga-in");
-      return;
-    }
     getMovies()
       .then(data => {
         setMovies(data);
@@ -25,7 +21,7 @@ export const Hem = () => {
         setError(err.message || "Något gick fel");
         setLoading(false);
       });
-  }, [user]);
+  }, []);
 
   const handleDelete = async movieId => {
     if (!user?.isAdmin) {
@@ -34,7 +30,6 @@ export const Hem = () => {
     }
     try {
       await deleteMovie(movieId);
-      // You might want to refresh the movies list after deletion
       getMovies().then(data => setMovies(data));
     } catch (err) {
       setError(err.message || "Något gick fel");
@@ -42,7 +37,7 @@ export const Hem = () => {
   };
 
   const handleAddMovie = () => {
-    navigate("/addmovie"); //Vad är API för att addera?
+    navigate("/addmovie"); 
   };
 
   if (loading) return <div>Laddar filmer...</div>;
@@ -51,7 +46,7 @@ export const Hem = () => {
   return (
     <div>
       <h1>Alla Filmer</h1>
-      {user && user.isAdmin && (
+      {user && user.isAdmin ===1 && (
         <button onClick={handleAddMovie} className="admin-add-button">
           Lägg till film
         </button>
@@ -60,7 +55,7 @@ export const Hem = () => {
         {movies.map(movie => (
           <div key={movie.movie_id} className="movie-card-wrapper">
             <MovieCard movie={movie} />
-            {user && user.isAdmin && (
+            {user && user.isAdmin ===1 && (
               <button
                 className="delete-button"
                 onClick={() => handleDelete(movie.movie_id)}

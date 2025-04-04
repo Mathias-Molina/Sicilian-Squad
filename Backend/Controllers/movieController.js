@@ -77,6 +77,40 @@ export const getMovieByIdHandler = (req, res) => {
   }
 };
 
+export const addMovieHandler = async (req, res) => {
+  const {
+    title,
+    description,
+    genre,
+    rated,
+    poster,
+    trailer,
+    runtime,
+    releaseDate,
+  } = req.body;
+
+  if (!title || !description) {
+    return res.status(400).json({ error: "Titel och beskrivning är obligatoriska" });
+  }
+
+  try {
+    const info = insertMovie(
+      title,
+      description,
+      genre,
+      rated,
+      poster,
+      trailer,
+      runtime,
+      releaseDate
+    );
+    res.json({ message: "Filmen har lagts till", id: info.lastInsertRowid });
+  } catch (error) {
+    console.error("Fel vid insättning av film:", error);
+    res.status(500).json({ error: "Något gick fel vid insättning" });
+  }
+};
+
 export const deleteMovieHandler = (req, res) => {
   try {
     const { movieId } = req.params;
