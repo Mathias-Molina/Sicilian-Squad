@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import logo from "../assets/The-Sicilian-Squad.jpg";
 
 export const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
@@ -23,27 +24,41 @@ export const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <section className="navbar-links">
-        <ul className="navbar-list">
-          <li className="navbar-item">
-            <NavLink to="/home">Hem</NavLink>
-          </li>
-          <li className="navbar-item">
-            <NavLink to="/min-sida">Mina bokningar</NavLink>
-          </li>
-          {user ? (
-            <>
+      <div className="navbar-content">
+        {/* Left section */}
+        <div className="nav-left">
+          <ul className="navbar-list">
+            <li className="navbar-item">
+              <NavLink to="/home">Hem</NavLink>
+            </li>
+            <li className="navbar-item">
+              <NavLink to="/min-sida">Mina bokningar</NavLink>
+            </li>
+          </ul>
+        </div>
+
+        {/* Center section - Logo */}
+        <div className="nav-center">
+          <NavLink to="/home">
+            <img src={logo} alt="The Sicilian Squad" className="nav-logo" />
+          </NavLink>
+        </div>
+
+        {/* Right section */}
+        <div className="nav-right">
+          <ul className="navbar-list">
+            {user ? (
               <li className="navbar-item">
                 <button onClick={handleLogout}>Logga ut</button>
               </li>
-            </>
-          ) : (
-            <li className="navbar-item">
-              <NavLink to="/logga-in">Logga in</NavLink>
-            </li>
-          )}
-        </ul>
-      </section>
+            ) : (
+              <li className="navbar-item">
+                <NavLink to="/logga-in">Logga in</NavLink>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
     </nav>
   );
 };
