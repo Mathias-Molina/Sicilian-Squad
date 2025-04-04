@@ -6,6 +6,8 @@ import cookieParser from "cookie-parser";
 import { getMovieHandler } from "./controllers/movieController.js";
 import { movieRouter } from "./Routes/movieRoutes.js";
 import { userRouter } from "./Routes/userRoutes.js";
+import { screeningRouter } from "./Routes/screeningRoutes.js";
+import { salonRouter } from "./Routes/salonRoutes.js";
 
 dotenv.config();
 
@@ -25,6 +27,10 @@ app.use("/movies", movieRouter);
 app.get("/add/:movieName", getMovieHandler);
 
 app.use("/user", userRouter);
+
+app.use("/screenings", screeningRouter);
+
+app.use("/salons", salonRouter);
 
 app.listen(3000, () => {
   console.log("Servern lyssnar på port 3000");
