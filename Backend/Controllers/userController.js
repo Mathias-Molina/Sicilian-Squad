@@ -72,6 +72,7 @@ export const registerUser = (req, res) => {
       if (user) {
         createTokenCookie(res, user);
         res.json({ message: "User Created" });
+        req.user = user;
       }
     } catch (err) {
       res.status(500).json({ message: "Internal server error" });
@@ -103,6 +104,7 @@ export const loginUser = async (req, res) => {
         username: user.user_username,
         isAdmin: user.user_isAdmin,
       });
+      req.user = user;
     } else {
       res.status(401).json({ message: "Invalid credentials" });
     }
