@@ -43,7 +43,7 @@ export const getMovieHandler = async (req, res) => {
       releaseDate
     );
 
-    res.json({ message: "Filmen har lagts till", id: info.lastInsertRowid });
+    res.json({ message: "Filmen har lagts till", title: title, id: info.lastInsertRowid });
   } catch (error) {
     console.error("Fel vid hämtning eller insättning:", error);
     res.status(500).json({ error: "Något gick fel" });
@@ -74,6 +74,40 @@ export const getMovieByIdHandler = (req, res) => {
   } catch (error) {
     console.error("Fel vid hämtning av film:", error);
     res.status(500).json({ error: "Något gick fel" });
+  }
+};
+
+export const addMovieHandler = async (req, res) => {
+  const {
+    title,
+    description,
+    genre,
+    rated,
+    poster,
+    trailer,
+    runtime,
+    releaseDate,
+  } = req.body;
+
+  if (!title || !description) {
+    return res.status(400).json({ error: "Titel och beskrivning är obligatoriska" });
+  }
+
+  try {
+    const info = insertMovie(
+      title,
+      description,
+      genre,
+      rated,
+      poster,
+      trailer,
+      runtime,
+      releaseDate
+    );
+    res.json({ message: "Filmen har lagts till", id: info.lastInsertRowid });
+  } catch (error) {
+    console.error("Fel vid insättning av film:", error);
+    res.status(500).json({ error: "Något gick fel vid insättning" });
   }
 };
 

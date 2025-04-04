@@ -8,6 +8,7 @@ export const getMovieById = (
   errorMessage = "Fel vid hämtning av film"
 ) => apiRequest(`http://localhost:3000/movies/${movieId}`, {}, errorMessage);
 
+
 export const deleteMovie = (
   movieId,
   errorMessage = "Fel vid radering av film"
