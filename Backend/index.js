@@ -10,6 +10,7 @@ import { screeningRouter } from "./Routes/screeningRoutes.js";
 import { salonRouter } from "./Routes/salonRoutes.js";
 
 
+
 dotenv.config();
 
 const app = express();
@@ -24,6 +25,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/movies", movieRouter);
+
 
 app.get("/add/:movieName", getMovieHandler);
 
