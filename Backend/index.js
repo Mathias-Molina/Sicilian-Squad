@@ -9,6 +9,7 @@ import { userRouter } from "./Routes/userRoutes.js";
 import { screeningRouter } from "./Routes/screeningRoutes.js";
 import { salonRouter } from "./Routes/salonRoutes.js";
 
+
 dotenv.config();
 
 const app = express();
