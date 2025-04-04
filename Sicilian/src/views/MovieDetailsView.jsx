@@ -20,6 +20,9 @@ export const MovieDetailsView = () => {
   if (error) return <div>Fel: {error.message || "Något gick fel"}</div>;
   if (!movie) return <div>Laddar...</div>;
 
+
+  const videoId = movie.movie_trailer; //  Fetching from database --Maricel--
+
   return (
     <section>
       <h1>{movie.movie_title}</h1>
@@ -41,6 +44,23 @@ export const MovieDetailsView = () => {
       <p>
         <strong>Released:</strong> {movie.movie_releaseDate}
       </p>
+
+      {/* 🎬 Trailer section */}             //---Maricel--
+      {videoId && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Trailer:</h3>
+          <iframe
+            width="560"
+            height="315"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title="YouTube trailer"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
+      )}
+
       <Link to="/boka">
         <button>Boka film</button>
       </Link>
