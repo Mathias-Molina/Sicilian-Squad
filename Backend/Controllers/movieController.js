@@ -43,7 +43,7 @@ export const getMovieHandler = async (req, res) => {
       releaseDate
     );
 
-    res.json({ message: "Filmen har lagts till", id: info.lastInsertRowid });
+    res.json({ message: "Filmen har lagts till", title: title, id: info.lastInsertRowid });
   } catch (error) {
     console.error("Fel vid hämtning eller insättning:", error);
     res.status(500).json({ error: "Något gick fel" });
