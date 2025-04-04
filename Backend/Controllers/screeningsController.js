@@ -1,4 +1,8 @@
-import { addScreenings } from "../Models/screeningModel.js";
+import {
+  addScreenings,
+  getAllScreenings,
+  getScreeningById,
+} from "../Models/screeningModel.js";
 
 export const addScreeningsHandler = (req, res) => {
   const { movie_id, salon_id, screening_time } = req.body;
@@ -16,4 +20,8 @@ export const addScreeningsHandler = (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const getAllScreeningsHandler = (req, res) => {
+  const screenings = getAllScreenings;
 };
