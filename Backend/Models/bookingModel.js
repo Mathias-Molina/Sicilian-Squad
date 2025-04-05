@@ -1,8 +1,11 @@
-bookingModels.js
-
 import { db } from "../Config/database.js";
 
-export const createBooking = (booking_number, booking_price, user_id, screening_id) => {
+export const createBooking = (
+  booking_number,
+  booking_price,
+  user_id,
+  screening_id
+) => {
   const stmt = db.prepare(`
     INSERT INTO bookings (booking_number, booking_price, user_id, screening_id)
     VALUES (?,?,?,?)
@@ -10,10 +13,51 @@ export const createBooking = (booking_number, booking_price, user_id, screening_
   return stmt.run(booking_number, booking_price, user_id, screening_id);
 };
 
-export const createBookingSeat = (booking_id, seat_id, bookingSeat_price, ticketType) => {
+export const createBookingSeat = (
+  booking_id,
+  seat_id,
+  bookingSeat_price,
+  ticketType
+) => {
   const stmt = db.prepare(`
     INSERT INTO bookingSeats (booking_id, seat_id, bookingSeat_price, bockingSeat_ticketType)
     VALUES (?,?,?,?)
   `);
   return stmt.run(booking_id, seat_id, bookingSeat_price, ticketType);
+};
+
+export const getBookingById = booking_id => {
+  const stmt = db.prepare("SELECT * FROM bookings WHERE booking_id = ?");
+  return stmt.get(booking_id);
+};
+
+export const getBookingSeats = booking_id => {
+  const stmt = db.prepare("SELECT * FROM bookingSeats WHERE booking_id = ?");
+  return stmt.all(booking_id);
+};
+
+export const getAllSeatsForSalon = salon_id => {
+  const stmt = db.prepare("SELECT * FROM seats WHERE salon_id = ?");
+  return stmt.all(salon_id);
+};
+
+export const getBookedSeatIdsForScreening = screening_id => {
+  const stmt = db.prepare(`
+      SELECT bs.seat_id 
+      FROM bookingSeats bs
+      JOIN bookings b ON bs.booking_id = b.booking_id
+      WHERE b.screening_id = ?
+    `);
+  const rows = stmt.all(screening_id);
+  return rows.map(row => row.seat_id);
+};
+
+export const getBookingsByUserId = user_id => {
+  const stmt = db.prepare("SELECT * FROM bookings WHERE user_id = ?");
+  return stmt.all(user_id);
+};
+
+export const getAllBookings = () => {
+  const stmt = db.prepare("SELECT * FROM bookings");
+  return stmt.all();
 };
