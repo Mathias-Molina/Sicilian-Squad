@@ -23,5 +23,11 @@ export const addScreeningsHandler = (req, res) => {
 };
 
 export const getAllScreeningsHandler = (req, res) => {
-  const screenings = getAllScreenings;
+  try {
+    const screenings = getAllScreenings();
+    res.json(screenings);
+  } catch (error) {
+    console.error("Error retrieving screenings:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
