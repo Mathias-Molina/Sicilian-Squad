@@ -6,8 +6,8 @@ import {
   getUserBookingsHandler,
   getAllBookingsHandler,
 } from "../Controllers/bookingController.js";
-import { authMiddleware } from "../Middleware/auth.js";
-import { isAdmin } from "../Middleware/isAdmin.js";
+import authMiddleware from "../Middleware/auth.js";
+import isAdmin from "../Middleware/isAdmin.js";
 
 export const bookingRouter = express.Router();
 

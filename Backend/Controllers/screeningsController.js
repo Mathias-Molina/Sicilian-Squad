@@ -1,7 +1,7 @@
 import {
   addScreenings,
   getAllScreenings,
-  getScreeningById,
+  getScreeningsByMovieId,
 } from "../Models/screeningModel.js";
 
 export const addScreeningsHandler = (req, res) => {
@@ -25,22 +25,22 @@ export const addScreeningsHandler = (req, res) => {
 export const getAllScreeningsHandler = (req, res) => {
   try {
     const screenings = getAllScreenings();
- feature/bokningssida
+
+    if (!screenings) {
+      res.status(404).json({ message: "No screenings found" });
+    }
+
     res.json(screenings);
-  } catch (error) {
-    console.error("Error retrieving screenings:", error);
-=======
-    res.send(screenings);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getScreeningByIdHandler = (req, res) => {
-  const { id } = req.params;
+export const getScreeningsByMovieIdHandler = (req, res) => {
+  const { movie_id } = req.params;
 
   try {
-    const screening = getScreeningById(id);
+    const screening = getScreeningsByMovieId(Number(movie_id));
 
     if (screening) {
       res.send(screening);
@@ -48,7 +48,6 @@ export const getScreeningByIdHandler = (req, res) => {
       res.status(404).json({ message: "No screening found" });
     }
   } catch (error) {
-> main
     res.status(500).json({ message: "Internal server error" });
   }
 };
