@@ -12,6 +12,7 @@ import { AdderaFilm } from "./views/AdderaFilm";
 import { SelectScreeningView } from "./views/SelectScreeningView";
 import { SelectSeatsView } from "./views/SelectSeatsView";
 import { ProtectedAdminRoutes } from "./ProtectedAdminRoutes";
+import { AddScreening } from "./views/AddScreening";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -35,6 +36,7 @@ export const router = createBrowserRouter(
       />
       <Route element={<ProtectedAdminRoutes />}>
         <Route path="/addmovie" element={<AdderaFilm />} />
+        <Route path="/screening/add" element={<AddScreening />} />
       </Route>
     </Route>
   )

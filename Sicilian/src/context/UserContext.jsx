@@ -4,6 +4,7 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -16,9 +17,11 @@ export const UserProvider = ({ children }) => {
         const data = await response.json();
         if (response.ok) {
           setUser(data);
+          setIsLoading(false);
         }
       } catch (error) {
         console.error("Error checking auth:", error);
+        setIsLoading(false);
       }
     };
 
@@ -26,7 +29,7 @@ export const UserProvider = ({ children }) => {
   }, []);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, isLoading }}>
       {children}
     </UserContext.Provider>
   );
