@@ -43,13 +43,13 @@ export const MovieDetailsView = () => {
       <p>
         <strong>Released:</strong> {movie.movie_releaseDate}
       </p>
-      {/* 🎬 Trailer section */} //---Maricel--
+      {/* 🎬 Trailer section --Maricel*/} 
       {videoId && (
         <div style={{ marginTop: "20px" }}>
           <h3>Trailer:</h3>
           <iframe
-            width="560"
-            height="315"
+            width="400"
+            height="240"
             src={`https://www.youtube.com/embed/${videoId}`}
             title="YouTube trailer"
             frameBorder="0"
