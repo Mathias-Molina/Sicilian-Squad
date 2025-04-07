@@ -25,6 +25,11 @@ export const addScreeningsHandler = (req, res) => {
 export const getAllScreeningsHandler = (req, res) => {
   try {
     const screenings = getAllScreenings();
+ feature/bokningssida
+    res.json(screenings);
+  } catch (error) {
+    console.error("Error retrieving screenings:", error);
+=======
     res.send(screenings);
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -43,6 +48,7 @@ export const getScreeningByIdHandler = (req, res) => {
       res.status(404).json({ message: "No screening found" });
     }
   } catch (error) {
+> main
     res.status(500).json({ message: "Internal server error" });
   }
 };
