@@ -9,17 +9,16 @@ export const MovieDetailsView = () => {
 
   useEffect(() => {
     getMovieById(movieId)
-      .then(data => {
+      .then((data) => {
         setMovie(data);
       })
-      .catch(err => {
+      .catch((err) => {
         setError(err);
       });
   }, [movieId]);
 
   if (error) return <div>Fel: {error.message || "Något gick fel"}</div>;
   if (!movie) return <div>Laddar...</div>;
-
 
   const videoId = movie.movie_trailer; //  Fetching from database --Maricel--
 
@@ -44,8 +43,7 @@ export const MovieDetailsView = () => {
       <p>
         <strong>Released:</strong> {movie.movie_releaseDate}
       </p>
-
-      {/* 🎬 Trailer section */}             //---Maricel--
+      {/* 🎬 Trailer section */} //---Maricel--
       {videoId && (
         <div style={{ marginTop: "20px" }}>
           <h3>Trailer:</h3>
@@ -60,8 +58,7 @@ export const MovieDetailsView = () => {
           ></iframe>
         </div>
       )}
-
-      <Link to="/boka">
+      <Link to={`/boka/${movie.movie_id}`}>
         <button>Boka film</button>
       </Link>
     </section>
