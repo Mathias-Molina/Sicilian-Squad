@@ -52,9 +52,9 @@ export const getBookedSeatIdsForScreening = screening_id => {
   return rows.map(row => row.seat_id);
 };
 
-export const getBookingsByUserId = user_id => {
+export const getBookingsByUserId = userId => {
   const stmt = db.prepare("SELECT * FROM bookings WHERE user_id = ?");
-  return stmt.all(user_id);
+  return stmt.all(userId);
 };
 
 export const getAllBookings = () => {

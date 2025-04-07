@@ -47,9 +47,17 @@ export const Hem = () => {
     <div>
       <h1>Alla Filmer</h1>
       {user && user.user_admin === 1 && (
-        <button onClick={handleAddMovie} className="admin-add-button">
-          Lägg till film
-        </button>
+        <div>
+          <button onClick={handleAddMovie} className="admin-add-button">
+            Lägg till film
+          </button>
+          <button
+            onClick={() => navigate("/screening/add")}
+            className="admin-add-button"
+          >
+            Lägg till visning
+          </button>
+        </div>
       )}
       <div className="movie-cards-container">
         {movies.map((movie) => (
