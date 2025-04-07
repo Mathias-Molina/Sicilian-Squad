@@ -1,7 +1,7 @@
 import {
   addScreenings,
   getAllScreenings,
-  getScreeningById,
+  getScreeningsByMovieId,
 } from "../Models/screeningModel.js";
 
 export const addScreeningsHandler = (req, res) => {
@@ -31,11 +31,11 @@ export const getAllScreeningsHandler = (req, res) => {
   }
 };
 
-export const getScreeningByIdHandler = (req, res) => {
-  const { id } = req.params;
+export const getScreeningsByMovieIdHandler = (req, res) => {
+  const { movie_id } = req.params;
 
   try {
-    const screening = getScreeningById(id);
+    const screening = getScreeningsByMovieId(Number(movie_id));
 
     if (screening) {
       res.send(screening);

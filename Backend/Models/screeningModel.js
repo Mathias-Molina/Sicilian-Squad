@@ -25,11 +25,11 @@ export const getAllScreenings = () => {
   }
 };
 
-export const getScreeningById = (screening_id) => {
+export const getScreeningsByMovieId = (movie_id) => {
   try {
-    const stmt = db.prepare("SELECT * FROM screenings WHERE screening_id = ?");
-    const screening = stmt.get(screening_id);
-    return screening || null;
+    const stmt = db.prepare("SELECT * FROM screenings WHERE movie_id = ?");
+    const screening = stmt.all(movie_id);
+    return screening;
   } catch (error) {
     console.error("Databse query error:", error);
     throw new Error("No screening found");
