@@ -1,7 +1,4 @@
 import express from "express";
- feature/bokningssida
-import { addScreeningsHandler, getAllScreeningsHandler } from "../Controllers/screeningsController.js";
-=======
 import {
   addScreeningsHandler,
   getAllScreeningsHandler,
@@ -9,7 +6,6 @@ import {
 } from "../Controllers/screeningsController.js";
 import isAdmin from "../Middleware/isAdmin.js";
 import authMiddleware from "../Middleware/auth.js";
- main
 
 export const screeningRouter = express.Router();
 
