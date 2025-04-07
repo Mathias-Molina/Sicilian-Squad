@@ -27,7 +27,11 @@ export const getAllScreenings = () => {
 
 export const getScreeningsByMovieId = (movie_id) => {
   try {
-    const stmt = db.prepare("SELECT * FROM screenings WHERE movie_id = ?");
+    const stmt = db.prepare(`SELECT *
+FROM screenings AS S
+INNER JOIN movies AS M ON S.movie_id = M.movie_id
+INNER JOIN salons AS SA ON S.salon_id = SA.salon_id
+WHERE M.movie_id = ?`);
     const screening = stmt.all(movie_id);
     return screening;
   } catch (error) {

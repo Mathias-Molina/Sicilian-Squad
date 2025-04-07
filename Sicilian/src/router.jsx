@@ -8,7 +8,6 @@ import { Hem } from "./views/Hem";
 import { MinaBokningar } from "./views/MinaBokningar";
 import { LoggaIn } from "./views/LoggaIn";
 import { MovieDetailsView } from "./views/MovieDetailsView";
-import { BokningsView } from "./views/BokningsView";
 import { AdderaFilm } from "./views/AdderaFilm";
 import { SelectScreeningView } from "./views/SelectScreeningView";
 import { SelectSeatsView } from "./views/SelectSeatsView";
@@ -28,9 +27,8 @@ export const router = createBrowserRouter(
       <Route path="/min-sida" element={<MinaBokningar />} />
       <Route path="/logga-in" element={<LoggaIn />} />
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
-      <Route path="/boka" element={<BokningsView />} />
+      <Route path="/boka/:movieId" element={<SelectScreeningView />} />
       <Route path="/addmovie" element={<AdderaFilm />} />
-      <Route path="/boka/salongs/:salonId" element={<SelectScreeningView />} />
       <Route
         path="/boka/screening/:screeningId"
         element={<SelectSeatsView />}
