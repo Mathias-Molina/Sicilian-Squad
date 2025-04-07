@@ -9,13 +9,8 @@ import authMiddleware from "../Middleware/auth.js";
 
 export const screeningRouter = express.Router();
 
-screeningRouter.get("/", authMiddleware, isAdmin, getAllScreeningsHandler);
-screeningRouter.get(
-  "/:movie_id",
-  authMiddleware,
-  isAdmin,
-  getScreeningsByMovieIdHandler
-);
-screeningRouter.post("/add", addScreeningsHandler);
+screeningRouter.get("/", getAllScreeningsHandler);
+screeningRouter.get("/:movie_id", getScreeningsByMovieIdHandler);
+screeningRouter.post("/add", authMiddleware, isAdmin, addScreeningsHandler);
 
 screeningRouter.get("/", getAllScreeningsHandler);
