@@ -11,6 +11,7 @@ import { MovieDetailsView } from "./views/MovieDetailsView";
 import { AdderaFilm } from "./views/AdderaFilm";
 import { SelectScreeningView } from "./views/SelectScreeningView";
 import { SelectSeatsView } from "./views/SelectSeatsView";
+import { ProtectedAdminRoutes } from "./ProtectedAdminRoutes";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,11 +29,13 @@ export const router = createBrowserRouter(
       <Route path="/logga-in" element={<LoggaIn />} />
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
       <Route path="/boka/:movieId" element={<SelectScreeningView />} />
-      <Route path="/addmovie" element={<AdderaFilm />} />
       <Route
         path="/boka/screening/:screeningId"
         element={<SelectSeatsView />}
       />
+      <Route element={<ProtectedAdminRoutes />}>
+        <Route path="/addmovie" element={<AdderaFilm />} />
+      </Route>
     </Route>
   )
 );
