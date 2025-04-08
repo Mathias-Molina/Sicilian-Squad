@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from 'react';
 
 export const UserContext = createContext();
 
@@ -9,18 +9,18 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await fetch("http://localhost:3000/user/whoami", {
-          method: "GET",
-          credentials: "include",
+        const response = await fetch('http://localhost:3000/user/whoami', {
+          method: 'GET',
+          credentials: 'include',
         });
 
         const data = await response.json();
         if (response.ok) {
-          setUser(data);
+          setUser({ ...data, user_id: data.id });
           setIsLoading(false);
         }
       } catch (error) {
-        console.error("Error checking auth:", error);
+        console.error('Error checking auth:', error);
         setIsLoading(false);
       }
     };
