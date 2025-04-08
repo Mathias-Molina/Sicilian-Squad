@@ -2,14 +2,15 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { getBookingsByUserId } from '../api/apiBookings';
 import { Link } from 'react-router-dom';
+import { BookingCards } from '../components/BookingCards';
 
 export const MinaBokningar = () => {
   const { user, isLoading } = useContext(UserContext);
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
+    if (!user || !user.user_id) return;
     const fetchBookings = async () => {
-      if (!user) return;
       try {
         const data = await getBookingsByUserId(user.user_id);
         setBookings(data);
@@ -37,7 +38,7 @@ export const MinaBokningar = () => {
               Bokning: {booking.booking_number} <br />
               <Link
                 className='text-blue-600 underline'
-                to={`/booking/${booking.booking_number}`}
+                to={`/bookings/${booking.booking_number}`}
               >
                 Visa
               </Link>

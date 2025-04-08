@@ -1,21 +1,30 @@
 // apiScreenings.js
-import { apiRequest } from "./apiRequest";
+import { apiRequest } from './apiRequest';
 
 export const getScreenings = (
   movieId,
-  errorMessage = "Fel vid hämtning av visningar"
+  errorMessage = 'Fel vid hämtning av visningar'
 ) =>
   apiRequest(
     `http://localhost:3000/screenings/movie/${movieId}`,
     {
-      method: "GET",
+      method: 'GET',
     },
+    errorMessage
+  );
+
+export const getAllScreenings = (
+  errorMessage = 'Fel vid hämtning av alla visningar'
+) =>
+  apiRequest(
+    `http://localhost:3000/screenings`,
+    { method: 'GET' },
     errorMessage
   );
 
 export const getScreeningDetails = (
   screeningId,
-  errorMessage = "Fel vid hämtning av screeningdetaljer"
+  errorMessage = 'Fel vid hämtning av screeningdetaljer'
 ) =>
   apiRequest(
     `http://localhost:3000/screenings/details/${screeningId}`,
@@ -27,16 +36,16 @@ export const addScreenings = (
   movie_id,
   salon_id,
   screening_time,
-  errorMessage = "Gick inte att lägga till visning"
+  errorMessage = 'Gick inte att lägga till visning'
 ) =>
   apiRequest(
     `http://localhost:3000/screenings/add`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify({
         movie_id: Number(movie_id),
         salon_id: Number(salon_id),
