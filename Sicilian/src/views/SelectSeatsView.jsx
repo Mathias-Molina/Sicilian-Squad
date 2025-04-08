@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getAvailableSeats } from "../api/apiSeats";
 import { createBooking } from "../api/apiBookings";
-import { getScreeningDetails } from "../api/apiScreenings"; 
+import { getScreeningDetails } from "../api/apiScreenings";
 
 export const SelectSeatsView = () => {
   const { screeningId } = useParams();
@@ -12,6 +12,7 @@ export const SelectSeatsView = () => {
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
+  const [ticketTypes, setTicketTypes] = useState({}); {/*Maricel */ }
 
   useEffect(() => {
     getScreeningDetails(screeningId)
@@ -43,6 +44,7 @@ export const SelectSeatsView = () => {
     // Om det nya antalet är mindre än redan valda säten, rensa valet
     if (selectedSeats.length > newNum) {
       setSelectedSeats([]);
+      setTicketTypes({}); {/*Maricel */ }
     }
   };
 
@@ -51,13 +53,23 @@ export const SelectSeatsView = () => {
     if (!available) return;
     if (selectedSeats.includes(seatId)) {
       setSelectedSeats(selectedSeats.filter(id => id !== seatId));
+      setTicketTypes(prev => {
+        const updated = { ...prev };
+        delete updated[seatId];
+        return updated;
+      });
     } else {
       if (selectedSeats.length < numPersons) {
         setSelectedSeats([...selectedSeats, seatId]);
+        setTicketTypes(prev => ({ ...prev, [seatId]: "vuxen" }));
       } else {
         alert(`Du kan bara välja ${numPersons} säten.`);
       }
     }
+  };
+
+  const handleTicketTypeChange = (seatId, type) => {
+    setTicketTypes(prev => ({ ...prev, [seatId]: type }));
   };
 
   const handleBooking = () => {
@@ -125,10 +137,33 @@ export const SelectSeatsView = () => {
           </button>
         ))}
       </div>
-      <div>
-        <h2>Valda platser: {selectedSeats.join(", ")}</h2>
-      </div>
-      <div>
+      {/* <div>
+        <h2>Valda platser: {selectedSeats.join(", ")}</h2>*
+    </div> */}
+      {/* 🆕 Ticket type dropdowns */} {/*maricel*/}
+      {selectedSeats.length > 0 && (
+        <div style={{ marginTop: "20px" }}>
+          <h3>Biljettyp per plats:</h3>
+          {selectedSeats.map(seatId => (
+            <div key={seatId}>
+              <label>
+                Plats {seatId}:
+                <select
+                  value={ticketTypes[seatId] || "vuxen"}
+                  onChange={e => handleTicketTypeChange(seatId, e.target.value)}
+                >
+                  <option value="vuxen">Vuxen</option>
+                  <option value="barn">Barn</option>
+                  <option value="student">Student</option>
+                </select>
+              </label>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div style={{ marginTop: "20px" }}> {/* Maricel*/}
+
         <button onClick={handleBooking}>Boka film</button>
       </div>
     </section>
