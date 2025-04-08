@@ -1,4 +1,4 @@
-import { db } from "../Config/database.js";
+import { db } from '../Config/database.js';
 
 export const createBooking = (
   booking_number,
@@ -27,17 +27,17 @@ export const createBookingSeat = (
 };
 
 export const getBookingById = booking_id => {
-  const stmt = db.prepare("SELECT * FROM bookings WHERE booking_id = ?");
+  const stmt = db.prepare('SELECT * FROM bookings WHERE booking_id = ?');
   return stmt.get(booking_id);
 };
 
 export const getBookingSeats = booking_id => {
-  const stmt = db.prepare("SELECT * FROM bookingSeats WHERE booking_id = ?");
+  const stmt = db.prepare('SELECT * FROM bookingSeats WHERE booking_id = ?');
   return stmt.all(booking_id);
 };
 
 export const getAllSeatsForSalon = salon_id => {
-  const stmt = db.prepare("SELECT * FROM seats WHERE salon_id = ?");
+  const stmt = db.prepare('SELECT * FROM seats WHERE salon_id = ?');
   return stmt.all(salon_id);
 };
 
@@ -53,11 +53,28 @@ export const getBookedSeatIdsForScreening = screening_id => {
 };
 
 export const getBookingsByUserId = userId => {
-  const stmt = db.prepare("SELECT * FROM bookings WHERE user_id = ?");
+  const stmt = db.prepare('SELECT * FROM bookings WHERE user_id = ?');
   return stmt.all(userId);
 };
 
 export const getAllBookings = () => {
-  const stmt = db.prepare("SELECT * FROM bookings");
+  const stmt = db.prepare('SELECT * FROM bookings');
   return stmt.all();
+};
+
+export const getBookingSeatsWithSeatInfo = booking_id => {
+  const stmt = db.prepare(`
+    SELECT 
+      bs.booking_id,
+      bs.seat_id,
+      bs.bookingSeat_price,
+      bs.bockingSeat_ticketType AS bookingSeat_ticketType,
+      s.seat_rowNumber,
+      s.seat_number
+    FROM bookingSeats bs
+    JOIN seats s ON bs.seat_id = s.seat_id
+    WHERE bs.booking_id = ?
+  `);
+
+  return stmt.all(booking_id);
 };
