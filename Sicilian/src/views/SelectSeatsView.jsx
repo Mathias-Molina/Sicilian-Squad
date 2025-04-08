@@ -2,12 +2,13 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { getAvailableSeats } from "../api/apiSeats";
 import { createBooking } from "../api/apiBookings";
-import { getScreeningDetails } from "../api/apiScreenings"; 
+import { getScreeningDetails } from "../api/apiScreenings";
 
 export const SelectSeatsView = () => {
   const { screeningId } = useParams();
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [seatTicketTypes, setSeatTicketTypes] = useState({});
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
@@ -35,14 +36,32 @@ export const SelectSeatsView = () => {
       });
   }, [screeningId]);
 
-  const totalPrice = numPersons * pricePerTicket;
+  // Funktion för att returnera pris-multiplikator baserat på biljett-typ
+  const getMultiplier = type => {
+    if (type === "barn") return 0.5;
+    if (type === "student") return 0.8;
+    return 1.0; // vuxen
+  };
+
+  // Räkna ut totala priset baserat på vald biljett-typ för varje valt säte
+  const totalPrice = selectedSeats.reduce((sum, seatId) => {
+    const ticketType = seatTicketTypes[seatId] || "vuxen";
+    return sum + pricePerTicket * getMultiplier(ticketType);
+  }, 0);
 
   const handleNumPersonsChange = e => {
     const newNum = parseInt(e.target.value);
     setNumPersons(newNum);
     // Om det nya antalet är mindre än redan valda säten, rensa valet
     if (selectedSeats.length > newNum) {
-      setSelectedSeats([]);
+      // Ta bort överskjutande säten och dess biljett-typ
+      const newSelected = selectedSeats.slice(0, newNum);
+      setSelectedSeats(newSelected);
+      const newTicketTypes = {};
+      newSelected.forEach(seatId => {
+        newTicketTypes[seatId] = seatTicketTypes[seatId] || "vuxen";
+      });
+      setSeatTicketTypes(newTicketTypes);
     }
   };
 
@@ -50,14 +69,27 @@ export const SelectSeatsView = () => {
   const toggleSeatSelection = (seatId, available) => {
     if (!available) return;
     if (selectedSeats.includes(seatId)) {
+      // Ta bort säte och dess biljett-typ
       setSelectedSeats(selectedSeats.filter(id => id !== seatId));
+      const newTicketTypes = { ...seatTicketTypes };
+      delete newTicketTypes[seatId];
+      setSeatTicketTypes(newTicketTypes);
     } else {
       if (selectedSeats.length < numPersons) {
         setSelectedSeats([...selectedSeats, seatId]);
+        // Sätt standardbiljett-typ till "vuxen"
+        setSeatTicketTypes({ ...seatTicketTypes, [seatId]: "vuxen" });
       } else {
         alert(`Du kan bara välja ${numPersons} säten.`);
       }
     }
+  };
+
+  const handleTicketTypeChange = (seatId, newType) => {
+    setSeatTicketTypes({
+      ...seatTicketTypes,
+      [seatId]: newType,
+    });
   };
 
   const handleBooking = () => {
@@ -103,7 +135,7 @@ export const SelectSeatsView = () => {
             ))}
           </select>
         </label>
-        <p>Totalpris: {totalPrice} kr</p>
+        <p>Totalpris: {totalPrice.toFixed(2)} kr</p>
       </div>
       <div className="salon-map">
         {seats.map(seat => (
@@ -126,7 +158,20 @@ export const SelectSeatsView = () => {
         ))}
       </div>
       <div>
-        <h2>Valda platser: {selectedSeats.join(", ")}</h2>
+        <h2>Valda platser:</h2>
+        {selectedSeats.map(seatId => (
+          <div key={seatId}>
+            <span>Säte {seatId}: </span>
+            <select
+              value={seatTicketTypes[seatId] || "vuxen"}
+              onChange={e => handleTicketTypeChange(seatId, e.target.value)}
+            >
+              <option value="vuxen">Vuxen (100%)</option>
+              <option value="student">Student (80%)</option>
+              <option value="barn">Barn (50%)</option>
+            </select>
+          </div>
+        ))}
       </div>
       <div>
         <button onClick={handleBooking}>Boka film</button>
