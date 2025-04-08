@@ -3,16 +3,21 @@ import { useParams } from "react-router-dom";
 import { getAvailableSeats } from "../api/apiSeats";
 import { createBooking } from "../api/apiBookings";
 import { getScreeningDetails } from "../api/apiScreenings";
+import { useNavigate } from "react-router-dom"; {/*Maricel * to navigate to BookingConfirmationView*/ }
+
 
 export const SelectSeatsView = () => {
   const { screeningId } = useParams();
+  const navigate = useNavigate(); {/*Maricel * to navigate to BookingConfirmationView*/ }
+
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
-  const [ticketTypes, setTicketTypes] = useState({}); {/*Maricel */ }
+  const [ticketTypes, setTicketTypes] = useState({}); {/*Maricel--biljettyp */ }
+
 
   useEffect(() => {
     getScreeningDetails(screeningId)
@@ -79,7 +84,7 @@ export const SelectSeatsView = () => {
     }
 
     // Använd en standardbiljett (t.ex. "vuxen") för varje valt säte
-    const ticketTypes = selectedSeats.map(() => "vuxen");
+   // const ticketTypes = selectedSeats.map(() => "vuxen");
 
     const bookingData = {
       screeningId,
@@ -90,12 +95,29 @@ export const SelectSeatsView = () => {
 
     createBooking(bookingData)
       .then(response => {
-        alert("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
+        navigate("/booking-confirmation", {
+          state: {
+            bookingNumber: response.bookingNumber,
+            bookingId: response.bookingId,
+            seats: selectedSeats,
+            ticketTypes,
+            totalPrice
+          }
+        });
       })
       .catch(err => {
         console.error("Fel vid bokning:", err);
         alert("Något gick fel vid bokningen.");
       });
+
+    {/*createBooking(bookingData)
+      .then(response => {
+        alert("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
+      })
+      .catch(err => {
+        console.error("Fel vid bokning:", err);
+        alert("Något gick fel vid bokningen.");
+      });*/}
   };
 
   if (loading) return <div>Laddar säten...</div>;
