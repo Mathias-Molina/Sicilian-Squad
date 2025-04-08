@@ -21,7 +21,7 @@ export const MinaBokningar = () => {
     fetchBookings();
   }, [user]);
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return <div>Laddar användarens bokningar...</div>;
   }
 
