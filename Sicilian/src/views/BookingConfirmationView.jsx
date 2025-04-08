@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom"; {/}
+import { useLocation } from "react-router-dom"; {/*Maricel*/ }
 
 export const BookingConfirmationView = () => {
     const { state } = useLocation();
