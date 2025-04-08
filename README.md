@@ -15,4 +15,4 @@
 - ⏱️ **Tidsrapport:** [[Länk till tidsrapport](https://docs.google.com/spreadsheets/d/1OtIt4UGSKhrz9V-15fxl6OU8sw0idddjvNq8PTeXKyI/edit?usp=sharing)]
 - 🎨 **Figma** [[Länk till Figma](https://www.figma.com/proto/jUnsiRa3NOVTAF1yAdxb0R/Sicilian-Cinema-Project?node-id=0-1&t=sEFC9L27qtEGGbFS-1)]
 - ⚙️ **Dependencies:**
-- 
+- ⚙️ **ER-Diagram:** ![ER-diagram](ER-diagram.jpg)
