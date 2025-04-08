@@ -13,6 +13,7 @@ import { SelectScreeningView } from "./views/SelectScreeningView";
 import { SelectSeatsView } from "./views/SelectSeatsView";
 import { ProtectedAdminRoutes } from "./ProtectedAdminRoutes";
 import { AddScreening } from "./views/AddScreening";
+import { BookingConfirmationView } from "./views/BookingConfirmationView";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,6 +35,8 @@ export const router = createBrowserRouter(
         path="/boka/screening/:screeningId"
         element={<SelectSeatsView />}
       />
+      <Route path="/booking-confirmation" element={<BookingConfirmationView />} />
+      
       <Route element={<ProtectedAdminRoutes />}>
         <Route path="/addmovie" element={<AdderaFilm />} />
         <Route path="/screening/add" element={<AddScreening />} />
