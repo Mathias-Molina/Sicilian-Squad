@@ -13,13 +13,8 @@ export const MovieCard = ({ movie, movieTrailerId }) => {
         />
         <div className="movie-card__info">
           <h2 className="movie-card__title">{movie.movie_title}</h2>
-          <p className="movie-card__description">{movie.movie_description}</p>
           <p className="movie-card__genre">Genre: {movie.movie_genre}</p>
           <p className="movie-card__rating">Betyg: {movie.movie_rated}</p>
-          <p className="movie-card__runtime">Speltid: {movie.movie_runtime}</p>
-          <p className="movie-card__releaseDate">
-            Released: {movie.movie_releaseDate}
-          </p>
 
           {movieTrailerId && ( // Check if movieTailerId is available, Added by Maricel,
             <div
