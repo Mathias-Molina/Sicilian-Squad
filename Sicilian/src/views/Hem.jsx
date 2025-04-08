@@ -45,7 +45,7 @@ export const Hem = () => {
 
   return (
     <div>
-      <h1>Alla Filmer</h1>
+      <h1>Aktuella filmer</h1>
       {user && user.user_admin === 1 && (
         <div>
           <button onClick={handleAddMovie} className="admin-add-button">
