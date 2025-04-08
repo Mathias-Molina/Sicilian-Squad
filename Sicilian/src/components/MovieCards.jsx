@@ -13,7 +13,6 @@ export const MovieCard = ({ movie, movieTrailerId }) => {
         />
         <div className="movie-card__info">
           <h2 className="movie-card__title">{movie.movie_title}</h2>
-          <p className="movie-card__description">{movie.movie_description}</p>
           <p className="movie-card__genre">Genre: {movie.movie_genre}</p>
           <p className="movie-card__rating">Betyg: {movie.movie_rated}</p>
 
