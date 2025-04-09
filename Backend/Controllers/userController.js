@@ -21,8 +21,9 @@ function createTokenCookie(res, user) {
   res.cookie("token", token, {
     httpOnly: true, // Prevents client-side access (XSS protection)
     secure: false, // Use HTTPS in production
-    sameSite: "Strict",
+    sameSite: "lax",
     maxAge: 60 * 60 * 1000, // 1 hour
+    path: "/",
   });
 }
 

@@ -8,10 +8,8 @@ import {
   getBookedSeatIdsForScreening,
   getAllBookings,
 } from "../Models/bookingModel.js";
-export const createBookingHandler = (req, res) => {
-  console.log("createBookingHandler received req.body:", req.body);
-  console.log("req.user:", req.user); // ska vara satt om användaren är inloggad
 
+export const createBookingHandler = (req, res) => {
   const { screeningId, seats, totalPrice, ticketTypes } = req.body;
 
   if (!screeningId || !seats || seats.length === 0) {
@@ -21,10 +19,20 @@ export const createBookingHandler = (req, res) => {
   }
 
   const bookingNumber = Math.random().toString(36).substring(2, 9);
-  // Sätt userId om req.user finns, annars blir det null (gäst)
   const userId = req.user ? req.user.id : null;
 
   try {
+    // Hämta screeningens baspris från databasen
+    const screeningStmt = db.prepare(
+      "SELECT screening_price FROM screenings WHERE screening_id = ?"
+    );
+    const screening = screeningStmt.get(screeningId);
+    if (!screening) {
+      return res.status(404).json({ message: "Screening hittades inte" });
+    }
+    const basePrice = screening.screening_price;
+
+    // Skapa bokningen med det totala priset (du kan även välja att beräkna totalPrice här om du vill)
     const result = createBooking(
       bookingNumber,
       totalPrice,
@@ -33,15 +41,20 @@ export const createBookingHandler = (req, res) => {
     );
     const bookingId = result.lastInsertRowid;
 
+    // Funktion för att få multiplikator baserat på vald biljett-typ
+    const getMultiplier = ticketType => {
+      if (ticketType === "barn") return 0.5;
+      if (ticketType === "student") return 0.8;
+      return 1.0; // vuxen
+    };
+
+    // Loopa igenom de bokade sätena och beräkna individuellt pris per biljett
     for (let i = 0; i < seats.length; i++) {
       const seatId = seats[i];
       const ticketType = ticketTypes[i] || "vuxen";
-      createBookingSeat(
-        bookingId,
-        seatId,
-        totalPrice / seats.length,
-        ticketType
-      );
+      const multiplier = getMultiplier(ticketType);
+      const seatPrice = basePrice * multiplier;
+      createBookingSeat(bookingId, seatId, seatPrice, ticketType);
     }
 
     res.json({ message: "Bokning skapad", bookingNumber, bookingId });
@@ -57,14 +70,11 @@ export const getBookingHandler = (req, res) => {
   try {
     // Hämta bokningsinformationen med modellfunktionen
     const booking = getBookingById(bookingId);
-
     if (!booking) {
       return res.status(404).json({ message: "Bokningen hittades inte" });
     }
-
     // Hämta tillhörande bokade säten med modellfunktionen
     const seats = getBookingSeats(bookingId);
-
     res.json({ booking, seats });
   } catch (error) {
     console.error("Fel vid hämtning av bokning:", error);
@@ -107,6 +117,8 @@ export const getAvailableSeatsHandler = (req, res) => {
 
 export const getUserBookingsHandler = (req, res) => {
   const userId = Number(req.params.userId);
+  res.set("Cache-Control", "no-store");
+
   try {
     const bookings = getBookingsByUserId(userId);
     res.json(bookings);
