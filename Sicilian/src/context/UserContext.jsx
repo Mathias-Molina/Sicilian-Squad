@@ -28,6 +28,8 @@ export const UserProvider = ({ children }) => {
     checkUser();
   }, []);
 
+  useEffect(() => {}, [user]);
+
   return (
     <UserContext.Provider value={{ user, setUser, isLoading }}>
       {children}

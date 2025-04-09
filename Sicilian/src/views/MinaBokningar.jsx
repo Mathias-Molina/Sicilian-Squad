@@ -6,46 +6,44 @@ import { BookingCards } from '../components/BookingCards';
 
 export const MinaBokningar = () => {
   const { user, isLoading } = useContext(UserContext);
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState(null);
 
   useEffect(() => {
-    if (!user || !user.user_id) return;
+    if (!user?.user_id) return;
     const fetchBookings = async () => {
       try {
         const data = await getBookingsByUserId(user.user_id);
         setBookings(data);
       } catch (error) {
         console.error('Fel vid hämtning av bokningar:', error);
+        setBookings([]);
       }
     };
 
     fetchBookings();
-  }, [user]);
+  }, [user?.user_id]);
 
-  if (isLoading || !user) {
-    return <div>Laddar användarens bokningar...</div>;
-  }
+  if (isLoading) return <p>Laddar användarinfo...</p>;
+  if (!user) return <p>Du måste vara inloggad för att se dina bokningar.</p>;
+  if (bookings === null) return <p>Hämtar bokningar...</p>;
+  if (bookings.length === 0) return <p>Inga bokningar hittades.</p>;
 
   return (
     <div className='p-4'>
       <h1>Mina bokningar</h1>
-      {bookings.length === 0 ? (
-        <p>Inga bokningar hittades.</p>
-      ) : (
-        <ul className='space-y-2'>
-          {bookings.map(booking => (
-            <li key={booking.booking_number}>
-              Bokning: {booking.booking_number} <br />
-              <Link
-                className='text-blue-600 underline'
-                to={`/bookings/${booking.booking_number}`}
-              >
-                Visa
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className='space-y-2'>
+        {bookings.map(booking => (
+          <li key={booking.booking_number}>
+            Bokning: {booking.booking_number} <br />
+            <Link
+              className='text-blue-600 underline'
+              to={`/bookings/${booking.booking_number}`}
+            >
+              Visa
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
