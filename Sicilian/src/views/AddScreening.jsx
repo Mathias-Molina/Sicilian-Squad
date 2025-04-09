@@ -7,6 +7,7 @@ export const AddScreening = () => {
   const [movie, setMovie] = useState(undefined);
   const [salon, setSalon] = useState(undefined);
   const [screeningTime, setScreeningTime] = useState("");
+  const [screeningPrice, setScreeningPrice] = useState(0);
   const [movies, setMovies] = useState(null);
   const [salons, setSalons] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -36,11 +37,17 @@ export const AddScreening = () => {
       });
   }, []);
 
-  const handleAddScreening = async (e, movie, salon, screening_time) => {
+  const handleAddScreening = async (
+    e,
+    movie,
+    salon,
+    screening_time,
+    screening_price
+  ) => {
     e.preventDefault();
     setMessage(null);
 
-    if (!movie || !salon || !screening_time) {
+    if (!movie || !salon || !screening_time || !screening_price) {
       return setError("All fields required");
     }
 
@@ -48,14 +55,16 @@ export const AddScreening = () => {
       const response = await addScreenings(
         movie.movie_id,
         salon.salon_id,
-        screening_time
+        screening_time,
+        screening_price
       );
       setMessage(
-        `${response.message} ${movie.movie_title} ${salon.salon_id} ${screeningTime}`
+        `${response.message} ${movie.movie_title} ${salon.salon_id} ${screeningTime} ${screeningPrice}KR`
       );
       setError(null);
       setMovie(undefined);
       setSalon(undefined);
+      setScreeningPrice(0);
       setScreeningTime("");
     } catch (err) {
       setError(err);
@@ -67,7 +76,9 @@ export const AddScreening = () => {
       {(error && (error.message || error)) || null}
       {message && message}
       <form
-        onSubmit={(e) => handleAddScreening(e, movie, salon, screeningTime)}
+        onSubmit={(e) =>
+          handleAddScreening(e, movie, salon, screeningTime, screeningPrice)
+        }
       >
         <p>{`Chosen movie: ${movie ? movie.movie_title : ""}`}</p>
         <p>{`Chosen salon: ${salon ? salon.salon_name : ""}`}</p>
@@ -76,6 +87,13 @@ export const AddScreening = () => {
           placeholder="screening_time"
           value={screeningTime}
           onChange={(e) => setScreeningTime(e.target.value)}
+        />
+        <label>Ticket Price</label>
+        <input
+          type="number"
+          placeholder="price"
+          value={screeningPrice}
+          onChange={(e) => setScreeningPrice(e.target.value)}
         />
         <button type="submit">Submit</button>
       </form>

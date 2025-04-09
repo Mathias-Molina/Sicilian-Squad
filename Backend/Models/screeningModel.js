@@ -1,12 +1,22 @@
 import { db } from "../Config/database.js";
 
-export const addScreenings = (movie_id, salon_id, screening_time) => {
+export const addScreenings = (
+  movie_id,
+  salon_id,
+  screening_time,
+  screening_price
+) => {
   try {
     const stmt = db.prepare(
-      "INSERT INTO screenings (movie_id, salon_id, screening_time) VALUES (?,?,?)"
+      "INSERT INTO screenings (movie_id, salon_id, screening_time, screening_price) VALUES (?,?,?,?)"
     );
 
-    const screening = stmt.run(movie_id, salon_id, screening_time);
+    const screening = stmt.run(
+      movie_id,
+      salon_id,
+      screening_time,
+      screening_price
+    );
     return screening || null;
   } catch (error) {
     console.error("Database query error:", error);
