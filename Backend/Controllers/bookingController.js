@@ -9,9 +9,6 @@ import {
   getAllBookings,
 } from "../Models/bookingModel.js";
 export const createBookingHandler = (req, res) => {
-  console.log("createBookingHandler received req.body:", req.body);
-  console.log("req.user:", req.user); // ska vara satt om användaren är inloggad
-
   const { screeningId, seats, totalPrice, ticketTypes } = req.body;
 
   if (!screeningId || !seats || seats.length === 0) {
@@ -107,6 +104,8 @@ export const getAvailableSeatsHandler = (req, res) => {
 
 export const getUserBookingsHandler = (req, res) => {
   const userId = Number(req.params.userId);
+  res.set("Cache-Control", "no-store");
+
   try {
     const bookings = getBookingsByUserId(userId);
     res.json(bookings);
