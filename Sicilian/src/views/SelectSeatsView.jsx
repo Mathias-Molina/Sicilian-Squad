@@ -17,28 +17,28 @@ export const SelectSeatsView = () => {
 
   useEffect(() => {
     getScreeningDetails(screeningId)
-      .then((data) => {
+      .then(data => {
         setPricePerTicket(data.screening_price);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("Fel vid hämtning av screeningdetaljer:", err);
       });
   }, [screeningId]);
 
   useEffect(() => {
     getAvailableSeats(screeningId)
-      .then((data) => {
+      .then(data => {
         setSeats(data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err.message || "Fel vid hämtning av lediga säten");
         setLoading(false);
       });
   }, [screeningId]);
 
   // Funktion för att returnera pris-multiplikator baserat på biljett-typ
-  const getMultiplier = (type) => {
+  const getMultiplier = type => {
     if (type === "barn") return 0.5;
     if (type === "student") return 0.8;
     return 1.0; // vuxen
@@ -50,7 +50,7 @@ export const SelectSeatsView = () => {
     return sum + pricePerTicket * getMultiplier(ticketType);
   }, 0);
 
-  const handleNumPersonsChange = (e) => {
+  const handleNumPersonsChange = e => {
     const newNum = parseInt(e.target.value);
     setNumPersons(newNum);
     // Om det nya antalet är mindre än redan valda säten, rensa valet
@@ -59,7 +59,7 @@ export const SelectSeatsView = () => {
       const newSelected = selectedSeats.slice(0, newNum);
       setSelectedSeats(newSelected);
       const newTicketTypes = {};
-      newSelected.forEach((seatId) => {
+      newSelected.forEach(seatId => {
         newTicketTypes[seatId] = seatTicketTypes[seatId] || "vuxen";
       });
       setSeatTicketTypes(newTicketTypes);
@@ -71,7 +71,7 @@ export const SelectSeatsView = () => {
     if (!available) return;
     if (selectedSeats.includes(seatId)) {
       // Ta bort säte och dess biljett-typ
-      setSelectedSeats(selectedSeats.filter((id) => id !== seatId));
+      setSelectedSeats(selectedSeats.filter(id => id !== seatId));
       const newTicketTypes = { ...seatTicketTypes };
       delete newTicketTypes[seatId];
       setSeatTicketTypes(newTicketTypes);
@@ -111,11 +111,11 @@ export const SelectSeatsView = () => {
     };
 
     createBooking(bookingData)
-      .then((response) => {
+      .then(response => {
         alert("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
         navigate(`/bookings/${response.bookingNumber}`);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("Fel vid bokning:", err);
         alert("Något gick fel vid bokningen.");
       });
@@ -131,7 +131,7 @@ export const SelectSeatsView = () => {
         <label>
           Antal personer:
           <select value={numPersons} onChange={handleNumPersonsChange}>
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+            {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
               <option key={n} value={n}>
                 {n}
               </option>
@@ -141,15 +141,13 @@ export const SelectSeatsView = () => {
         <p>Totalpris: {totalPrice.toFixed(2)} kr</p>
       </div>
       <div className="salon-map">
-        {seats.map((seat) => (
+        {seats.map(seat => (
           <button
             key={seat.seat_id}
-            onClick={() =>
-              toggleSeatSelection(seat.seat_number, seat.available)
-            }
+            onClick={() => toggleSeatSelection(seat.seat_id, seat.available)}
             style={{
               backgroundColor: seat.available
-                ? selectedSeats.includes(seat.seat_number)
+                ? selectedSeats.includes(seat.seat_id)
                   ? "blue"
                   : "green"
                 : "red",
@@ -164,12 +162,12 @@ export const SelectSeatsView = () => {
       </div>
       <div>
         <h2>Valda platser:</h2>
-        {selectedSeats.map((seatId) => (
+        {selectedSeats.map(seatId => (
           <div key={seatId}>
             <span>Säte {seatId}: </span>
             <select
               value={seatTicketTypes[seatId] || "vuxen"}
-              onChange={(e) => handleTicketTypeChange(seatId, e.target.value)}
+              onChange={e => handleTicketTypeChange(seatId, e.target.value)}
             >
               <option value="vuxen">Vuxen (100%)</option>
               <option value="student">Student (80%)</option>
