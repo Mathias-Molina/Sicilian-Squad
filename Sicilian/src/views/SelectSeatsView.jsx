@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom"; {/*Maricel * to navigate to Book
 export const SelectSeatsView = () => {
   const { screeningId } = useParams();
   const navigate = useNavigate(); {/*Maricel * to navigate to BookingConfirmationView*/ }
+  const [movieDetails, setMovieDetails] = useState(null);
 
   const [seats, setSeats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
@@ -22,6 +23,7 @@ export const SelectSeatsView = () => {
     getScreeningDetails(screeningId)
       .then(data => {
         setPricePerTicket(data.screening_price);
+        setMovieDetails(data.movie);
       })
       .catch(err => {
         console.error("Fel vid hämtning av screeningdetaljer:", err);
@@ -111,16 +113,20 @@ export const SelectSeatsView = () => {
       totalPrice,
       ticketTypes: seatTicketTypes
     };
+    console.log("Booking data:", bookingData);
 
     createBooking(bookingData)
       .then(response => {
+        console.log("Booking response:", response);
         navigate("/booking-confirmation", {
           state: {
             bookingNumber: response.bookingNumber,
             bookingId: response.bookingId,
             seats: selectedSeats,
             ticketTypes: seatTicketTypes,
-            totalPrice
+            totalPrice,
+            movieTitle: movieDetails.movie_title,      // 👈 Add this
+            moviePoster: movieDetails.movie_poster  
           }
         });
       })
@@ -134,7 +140,7 @@ export const SelectSeatsView = () => {
         alert("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
       })
       .catch(err => {
-        console.error("Fel vid bokning:", err);
+        console.error("Fel vid bokning:", err); 
         alert("Något gick fel vid bokningen.");
       });*/}
   };
