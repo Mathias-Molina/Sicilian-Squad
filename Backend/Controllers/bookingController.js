@@ -20,7 +20,7 @@ export const createBookingHandler = (req, res) => {
       .json({ message: "screeningId och minst ett säte måste anges" });
   }
 
-  const bookingNumber = Math.random().toString(36).substr(2, 9);
+  const bookingNumber = Math.random().toString(36).substring(2, 9);
   // Sätt userId om req.user finns, annars blir det null (gäst)
   const userId = req.user ? req.user.id : null;
 
