@@ -1,4 +1,5 @@
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 export const LoggaIn = () => {
@@ -8,6 +9,7 @@ export const LoggaIn = () => {
   const [password, setPassword] = useState('');
   const { setUser } = useContext(UserContext);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -29,20 +31,21 @@ export const LoggaIn = () => {
       const data = await response.json();
 
       if (response.ok) {
-        //adderat detta för att hämta korrekt användareinfo via whoami
+        // Hämta korrekt användarinformation via whoami
         const whoamiRes = await fetch('http://localhost:3000/user/whoami', {
           method: 'GET',
           credentials: 'include',
         });
-
         const userInfo = await whoamiRes.json();
-        setUser(userInfo); // ✅ Sätter rätt användarobjekt med user_id, username etc.
-        setMessage(
-          isRegister ? 'Registrering lyckades!' : 'Inloggning lyckades!'
-        );
+        setUser({ ...userInfo, user_id: userInfo.id });
+
+        // Rensa formuläret
         setUsername('');
         setPassword('');
         if (isRegister) setName('');
+
+        // Navigera direkt till Mina bokningar (eller annan dashboard)
+        navigate('/');
       } else {
         setMessage(data.message || 'Fel vid inloggning/registrering');
       }
