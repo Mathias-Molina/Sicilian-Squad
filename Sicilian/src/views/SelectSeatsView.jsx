@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { getAvailableSeats } from "../api/apiSeats";
 import { createBooking } from "../api/apiBookings";
 import { getScreeningDetails } from "../api/apiScreenings";
@@ -13,6 +13,7 @@ export const SelectSeatsView = () => {
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getScreeningDetails(screeningId)
@@ -95,6 +96,7 @@ export const SelectSeatsView = () => {
   const handleBooking = () => {
     if (selectedSeats.length !== numPersons) {
       alert(`Vänligen välj exakt ${numPersons} säten.`);
+
       return;
     }
 
@@ -111,6 +113,7 @@ export const SelectSeatsView = () => {
     createBooking(bookingData)
       .then((response) => {
         alert("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
+        navigate(`/bookings/${response.bookingNumber}`);
       })
       .catch((err) => {
         console.error("Fel vid bokning:", err);
