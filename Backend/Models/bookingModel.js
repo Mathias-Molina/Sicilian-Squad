@@ -20,7 +20,7 @@ export const createBookingSeat = (
   ticketType
 ) => {
   const stmt = db.prepare(`
-    INSERT INTO bookingSeats (booking_id, seat_id, bookingSeat_price, bockingSeat_ticketType)
+    INSERT INTO bookingSeats (booking_id, seat_id, bookingSeat_price, bookingSeat_ticketType)
     VALUES (?,?,?,?)
   `);
   return stmt.run(booking_id, seat_id, bookingSeat_price, ticketType);
@@ -68,7 +68,7 @@ export const getBookingSeatsWithSeatInfo = booking_id => {
       bs.booking_id,
       bs.seat_id,
       bs.bookingSeat_price,
-      bs.bockingSeat_ticketType AS bookingSeat_ticketType,
+      bs.bookingSeat_ticketType,
       s.seat_rowNumber,
       s.seat_number
     FROM bookingSeats bs

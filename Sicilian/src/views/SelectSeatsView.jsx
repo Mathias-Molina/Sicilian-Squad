@@ -100,8 +100,8 @@ export const SelectSeatsView = () => {
       return;
     }
 
-    // Använd en standardbiljett (t.ex. "vuxen") för varje valt säte
-    const ticketTypes = selectedSeats.map(() => "vuxen");
+   
+    const ticketTypes = selectedSeats.map(seatId => seatTicketTypes[seatId] || "vuxen");
 
     const bookingData = {
       screeningId,
