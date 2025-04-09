@@ -26,24 +26,24 @@ export const insertMovie = (
 };
 
 export const getAllMovies = () => {
-  const stmt = db.prepare("SELECT * FROM movies");
+  const stmt = db.prepare("SELECT * FROM movies WHERE movie_isDeleted = 0");
   return stmt.all();
 };
 
-export const getMovieById = (movieId) => {
-  const stmt = db.prepare("SELECT * FROM movies WHERE movie_id = ?");
+export const getMovieById = movieId => {
+  const stmt = db.prepare(
+    "SELECT * FROM movies WHERE movie_id = ? AND movie_isDeleted = 0"
+  );
   return stmt.get(movieId);
-}
+};
 
-export const deleteMovie = (movieId) => {
-  try {
-    const stmt = db.prepare("DELETE FROM movies WHERE movie_id = ?");
-    const info = stmt.run(movieId);
-    if (info.changes === 0) {
-      throw new Error("Filmen hittades inte");
-    }
-    return info;
-  } catch (error) {
-    throw error;
+export const softDeleteMovie = movieId => {
+  const stmt = db.prepare(
+    "UPDATE movies SET movie_isDeleted = 1 WHERE movie_id = ?"
+  );
+  const info = stmt.run(movieId);
+  if (info.changes === 0) {
+    throw new Error("Filmen hittades inte");
   }
+  return info;
 };

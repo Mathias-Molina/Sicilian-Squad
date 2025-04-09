@@ -4,7 +4,7 @@ import {
   insertMovie,
   getAllMovies,
   getMovieById,
-  deleteMovie,
+  softDeleteMovie,
 } from "../Models/movieModel.js";
 
 export const getMovieHandler = async (req, res) => {
@@ -43,7 +43,11 @@ export const getMovieHandler = async (req, res) => {
       releaseDate
     );
 
-    res.json({ message: "Filmen har lagts till", title: title, id: info.lastInsertRowid });
+    res.json({
+      message: "Filmen har lagts till",
+      title: title,
+      id: info.lastInsertRowid,
+    });
   } catch (error) {
     console.error("Fel vid hämtning eller insättning:", error);
     res.status(500).json({ error: "Något gick fel" });
@@ -90,7 +94,9 @@ export const addMovieHandler = async (req, res) => {
   } = req.body;
 
   if (!title || !description) {
-    return res.status(400).json({ error: "Titel och beskrivning är obligatoriska" });
+    return res
+      .status(400)
+      .json({ error: "Titel och beskrivning är obligatoriska" });
   }
 
   try {
@@ -117,8 +123,9 @@ export const deleteMovieHandler = (req, res) => {
     if (!movieId) {
       return res.status(400).json({ error: "Filmens id saknas" });
     }
-    const result = deleteMovie(movieId);
-    res.status(200).json({ message: "Film raderad", result });
+    // Använd soft delete istället för att ta bort posten direkt
+    const result = softDeleteMovie(movieId);
+    res.status(200).json({ message: "Film markerad som raderad", result });
   } catch (error) {
     console.error("Fel vid radering av film:", error);
     if (error.message === "Filmen hittades inte") {
