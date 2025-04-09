@@ -6,14 +6,19 @@ import {
 } from "../Models/screeningModel.js";
 
 export const addScreeningsHandler = (req, res) => {
-  const { movie_id, salon_id, screening_time } = req.body;
+  const { movie_id, salon_id, screening_time, screening_price } = req.body;
 
-  if (!movie_id || !salon_id || !screening_time) {
+  if (!movie_id || !salon_id || !screening_time || !screening_price) {
     return res.status(400).send("All fields required");
   }
 
   try {
-    const screening = addScreenings(movie_id, salon_id, screening_time);
+    const screening = addScreenings(
+      movie_id,
+      salon_id,
+      screening_time,
+      screening_price
+    );
 
     if (screening) {
       res.json({ message: "New screening added" });
