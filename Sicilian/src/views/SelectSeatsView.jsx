@@ -10,6 +10,7 @@ export const SelectSeatsView = () => {
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [seatTicketTypes, setSeatTicketTypes] = useState({});
   const [error, setError] = useState("");
+  const [movieTitle, setMovieTitle] = useState("");
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
@@ -19,6 +20,7 @@ export const SelectSeatsView = () => {
     getScreeningDetails(screeningId)
       .then(data => {
         setPricePerTicket(data.screening_price);
+        setMovieTitle(data.movie_title);
       })
       .catch(err => {
         console.error("Fel vid hämtning av screeningdetaljer:", err);
@@ -100,8 +102,9 @@ export const SelectSeatsView = () => {
       return;
     }
 
-   
-    const ticketTypes = selectedSeats.map(seatId => seatTicketTypes[seatId] || "vuxen");
+    const ticketTypes = selectedSeats.map(
+      seatId => seatTicketTypes[seatId] || "vuxen"
+    );
 
     const bookingData = {
       screeningId,
@@ -126,7 +129,7 @@ export const SelectSeatsView = () => {
 
   return (
     <section>
-      <h1>Välj platser för filmvisning {screeningId}</h1>
+      <h1>Välj platser för filmvisning: {movieTitle}</h1>
       <div className="booking-form">
         <label>
           Antal personer:

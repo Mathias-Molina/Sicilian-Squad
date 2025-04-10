@@ -62,7 +62,12 @@ export const getScreeningsByMovieIdHandler = (req, res) => {
 export const getScreeningDetailsHandler = (req, res) => {
   const { screeningId } = req.params;
   try {
-    const stmt = db.prepare("SELECT * FROM screenings WHERE screening_id = ?");
+    const stmt = db.prepare(`
+      SELECT s.*, m.movie_title
+      FROM screenings s 
+      JOIN movies m ON s.movie_id = m.movie_id
+      WHERE s.screening_id = ?
+    `);
     const screening = stmt.get(screeningId);
     if (!screening) {
       return res.status(404).json({ message: "Screening hittades inte" });
