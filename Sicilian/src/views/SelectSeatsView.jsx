@@ -15,7 +15,10 @@ export const SelectSeatsView = () => {
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
-  const [bookingError, setBookingError] = useState(""); {/* Added for replacing alert message to red text -Maricel*/}
+  const [bookingError, setBookingError] = useState("");
+  {
+    /* Added for replacing alert message to red text -Maricel*/
+  }
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -77,18 +80,18 @@ export const SelectSeatsView = () => {
   // Låter användaren välja ett säte, men begränsar antalet till numPersons
   const toggleSeatSelection = (seatId, available) => {
     if (!available) return;
-    
-    let newSelectedSeats;
+
+    let newSelectedSeats; // Variabeln ska få ett värde i båda grenarna
 
     if (selectedSeats.includes(seatId)) {
-      // Ta bort säte och dess biljett-typ
-      setSelectedSeats(selectedSeats.filter(id => id !== seatId));
+      // Om säte redan är valt, ta bort det och uppdatera biljett-typerna
+      newSelectedSeats = selectedSeats.filter(id => id !== seatId);
       const newTicketTypes = { ...seatTicketTypes };
       delete newTicketTypes[seatId];
       setSeatTicketTypes(newTicketTypes);
     } else {
+      // Lägg till säte
       if (selectedSeats.length < numPersons) {
-        setSelectedSeats([...selectedSeats, seatId]);
         newSelectedSeats = [...selectedSeats, seatId];
         // Sätt standardbiljett-typ till "vuxen"
         setSeatTicketTypes({ ...seatTicketTypes, [seatId]: "vuxen" });
@@ -97,8 +100,11 @@ export const SelectSeatsView = () => {
         return;
       }
     }
+
+    // Nu är newSelectedSeats definierad oavsett gren
     setSelectedSeats(newSelectedSeats);
 
+    // Rensa eventuellt felmeddelande om antalet valda säten motsvarar numPersons
     if (newSelectedSeats.length === numPersons) {
       setBookingError("");
     }
@@ -130,12 +136,17 @@ export const SelectSeatsView = () => {
 
     createBooking(bookingData)
       .then(response => {
-        setBookingError("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
+        setBookingError(
+          "Bokning skapad! Bokningsnummer: " + response.bookingNumber
+        );
         navigate(`/bookings/${response.bookingNumber}`);
       })
       .catch(err => {
         console.error("Fel vid bokning:", err);
-        setBookingError("Något gick fel vid bokningen."); {/* Added for replacing alert message to red text -Maricel*/}
+        setBookingError("Något gick fel vid bokningen.");
+        {
+          /* Added for replacing alert message to red text -Maricel*/
+        }
       });
   };
 
