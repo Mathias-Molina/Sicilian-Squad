@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAvailableSeats } from "../api/apiSeats";
 import { createBooking } from "../api/apiBookings";
 import { getScreeningDetails } from "../api/apiScreenings";
+import { ErrorMessage } from "../components/Errormessage"; // Added for replacing alert message to red text -Maricel
 
 export const SelectSeatsView = () => {
   const { screeningId } = useParams();
@@ -14,6 +15,7 @@ export const SelectSeatsView = () => {
   const [loading, setLoading] = useState(true);
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
+  const [bookingError, setBookingError] = useState(""); {/* Added for replacing alert message to red text -Maricel*/}
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,10 +57,14 @@ export const SelectSeatsView = () => {
   const handleNumPersonsChange = e => {
     const newNum = parseInt(e.target.value);
     setNumPersons(newNum);
+
+    if (selectedSeats.length === newNum) {
+      setBookingError("");
+    }
     // Om det nya antalet är mindre än redan valda säten, rensa valet
     if (selectedSeats.length > newNum) {
-      // Ta bort överskjutande säten och dess biljett-typ
       const newSelected = selectedSeats.slice(0, newNum);
+      // Ta bort överskjutande säten och dess biljett-typ
       setSelectedSeats(newSelected);
       const newTicketTypes = {};
       newSelected.forEach(seatId => {
@@ -71,6 +77,9 @@ export const SelectSeatsView = () => {
   // Låter användaren välja ett säte, men begränsar antalet till numPersons
   const toggleSeatSelection = (seatId, available) => {
     if (!available) return;
+    
+    let newSelectedSeats;
+
     if (selectedSeats.includes(seatId)) {
       // Ta bort säte och dess biljett-typ
       setSelectedSeats(selectedSeats.filter(id => id !== seatId));
@@ -80,11 +89,18 @@ export const SelectSeatsView = () => {
     } else {
       if (selectedSeats.length < numPersons) {
         setSelectedSeats([...selectedSeats, seatId]);
+        newSelectedSeats = [...selectedSeats, seatId];
         // Sätt standardbiljett-typ till "vuxen"
         setSeatTicketTypes({ ...seatTicketTypes, [seatId]: "vuxen" });
       } else {
-        alert(`Du kan bara välja ${numPersons} säten.`);
+        setBookingError(`Du kan bara välja ${numPersons} säten.`);
+        return;
       }
+    }
+    setSelectedSeats(newSelectedSeats);
+
+    if (newSelectedSeats.length === numPersons) {
+      setBookingError("");
     }
   };
 
@@ -97,8 +113,7 @@ export const SelectSeatsView = () => {
 
   const handleBooking = () => {
     if (selectedSeats.length !== numPersons) {
-      alert(`Vänligen välj exakt ${numPersons} säten.`);
-
+      setBookingError(`Vänligen välj exakt ${numPersons} säten.`);
       return;
     }
 
@@ -115,12 +130,12 @@ export const SelectSeatsView = () => {
 
     createBooking(bookingData)
       .then(response => {
-        alert("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
+        setBookingError("Bokning skapad! Bokningsnummer: " + response.bookingNumber);
         navigate(`/bookings/${response.bookingNumber}`);
       })
       .catch(err => {
         console.error("Fel vid bokning:", err);
-        alert("Något gick fel vid bokningen.");
+        setBookingError("Något gick fel vid bokningen."); {/* Added for replacing alert message to red text -Maricel*/}
       });
   };
 
@@ -180,6 +195,11 @@ export const SelectSeatsView = () => {
         ))}
       </div>
       <div>
+        {/*{bookingError && (                                     // Added for replacing alert message to red text -Maricel
+          <p style={{ color: "white", fontWeight: "bold" }}>{bookingError}</p>
+        )} */}
+        <ErrorMessage message={bookingError} />
+
         <button onClick={handleBooking}>Boka film</button>
       </div>
     </section>
