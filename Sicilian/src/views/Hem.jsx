@@ -3,6 +3,7 @@ import { getMovies, deleteMovie } from "../api/apiMovies";
 import { MovieCard } from "../components/MovieCards";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import { ConfirmDialog } from "../components/ConfirmDialog"; //maricel
 
 export const Hem = () => {
   const [movies, setMovies] = useState([]);
@@ -10,6 +11,7 @@ export const Hem = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [movieToDelete, setMovieToDelete] = useState(null); //maricel
 
   useEffect(() => {
     getMovies()
@@ -23,7 +25,7 @@ export const Hem = () => {
       });
   }, []);
 
-  const handleDelete = async (movieId) => {
+  {/*const handleDelete = async (movieId) => {
     if (!user?.user_admin) {
       setError("Du måste vara admin för att kunna radera filmer");
       return;
@@ -34,7 +36,32 @@ export const Hem = () => {
     } catch (err) {
       setError(err.message || "Något gick fel");
     }
+  };*/}
+  const confirmDelete = (movieId) => {
+    if (!user?.user_admin) {
+      setError("Du måste vara admin för att kunna radera filmer");
+      return;
+    }
+    const movie = movies.find((m) => Number(m.movie_id) === Number(movieId));
+    setMovieToDelete(movie);
+
   };
+  const handleConfirm = async () => {
+    try {
+      await deleteMovie(movieToDelete.movie_id);
+      const updatedMovies = await getMovies();
+      setMovies(updatedMovies);
+    } catch (err) {
+      setError(err.message || "Något gick fel");
+    } finally {
+      setMovieToDelete(null);
+    }
+  };
+
+  const handleCancel = () => {
+    setMovieToDelete(null);
+  };
+
 
   const handleAddMovie = () => {
     navigate("/addmovie");
@@ -66,7 +93,7 @@ export const Hem = () => {
             {user && user.user_admin === 1 && (
               <button
                 className="delete-button"
-                onClick={() => handleDelete(movie.movie_id)}
+                onClick={() => confirmDelete(movie.movie_id)}
               >
                 ❌
               </button>
@@ -74,6 +101,14 @@ export const Hem = () => {
           </div>
         ))}
       </div>
+      {/* Add this here --Maricel */}
+      {movieToDelete && (
+        <ConfirmDialog
+          message={`Are you sure you want to delete the film "${movieToDelete.movie_title}"?`}
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+        />
+      )}
     </div>
   );
 };
