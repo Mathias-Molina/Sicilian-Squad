@@ -44,14 +44,12 @@ export const SelectSeatsView = () => {
       });
   }, [screeningId]);
 
-  // Funktion för att returnera pris-multiplikator baserat på biljett-typ
   const getMultiplier = type => {
     if (type === "barn") return 0.5;
     if (type === "student") return 0.8;
     return 1.0; // vuxen
   };
 
-  // Räkna ut totala priset baserat på vald biljett-typ för varje valt säte
   const totalPrice = selectedSeats.reduce((sum, seatId) => {
     const ticketType = seatTicketTypes[seatId] || "vuxen";
     return sum + pricePerTicket * getMultiplier(ticketType);
