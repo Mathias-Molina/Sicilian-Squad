@@ -3,10 +3,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAvailableSeats } from "../api/apiSeats";
 import { createBooking } from "../api/apiBookings";
 import { getScreeningDetails } from "../api/apiScreenings";
-
 import { getSalonById } from "../api/apiSalons";
 import "./SelectSeatsView.css";
-import { ErrorMessage } from "../components/Errormessage"; // Added for replacing alert message to red text -Maricel
+import { ErrorMessage } from "../components/Errormessage"; // Visar felmeddelanden i rött
 
 export const SelectSeatsView = () => {
   const { screeningId, salonId } = useParams();
@@ -20,63 +19,50 @@ export const SelectSeatsView = () => {
   const [numPersons, setNumPersons] = useState(1);
   const [pricePerTicket, setPricePerTicket] = useState(0);
   const [bookingError, setBookingError] = useState("");
-  {
-    /* Added for replacing alert message to red text -Maricel*/
-  }
   const navigate = useNavigate();
 
+  // Hämta screeningdetaljer
   useEffect(() => {
     getScreeningDetails(screeningId)
-      .then((data) => {
+      .then(data => {
         setPricePerTicket(data.screening_price);
         setMovieTitle(data.movie_title);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("Fel vid hämtning av screeningdetaljer:", err);
       });
   }, [screeningId]);
 
+  // Hämta tillgängliga säten
   useEffect(() => {
     getAvailableSeats(screeningId)
-      .then((data) => {
+      .then(data => {
         setSeats(data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err.message || "Fel vid hämtning av lediga säten");
         setLoading(false);
       });
   }, [screeningId]);
 
-
+  // Hämta salongdetaljer om ett salonId finns
   useEffect(() => {
-    getAvailableSeats(screeningId)
-      .then((data) => {
-        setSeats(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message || "Fel vid hämtning av lediga säten");
-        setLoading(false);
-      });
-  }, [screeningId]);
-
-  useEffect(() => {
-    getSalonById(salonId)
-      .then((data) => {
-        setSalon(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message || "Fel vid hämtning av lediga säten");
-        setLoading(false);
-      });
+    if (salonId) {
+      getSalonById(salonId)
+        .then(data => {
+          setSalon(data);
+          setLoading(false);
+        })
+        .catch(err => {
+          setError(err.message || "Fel vid hämtning av salondetaljer");
+          setLoading(false);
+        });
+    }
   }, [salonId]);
 
-  // Funktion för att returnera pris-multiplikator baserat på biljett-typ
- 
+  // Beräkna biljettpris-multiplikator
   const getMultiplier = type => {
-
     if (type === "barn") return 0.5;
     if (type === "student") return 0.8;
     return 1.0; // vuxen
@@ -87,63 +73,57 @@ export const SelectSeatsView = () => {
     return sum + pricePerTicket * getMultiplier(ticketType);
   }, 0);
 
-  const handleNumPersonsChange = (e) => {
+  // Hantera ändring av antal personer
+  const handleNumPersonsChange = e => {
     const newNum = parseInt(e.target.value);
     setNumPersons(newNum);
 
     if (selectedSeats.length === newNum) {
       setBookingError("");
     }
-    // Om det nya antalet är mindre än redan valda säten, rensa valet
+    // Om det nya antalet är mindre än redan valda säten, rensa överskjutande val
     if (selectedSeats.length > newNum) {
       const newSelected = selectedSeats.slice(0, newNum);
-      // Ta bort överskjutande säten och dess biljett-typ
       setSelectedSeats(newSelected);
       const newTicketTypes = {};
-      newSelected.forEach((seatId) => {
+      newSelected.forEach(seatId => {
         newTicketTypes[seatId] = seatTicketTypes[seatId] || "vuxen";
       });
       setSeatTicketTypes(newTicketTypes);
     }
   };
 
-  // Låter användaren välja ett säte, men begränsar antalet till numPersons
+  // Låter användaren välja ett säte med kontroll av antal
   const toggleSeatSelection = (seatId, available) => {
     if (!available) return;
 
-    let newSelectedSeats; // Variabeln ska få ett värde i båda grenarna
-
+    let newSelectedSeats; // Variabeln definieras i båda grenarna
     if (selectedSeats.includes(seatId)) {
-
-      // Ta bort säte och dess biljett-typ
-      setSelectedSeats(selectedSeats.filter((id) => id !== seatId));
-      // Om säte redan är valt, ta bort det och uppdatera biljett-typerna
+      // Ta bort säte och rensa dess biljett-typ
       newSelectedSeats = selectedSeats.filter(id => id !== seatId);
-
       const newTicketTypes = { ...seatTicketTypes };
       delete newTicketTypes[seatId];
       setSeatTicketTypes(newTicketTypes);
     } else {
-      // Lägg till säte
+      // Lägg till säte om max antal inte överskrids
       if (selectedSeats.length < numPersons) {
         newSelectedSeats = [...selectedSeats, seatId];
-        // Sätt standardbiljett-typ till "vuxen"
         setSeatTicketTypes({ ...seatTicketTypes, [seatId]: "vuxen" });
       } else {
         setBookingError(`Du kan bara välja ${numPersons} säten.`);
         return;
       }
     }
-
-    // Nu är newSelectedSeats definierad oavsett gren
     setSelectedSeats(newSelectedSeats);
-
-    // Rensa eventuellt felmeddelande om antalet valda säten motsvarar numPersons
-    if (newSelectedSeats.length === numPersons) {
+    // Uppdatera felmeddelandet beroende på om antalet säten stämmer med antalet personer
+    if (newSelectedSeats.length !== numPersons) {
+      setBookingError(`Vänligen välj exakt ${numPersons} säten.`);
+    } else {
       setBookingError("");
     }
   };
 
+  // Hantera ändring av biljett-typ för ett valt säte
   const handleTicketTypeChange = (seatId, newType) => {
     setSeatTicketTypes({
       ...seatTicketTypes,
@@ -151,6 +131,7 @@ export const SelectSeatsView = () => {
     });
   };
 
+  // Hantera bokningen
   const handleBooking = () => {
     if (selectedSeats.length !== numPersons) {
       setBookingError(`Vänligen välj exakt ${numPersons} säten.`);
@@ -158,7 +139,7 @@ export const SelectSeatsView = () => {
     }
 
     const ticketTypes = selectedSeats.map(
-      (seatId) => seatTicketTypes[seatId] || "vuxen"
+      seatId => seatTicketTypes[seatId] || "vuxen"
     );
 
     const bookingData = {
@@ -175,12 +156,9 @@ export const SelectSeatsView = () => {
         );
         navigate(`/bookings/${response.bookingNumber}`);
       })
-      .catch((err) => {
+      .catch(err => {
         console.error("Fel vid bokning:", err);
         setBookingError("Något gick fel vid bokningen.");
-        {
-          /* Added for replacing alert message to red text -Maricel*/
-        }
       });
   };
 
@@ -194,7 +172,7 @@ export const SelectSeatsView = () => {
         <label>
           Antal personer:
           <select value={numPersons} onChange={handleNumPersonsChange}>
-            {Array.from({ length: 10 }, (_, i) => i + 1).map((n) => (
+            {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
               <option key={n} value={n}>
                 {n}
               </option>
@@ -212,7 +190,7 @@ export const SelectSeatsView = () => {
             gridTemplateColumns: `repeat(${salon.salon_rowSeats}, min-content)`,
           }}
         >
-          {seats.map((seat) => (
+          {seats.map(seat => (
             <button
               key={seat.seat_number}
               onClick={() =>
@@ -230,14 +208,12 @@ export const SelectSeatsView = () => {
       </div>
       <div className="chosen-seats">
         <h2>Valda platser</h2>
-        {selectedSeats.map((seatNumber) => (
+        {selectedSeats.map(seatNumber => (
           <div className="selected-seat" key={seatNumber}>
             <span>Säte {seatNumber}: </span>
             <select
               value={seatTicketTypes[seatNumber] || "vuxen"}
-              onChange={(e) =>
-                handleTicketTypeChange(seatNumber, e.target.value)
-              }
+              onChange={e => handleTicketTypeChange(seatNumber, e.target.value)}
             >
               <option value="vuxen">Vuxen (100%)</option>
               <option value="student">Student (80%)</option>
@@ -247,6 +223,7 @@ export const SelectSeatsView = () => {
         ))}
       </div>
       <div>
+        <ErrorMessage message={bookingError} />
         <button className="book-button" onClick={handleBooking}>
           Boka film
         </button>
