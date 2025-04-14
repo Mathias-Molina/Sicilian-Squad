@@ -33,7 +33,7 @@ export const router = createBrowserRouter(
       <Route path="/boka/:movieId" element={<SelectScreeningView />} />
       <Route path="/bookings/:bookingId" element={<BookingDetailsView />} />
       <Route
-        path="/boka/screening/:screeningId"
+        path="/boka/screening/:screeningId/:salonId"
         element={<SelectSeatsView />}
       />
       <Route element={<ProtectedAdminRoutes />}>

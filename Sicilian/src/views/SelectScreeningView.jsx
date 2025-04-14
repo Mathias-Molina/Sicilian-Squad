@@ -21,8 +21,8 @@ export const SelectScreeningView = () => {
       });
   }, [salonId]);
 
-  const handleSelectScreening = (screeningId) => {
-    navigate(`/boka/screening/${screeningId}`);
+  const handleSelectScreening = (screeningId, salonId) => {
+    navigate(`/boka/screening/${screeningId}/${salonId}`);
   };
 
   if (loading) return <div>Laddar visningar...</div>;
@@ -35,7 +35,12 @@ export const SelectScreeningView = () => {
         {screenings.map((screening) => (
           <li key={screening.screening_id}>
             <button
-              onClick={() => handleSelectScreening(screening.screening_id)}
+              onClick={() =>
+                handleSelectScreening(
+                  screening.screening_id,
+                  screening.salon_id
+                )
+              }
             >
               {`${new Date(screening.screening_time).toLocaleString()} ${
                 screening.salon_name
