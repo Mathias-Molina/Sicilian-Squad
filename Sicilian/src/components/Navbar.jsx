@@ -39,7 +39,7 @@ export const Navbar = () => {
 
         {/* Center section - Logo */}
         <div className="nav-center">
-          <NavLink to="/home">
+          <NavLink to="/">
             <img src={logo} alt="The Sicilian Squad" className="nav-logo" />
           </NavLink>
         </div>

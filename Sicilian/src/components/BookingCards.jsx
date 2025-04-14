@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { getBookingsByUserId } from '../api/apiBookings';
-import { getMovies } from '../api/apiMovies';
-import { getAllScreenings } from '../api/apiScreenings';
-import { UserContext } from '../context/UserContext';
-import { getSalons } from '../api/apiSalons';
-import { getSeatsByBookingId } from '../api/apiSeats';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useContext } from "react";
+import { getBookingsByUserId } from "../api/apiBookings";
+import { getMovies } from "../api/apiMovies";
+import { getAllScreenings } from "../api/apiScreenings";
+import { UserContext } from "../context/UserContext";
+import { getSalons } from "../api/apiSalons";
+import { getSeatsByBookingId } from "../api/apiSeats";
+import { Link } from "react-router-dom";
 
 export function BookingCards({ bookingNumber }) {
   const { user } = useContext(UserContext);
@@ -18,24 +18,29 @@ export function BookingCards({ bookingNumber }) {
       try {
         const allBookings = await getBookingsByUserId(user.user_id);
 
-        const found = allBookings.find(b => b.booking_number === bookingNumber);
+        // Kombinera de två arrayerna till en.
+        const combinedBookings = [
+          ...(allBookings.upcomingBookings || []),
+          ...(allBookings.pastBookings || []),
+        ];
+
+        const found = combinedBookings.find(
+          b => b.booking_number === bookingNumber
+        );
 
         if (!found) return;
 
         const allScreenings = await getAllScreenings();
-
         const screening = allScreenings.find(
           s => String(s.screening_id) === String(found.screening_id)
         );
 
         const allMovies = await getMovies();
-
         const movie = screening
           ? allMovies.find(m => m.movie_id === screening.movie_id)
           : null;
 
         const allSalons = await getSalons();
-
         const salon = screening
           ? allSalons.find(
               s => String(s.salon_id) === String(screening.salon_id)
@@ -46,7 +51,7 @@ export function BookingCards({ bookingNumber }) {
 
         setBooking({ ...found, screening, movie, salon, seats });
       } catch (error) {
-        console.error('Fel vid hämtning av bokning:', error);
+        console.error("Fel vid hämtning av bokning:", error);
       }
     };
 
@@ -73,7 +78,7 @@ export function BookingCards({ bookingNumber }) {
         <p>
           Film: <br />
           <strong>
-            {booking.movie?.movie_title || 'Ingen titel hittades'}
+            {booking.movie?.movie_title || "Ingen titel hittades"}
           </strong>
         </p>
       )}
@@ -81,7 +86,7 @@ export function BookingCards({ bookingNumber }) {
       {booking?.movie?.movie_poster && (
         <img
           src={booking.movie.movie_poster}
-          alt={booking.movie.movie_title || 'Filmposter'}
+          alt={booking.movie.movie_title || "Filmposter"}
         />
       )}
       {booking?.screening?.screening_time && (
@@ -89,8 +94,8 @@ export function BookingCards({ bookingNumber }) {
           Visningstid: <br />
           <strong>
             {new Date(booking.screening.screening_time).toLocaleString(
-              'sv-SE',
-              { dateStyle: 'long', timeStyle: 'short' }
+              "sv-SE",
+              { dateStyle: "long", timeStyle: "short" }
             )}
           </strong>
         </p>

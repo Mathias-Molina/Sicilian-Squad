@@ -120,8 +120,28 @@ export const getUserBookingsHandler = (req, res) => {
   res.set("Cache-Control", "no-store");
 
   try {
-    const bookings = getBookingsByUserId(userId);
-    res.json(bookings);
+    // Gör en JOIN med screenings-tabellen för att få tillgång till screening_time
+    const query = `
+      SELECT b.*, s.screening_time
+      FROM bookings b
+      INNER JOIN screenings s ON b.screening_id = s.screening_id
+      WHERE b.user_id = ?
+    `;
+    const stmt = db.prepare(query);
+    const bookings = stmt.all(userId);
+
+    // Hämta nuvarande tid
+    const now = new Date();
+
+    // Dela in bokningarna efter om screening_time är i framtiden eller förfluten
+    const upcomingBookings = bookings.filter(
+      booking => new Date(booking.screening_time) >= now
+    );
+    const pastBookings = bookings.filter(
+      booking => new Date(booking.screening_time) < now
+    );
+
+    res.json({ upcomingBookings, pastBookings });
   } catch (error) {
     console.error("Error retrieving bookings for user:", error);
     res.status(500).json({ message: "Error retrieving bookings" });
