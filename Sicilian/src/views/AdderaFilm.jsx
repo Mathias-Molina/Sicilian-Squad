@@ -7,7 +7,7 @@ export const AdderaFilm = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:3000/add/${movieName}`);
+      const response = await fetch(`http://localhost:3000/api/movies/${encodeURIComponent(movieName)}`);
       const data = await response.json();
       if (response.ok) {
         setMessage(`Filmen har lagts till med namn: ${data.title} och id: ${data.id}`);

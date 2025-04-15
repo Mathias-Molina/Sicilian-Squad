@@ -16,3 +16,4 @@
 - 🎨 **Figma** [[Länk till Figma](https://www.figma.com/proto/jUnsiRa3NOVTAF1yAdxb0R/Sicilian-Cinema-Project?node-id=0-1&t=sEFC9L27qtEGGbFS-1)]
 - ⚙️ **Dependencies:**
 - ⚙️ **ER-Diagram:** ![ER-diagram](ER-diagram.jpg)
+Testmerge
