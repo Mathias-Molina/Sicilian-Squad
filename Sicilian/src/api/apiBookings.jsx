@@ -3,7 +3,10 @@ import { apiRequest } from './apiRequest';
 export const getAllBookings = (errorMessage = 'Fel vid hitta alla bokningar') =>
   apiRequest('http://localhost:3000/bookings/admin', {}, errorMessage);
 
-export const getBookingsByUserId = (userId, errorMessage = 'Fel vid hitta bokningar') =>
+export const getBookingsByUserId = (
+  userId,
+  errorMessage = 'Fel vid hitta bokningar'
+) =>
   apiRequest(`http://localhost:3000/bookings/user/${userId}`, {}, errorMessage);
 
 export const createBooking = (bookingData, errorMessage = 'Fel vid bokning') =>
@@ -16,5 +19,15 @@ export const createBooking = (bookingData, errorMessage = 'Fel vid bokning') =>
         'Content-Type': 'application/json',
       },
     },
+    errorMessage
+  );
+
+export const getDetailedBookingsByUserId = (
+  userId,
+  errorMessage = 'Fel vid hitta detaljerad bokning'
+) =>
+  apiRequest(
+    `http://localhost:3000/bookings/user/${userId}/detailed`,
+    {},
     errorMessage
   );

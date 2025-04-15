@@ -1,0 +1,19 @@
+.section-wrapper {
+  margin-top: 2rem;
+}
+
+.section-title-wrapper {
+  text-align: center;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 2rem 0 1rem;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #ffffff;
+  display: inline-block;
+  padding-bottom: 0.25rem;
+}

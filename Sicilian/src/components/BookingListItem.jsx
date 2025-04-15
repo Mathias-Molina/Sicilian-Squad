@@ -1,0 +1,42 @@
+import { Link } from 'react-router-dom';
+import '../styling/BookingListItem.css';
+
+export const BookingListItem = ({ booking }) => {
+  return (
+    <li className='booking-list-item'>
+      <img
+        src={booking.movie_poster}
+        alt={`Poster för ${booking.movie_title}`}
+        className='booking-poster'
+      />
+      <div className='booking-info'>
+        <h3>{booking.movie_title}</h3>
+        <p>
+          <span>Tid:</span>{' '}
+          {new Date(booking.screening_time).toLocaleString('sv-SE', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          })}
+        </p>
+        <p>
+          <span>Salong:</span> {booking.salon_name}
+        </p>
+        <p>
+          <span>Biljetter:</span> {booking.number_of_tickets}
+        </p>
+        <p>
+          <span>Bokningsnummer:</span> {booking.booking_number}
+        </p>
+        <Link
+          to={`/bookings/${booking.booking_number}`}
+          className='booking-link'
+        >
+          [Visa bokning]
+        </Link>
+      </div>
+    </li>
+  );
+};
