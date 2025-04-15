@@ -5,6 +5,7 @@ import {
   getAvailableSeatsHandler,
   getUserBookingsHandler,
   getAllBookingsHandler,
+  getDetailedUserBookingsHandler,
 } from '../Controllers/bookingController.js';
 import {
   getSeatsByBookingIdHandler,
@@ -27,3 +28,9 @@ bookingRouter.get('/:bookingId', authMiddleware, getBookingHandler);
 bookingRouter.get('/screening/:screeningId/seats', getAvailableSeatsHandler);
 
 bookingRouter.get('/:bookingId/seats', getDetailedSeatsByBookingIdHandler);
+
+bookingRouter.get(
+  '/user/:userId/detailed',
+  authMiddleware,
+  getDetailedUserBookingsHandler
+);

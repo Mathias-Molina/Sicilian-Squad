@@ -85,9 +85,10 @@ export const getDetailedBookingsByUserId = userId => {
       b.booking_id,
       b.booking_number,
       b.user_id,
-      s.time AS screening_time,
-      m.title AS movie_title,
-      sal.name AS salon_name,
+      s.screening_time,
+      m.movie_title,
+      m.movie_poster,
+      sal.salon_name,
       COUNT(bs.bookingseat_id) AS number_of_tickets
     FROM bookings b
     JOIN screenings s ON b.screening_id = s.screening_id
@@ -96,7 +97,7 @@ export const getDetailedBookingsByUserId = userId => {
     JOIN bookingseats bs ON bs.booking_id = b.booking_id
     WHERE b.user_id = ?
     GROUP BY b.booking_id
-    ORDER BY s.time DESC
+    ORDER BY s.screening_time DESC
   `);
 
   return stmt.all(userId);

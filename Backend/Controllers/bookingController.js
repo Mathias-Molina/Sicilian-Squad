@@ -1,4 +1,4 @@
-import { db } from "../Config/database.js";
+import { db } from '../Config/database.js';
 import {
   createBooking,
   createBookingSeat,
@@ -7,7 +7,8 @@ import {
   getBookingSeats,
   getBookedSeatIdsForScreening,
   getAllBookings,
-} from "../Models/bookingModel.js";
+  getDetailedBookingsByUserId,
+} from '../Models/bookingModel.js';
 
 export const createBookingHandler = (req, res) => {
   const { screeningId, seats, totalPrice, ticketTypes } = req.body;
@@ -15,7 +16,7 @@ export const createBookingHandler = (req, res) => {
   if (!screeningId || !seats || seats.length === 0) {
     return res
       .status(400)
-      .json({ message: "screeningId och minst ett säte måste anges" });
+      .json({ message: 'screeningId och minst ett säte måste anges' });
   }
 
   const bookingNumber = Math.random().toString(36).substring(2, 9);
@@ -24,11 +25,11 @@ export const createBookingHandler = (req, res) => {
   try {
     // Hämta screeningens baspris från databasen
     const screeningStmt = db.prepare(
-      "SELECT screening_price FROM screenings WHERE screening_id = ?"
+      'SELECT screening_price FROM screenings WHERE screening_id = ?'
     );
     const screening = screeningStmt.get(screeningId);
     if (!screening) {
-      return res.status(404).json({ message: "Screening hittades inte" });
+      return res.status(404).json({ message: 'Screening hittades inte' });
     }
     const basePrice = screening.screening_price;
 
@@ -43,24 +44,24 @@ export const createBookingHandler = (req, res) => {
 
     // Funktion för att få multiplikator baserat på vald biljett-typ
     const getMultiplier = ticketType => {
-      if (ticketType === "barn") return 0.5;
-      if (ticketType === "student") return 0.8;
+      if (ticketType === 'barn') return 0.5;
+      if (ticketType === 'student') return 0.8;
       return 1.0; // vuxen
     };
 
     // Loopa igenom de bokade sätena och beräkna individuellt pris per biljett
     for (let i = 0; i < seats.length; i++) {
       const seatId = seats[i];
-      const ticketType = ticketTypes[i] || "vuxen";
+      const ticketType = ticketTypes[i] || 'vuxen';
       const multiplier = getMultiplier(ticketType);
       const seatPrice = basePrice * multiplier;
       createBookingSeat(bookingId, seatId, seatPrice, ticketType);
     }
 
-    res.json({ message: "Bokning skapad", bookingNumber, bookingId });
+    res.json({ message: 'Bokning skapad', bookingNumber, bookingId });
   } catch (error) {
-    console.error("Fel vid skapande av bokning:", error);
-    res.status(500).json({ message: "Fel vid skapande av bokning" });
+    console.error('Fel vid skapande av bokning:', error);
+    res.status(500).json({ message: 'Fel vid skapande av bokning' });
   }
 };
 
@@ -71,14 +72,14 @@ export const getBookingHandler = (req, res) => {
     // Hämta bokningsinformationen med modellfunktionen
     const booking = getBookingById(bookingId);
     if (!booking) {
-      return res.status(404).json({ message: "Bokningen hittades inte" });
+      return res.status(404).json({ message: 'Bokningen hittades inte' });
     }
     // Hämta tillhörande bokade säten med modellfunktionen
     const seats = getBookingSeats(bookingId);
     res.json({ booking, seats });
   } catch (error) {
-    console.error("Fel vid hämtning av bokning:", error);
-    res.status(500).json({ message: "Fel vid hämtning av bokning" });
+    console.error('Fel vid hämtning av bokning:', error);
+    res.status(500).json({ message: 'Fel vid hämtning av bokning' });
   }
 };
 
@@ -88,15 +89,15 @@ export const getAvailableSeatsHandler = (req, res) => {
   try {
     // Hämta screening för att avgöra vilken salong som används
     const screeningStmt = db.prepare(
-      "SELECT * FROM screenings WHERE screening_id = ?"
+      'SELECT * FROM screenings WHERE screening_id = ?'
     );
     const screening = screeningStmt.get(screeningId);
     if (!screening) {
-      return res.status(404).json({ message: "Screening hittades inte" });
+      return res.status(404).json({ message: 'Screening hittades inte' });
     }
 
     // Hämta alla säten för salongen
-    const seatsStmt = db.prepare("SELECT * FROM seats WHERE salon_id = ?");
+    const seatsStmt = db.prepare('SELECT * FROM seats WHERE salon_id = ?');
     const allSeats = seatsStmt.all(screening.salon_id);
 
     // Hämta redan bokade säten via modellfunktionen
@@ -110,14 +111,14 @@ export const getAvailableSeatsHandler = (req, res) => {
 
     res.json(seatsWithAvailability);
   } catch (error) {
-    console.error("Fel vid hämtning av lediga säten:", error);
-    res.status(500).json({ message: "Fel vid hämtning av lediga säten" });
+    console.error('Fel vid hämtning av lediga säten:', error);
+    res.status(500).json({ message: 'Fel vid hämtning av lediga säten' });
   }
 };
 
 export const getUserBookingsHandler = (req, res) => {
   const userId = Number(req.params.userId);
-  res.set("Cache-Control", "no-store");
+  res.set('Cache-Control', 'no-store');
 
   try {
     // Gör en JOIN med screenings-tabellen för att få tillgång till screening_time
@@ -143,8 +144,8 @@ export const getUserBookingsHandler = (req, res) => {
 
     res.json({ upcomingBookings, pastBookings });
   } catch (error) {
-    console.error("Error retrieving bookings for user:", error);
-    res.status(500).json({ message: "Error retrieving bookings" });
+    console.error('Error retrieving bookings for user:', error);
+    res.status(500).json({ message: 'Error retrieving bookings' });
   }
 };
 
@@ -153,7 +154,30 @@ export const getAllBookingsHandler = (req, res) => {
     const bookings = getAllBookings();
     res.json(bookings);
   } catch (error) {
-    console.error("Error retrieving all bookings:", error);
-    res.status(500).json({ message: "Error retrieving all bookings" });
+    console.error('Error retrieving all bookings:', error);
+    res.status(500).json({ message: 'Error retrieving all bookings' });
+  }
+};
+
+export const getDetailedUserBookingsHandler = (req, res) => {
+  const userId = Number(req.params.userId);
+  res.set('Cache-Control', 'no-store');
+
+  try {
+    const bookings = getDetailedBookingsByUserId(userId);
+
+    const now = new Date();
+
+    const upcomingBookings = bookings.filter(
+      booking => new Date(booking.screening_time) >= now
+    );
+    const pastBookings = bookings.filter(
+      booking => new Date(booking.screening_time) < now
+    );
+
+    res.json({ upcomingBookings, pastBookings });
+  } catch (error) {
+    console.error('Error retrieving detailed bookings for user:', error);
+    res.status(500).json({ message: 'Error retrieving detailed bookings' });
   }
 };
