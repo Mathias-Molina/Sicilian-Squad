@@ -44,7 +44,7 @@ export const MovieDetailsView = () => {
         <strong>Released:</strong> {movie.movie_releaseDate}
       </p>
       {/* 🎬 Trailer section --Maricel*/} 
-      {videoId && (
+     {videoId && (
         <div style={{ marginTop: "20px" }}>
           <h3>Trailer:</h3>
           <iframe
@@ -55,7 +55,7 @@ export const MovieDetailsView = () => {
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-          ></iframe>
+          ></iframe> 
         </div>
       )}
       <Link to={`/boka/${movie.movie_id}`}>
