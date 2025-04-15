@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
-import { getBookingsByUserId } from '../api/apiBookings';
-import { Link } from 'react-router-dom';
 import { getDetailedBookingsByUserId } from '../api/apiBookings';
 import { BookingListItem } from '../components/BookingListItem';
+import '../styling/MinaBokningar.css';
 
 export const MinaBokningar = () => {
   const { user, isLoading } = useContext(UserContext);
@@ -33,12 +32,10 @@ export const MinaBokningar = () => {
   if (loadingBookings) return <p>Hämtar bokningar...</p>;
 
   return (
-    <div className='p-4'>
-      <h1>Mina bokningar</h1>
-
-      <h2>Kommande bokningar</h2>
+    <div className='section-title-wrapper'>
+      <h2 className='section-title'>Kommande bokningar</h2>
       {upcomingBookings && upcomingBookings.length > 0 ? (
-        <ul className='space-y-2'>
+        <ul>
           {upcomingBookings.map(booking => (
             <BookingListItem key={booking.booking_number} booking={booking} />
           ))}
@@ -47,9 +44,9 @@ export const MinaBokningar = () => {
         <p>Inga kommande bokningar hittades.</p>
       )}
 
-      <h2>Bokningshistorik</h2>
+      <h2 className='section-title'>Bokningshistorik</h2>
       {pastBookings && pastBookings.length > 0 ? (
-        <ul className='space-y-2'>
+        <ul>
           {pastBookings.map(booking => (
             <BookingListItem key={booking.booking_number} booking={booking} />
           ))}

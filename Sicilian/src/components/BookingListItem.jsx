@@ -1,29 +1,42 @@
 import { Link } from 'react-router-dom';
+import '../styling/BookingListItem.css';
 
 export const BookingListItem = ({ booking }) => {
   return (
-    <div className='p-4 border rounded-lg shadow-sm'>
-      <h3 className='text-lg font-bold'>{booking.movie_title}</h3>
-      <p>
-        Tid:{' '}
-        <strong>
+    <li className='booking-list-item'>
+      <img
+        src={booking.movie_poster}
+        alt={`Poster för ${booking.movie_title}`}
+        className='booking-poster'
+      />
+      <div className='booking-info'>
+        <h3>{booking.movie_title}</h3>
+        <p>
+          <span>Tid:</span>{' '}
           {new Date(booking.screening_time).toLocaleString('sv-SE', {
-            dateStyle: 'long',
-            timeStyle: 'short',
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
           })}
-        </strong>
-      </p>
-      <p>Salong: {booking.salon_name}</p>
-      <p>Biljetter: {booking.number_of_tickets}</p>
-      <p>
-        Bokningsnummer: <code>{booking.booking_number}</code>
-      </p>
-      <Link
-        className='text-blue-600 underline mt-2 inline-block'
-        to={`/bookings/${booking.booking_number}`}
-      >
-        Visa bokning
-      </Link>
-    </div>
+        </p>
+        <p>
+          <span>Salong:</span> {booking.salon_name}
+        </p>
+        <p>
+          <span>Biljetter:</span> {booking.number_of_tickets}
+        </p>
+        <p>
+          <span>Bokningsnummer:</span> {booking.booking_number}
+        </p>
+        <Link
+          to={`/bookings/${booking.booking_number}`}
+          className='booking-link'
+        >
+          [Visa bokning]
+        </Link>
+      </div>
+    </li>
   );
 };
