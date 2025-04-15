@@ -78,3 +78,26 @@ export const getBookingSeatsWithSeatInfo = booking_id => {
 
   return stmt.all(booking_id);
 };
+
+export const getDetailedBookingsByUserId = userId => {
+  const stmt = db.prepare(`
+    SELECT 
+      b.booking_id,
+      b.booking_number,
+      b.user_id,
+      s.time AS screening_time,
+      m.title AS movie_title,
+      sal.name AS salon_name,
+      COUNT(bs.bookingseat_id) AS number_of_tickets
+    FROM bookings b
+    JOIN screenings s ON b.screening_id = s.screening_id
+    JOIN movies m ON s.movie_id = m.movie_id
+    JOIN salons sal ON s.salon_id = sal.salon_id
+    JOIN bookingseats bs ON bs.booking_id = b.booking_id
+    WHERE b.user_id = ?
+    GROUP BY b.booking_id
+    ORDER BY s.time DESC
+  `);
+
+  return stmt.all(userId);
+};
