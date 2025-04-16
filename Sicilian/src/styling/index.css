@@ -1,3 +1,4 @@
+@import url("./SelectSeatsView.css");
 /* Container for all movie cards */
 .movie-cards-container {
     display: grid;
