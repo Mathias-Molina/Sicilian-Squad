@@ -1,0 +1,26 @@
+/* Admin controls */
+.admin-controls {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 0.5rem;
+    gap: 0.5rem;
+}
+
+.delete-button {
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+    background: #e62222;
+}
+
+.delete-button:hover {
+    background: rgba(255, 0, 0, 0.9);
+    transform: scale(1.1);
+}

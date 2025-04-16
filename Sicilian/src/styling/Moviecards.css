@@ -82,16 +82,16 @@
 }
 
 .delete-button {
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
+    width: 150px;
+    height: 50px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
+    background: red;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+    background: #e62222;
 }
 
 .delete-button:hover {
