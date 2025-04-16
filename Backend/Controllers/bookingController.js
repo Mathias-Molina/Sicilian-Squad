@@ -8,6 +8,8 @@ import {
   getBookedSeatIdsForScreening,
   getAllBookings,
   getDetailedBookingsByUserId,
+  getBookingByNumber,
+  getBookingSeatsWithSeatInfo,
 } from '../Models/bookingModel.js';
 
 export const createBookingHandler = (req, res) => {
@@ -179,5 +181,20 @@ export const getDetailedUserBookingsHandler = (req, res) => {
   } catch (error) {
     console.error('Error retrieving detailed bookings for user:', error);
     res.status(500).json({ message: 'Error retrieving detailed bookings' });
+  }
+};
+
+export const getBookingByNumberHandler = (req, res) => {
+  const { bookingNumber } = req.params;
+
+  try {
+    const booking = getBookingByNumber(bookingNumber);
+    if (!booking) return res.status(404).json({ message: 'Bokning ej hittad' });
+
+    const seats = getBookingSeatsWithSeatInfo(booking.booking_id);
+    res.json({ booking, seats });
+  } catch (error) {
+    console.error('Fel vid hämtning av bokning med nummer:', error);
+    res.status(500).json({ message: 'Något gick fel' });
   }
 };
