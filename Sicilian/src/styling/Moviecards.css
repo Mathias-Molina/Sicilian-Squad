@@ -16,7 +16,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+    width: 100%;
 }
 
 .movie-card:hover {
@@ -27,6 +29,10 @@
 .movie-card__link {
     text-decoration: none;
     color: inherit;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .movie-card__image {
