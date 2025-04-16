@@ -97,7 +97,7 @@ export const getDetailedBookingsByUserId = userId => {
     JOIN bookingseats bs ON bs.booking_id = b.booking_id
     WHERE b.user_id = ?
     GROUP BY b.booking_id
-    ORDER BY s.screening_time DESC
+    ORDER BY s.screening_time ASC
   `);
 
   return stmt.all(userId);
