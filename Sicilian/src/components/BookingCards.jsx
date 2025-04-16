@@ -1,11 +1,11 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { getBookingsByUserId } from "../api/apiBookings";
 import { getMovies } from "../api/apiMovies";
 import { getAllScreenings } from "../api/apiScreenings";
 import { UserContext } from "../context/UserContext";
 import { getSalons } from "../api/apiSalons";
 import { getSeatsByBookingId } from "../api/apiSeats";
-import { Link } from "react-router-dom";
+
 
 export function BookingCards({ bookingNumber }) {
   const { user } = useContext(UserContext);
