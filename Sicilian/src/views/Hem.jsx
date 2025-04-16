@@ -25,7 +25,7 @@ export const Hem = () => {
       });
   }, []);
 
-  {/*const handleDelete = async (movieId) => {
+  /* const handleDelete = async (movieId) => {
     if (!user?.user_admin) {
       setError("Du måste vara admin för att kunna radera filmer");
       return;
@@ -36,7 +36,7 @@ export const Hem = () => {
     } catch (err) {
       setError(err.message || "Något gick fel");
     }
-  };*/}
+  }; */
   const confirmDelete = (movieId) => {
     if (!user?.user_admin) {
       setError("Du måste vara admin för att kunna radera filmer");
@@ -88,16 +88,18 @@ export const Hem = () => {
       )}
       <div className="movie-cards-container">
         {movies.map((movie) => (
-          <div key={movie.movie_id} className="movie-card-wrapper">
-            <MovieCard movie={movie} />
+          <div key={movie.movie_id} className="movie-card">
             {user && user.user_admin === 1 && (
-              <button
-                className="delete-button"
-                onClick={() => confirmDelete(movie.movie_id)}
-              >
-                ❌
-              </button>
+              <div className="admin-controls">
+                <button
+                  className="delete-button"
+                  onClick={() => confirmDelete(movie.movie_id)}
+                >
+                  ❌
+                </button>
+              </div>
             )}
+            <MovieCard movie={movie} />
           </div>
         ))}
       </div>
