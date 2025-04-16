@@ -16,14 +16,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-    background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
     width: 100%;
 }
 
 .movie-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+
 }
 
 .movie-card__link {
@@ -32,7 +32,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; 
 }
 
 .movie-card__image {
