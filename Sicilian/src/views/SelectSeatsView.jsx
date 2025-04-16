@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { BookingForm } from "../components/BookingForm";
+import { BookingForm } from "../components/BookingPanel";
 import { SeatMap } from "../components/SeatMap";
 import { BookingFooter } from "../components/BookingFooter";
 import { useScreening } from "../hooks/useScreening";
