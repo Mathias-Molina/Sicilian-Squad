@@ -4,7 +4,6 @@ export const MovieCard = ({ movie, movieTrailerId }) => {
   // Pass the movieTrailerId as a prop--Maricel
   return (
     <Link to={`/film/${movie.movie_id}`} className="movie-card__link">
-      <div className="movie-card">
         <img
           src={movie.movie_poster}
           alt={movie.movie_title}
@@ -36,7 +35,6 @@ export const MovieCard = ({ movie, movieTrailerId }) => {
             </div>
           )}
         </div>
-      </div>
     </Link>
   );
 };
