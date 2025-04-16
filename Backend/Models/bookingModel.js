@@ -102,3 +102,8 @@ export const getDetailedBookingsByUserId = userId => {
 
   return stmt.all(userId);
 };
+
+export const getBookingByNumber = bookingNumber => {
+  const stmt = db.prepare('SELECT * FROM bookings WHERE booking_number = ?');
+  return stmt.get(bookingNumber);
+};

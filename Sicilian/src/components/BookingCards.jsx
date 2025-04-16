@@ -1,11 +1,10 @@
-import React, { useEffect, useState, useContext } from "react";
-import { getBookingsByUserId } from "../api/apiBookings";
-import { getMovies } from "../api/apiMovies";
-import { getAllScreenings } from "../api/apiScreenings";
-import { UserContext } from "../context/UserContext";
-import { getSalons } from "../api/apiSalons";
-import { getSeatsByBookingId } from "../api/apiSeats";
-import { Link } from "react-router-dom";
+import { useEffect, useState, useContext } from 'react';
+import { getBookingsByUserId, getBookingByNumber } from '../api/apiBookings';
+import { getMovies } from '../api/apiMovies';
+import { getAllScreenings } from '../api/apiScreenings';
+import { UserContext } from '../context/UserContext';
+import { getSalons } from '../api/apiSalons';
+import { getSeatsByBookingId } from '../api/apiSeats';
 
 export function BookingCards({ bookingNumber }) {
   const { user } = useContext(UserContext);
@@ -13,26 +12,36 @@ export function BookingCards({ bookingNumber }) {
 
   useEffect(() => {
     const fetchBooking = async () => {
-      if (!user?.user_id || !bookingNumber) return;
+      if (!bookingNumber) return;
 
       try {
-        const allBookings = await getBookingsByUserId(user.user_id);
+        let foundBooking = null;
+        let seats = [];
 
-        // Kombinera de två arrayerna till en.
-        const combinedBookings = [
-          ...(allBookings.upcomingBookings || []),
-          ...(allBookings.pastBookings || []),
-        ];
+        if (user?.user_id) {
+          // Inloggad användare: hämta alla användarens bokningar
+          const allBookings = await getBookingsByUserId(user.user_id);
+          const combinedBookings = [
+            ...(allBookings.upcomingBookings || []),
+            ...(allBookings.pastBookings || []),
+          ];
 
-        const found = combinedBookings.find(
-          b => b.booking_number === bookingNumber
-        );
+          foundBooking = combinedBookings.find(
+            b => b.booking_number === bookingNumber
+          );
 
-        if (!found) return;
+          if (!foundBooking) return;
+          seats = await getSeatsByBookingId(foundBooking.booking_id);
+        } else {
+          // Gäst: hämta bokning direkt via bokningsnummer
+          const response = await getBookingByNumber(bookingNumber);
+          foundBooking = response.booking;
+          seats = response.seats;
+        }
 
         const allScreenings = await getAllScreenings();
         const screening = allScreenings.find(
-          s => String(s.screening_id) === String(found.screening_id)
+          s => String(s.screening_id) === String(foundBooking.screening_id)
         );
 
         const allMovies = await getMovies();
@@ -47,11 +56,9 @@ export function BookingCards({ bookingNumber }) {
             )
           : null;
 
-        const seats = await getSeatsByBookingId(found.booking_id);
-
-        setBooking({ ...found, screening, movie, salon, seats });
+        setBooking({ ...foundBooking, screening, movie, salon, seats });
       } catch (error) {
-        console.error("Fel vid hämtning av bokning:", error);
+        console.error('Fel vid hämtning av bokning:', error);
       }
     };
 
@@ -60,12 +67,10 @@ export function BookingCards({ bookingNumber }) {
 
   if (!booking) return <p>Laddar bokning...</p>;
 
-  let totalPrice = 0;
-  if (booking?.seats?.length > 0) {
-    totalPrice = booking.seats.reduce((sum, seat) => {
+  const totalPrice =
+    booking.seats?.reduce((sum, seat) => {
       return sum + parseFloat(seat.bookingSeat_price);
-    }, 0);
-  }
+    }, 0) || 0;
 
   return (
     <div>
@@ -74,39 +79,39 @@ export function BookingCards({ bookingNumber }) {
         Bokningsnummer: <br />
         <strong>{bookingNumber}</strong>
       </p>
-      {booking && (
-        <p>
-          Film: <br />
-          <strong>
-            {booking.movie?.movie_title || "Ingen titel hittades"}
-          </strong>
-        </p>
-      )}
 
-      {booking?.movie?.movie_poster && (
+      <p>
+        Film: <br />
+        <strong>{booking.movie?.movie_title || 'Ingen titel hittades'}</strong>
+      </p>
+
+      {booking.movie?.movie_poster && (
         <img
           src={booking.movie.movie_poster}
-          alt={booking.movie.movie_title || "Filmposter"}
+          alt={booking.movie.movie_title || 'Filmposter'}
         />
       )}
-      {booking?.screening?.screening_time && (
+
+      {booking.screening?.screening_time && (
         <p>
           Visningstid: <br />
           <strong>
             {new Date(booking.screening.screening_time).toLocaleString(
-              "sv-SE",
-              { dateStyle: "long", timeStyle: "short" }
+              'sv-SE',
+              { dateStyle: 'long', timeStyle: 'short' }
             )}
           </strong>
         </p>
       )}
-      {booking?.salon?.salon_name && (
+
+      {booking.salon?.salon_name && (
         <p>
           Salong: <br />
           <strong>{booking.salon.salon_name}</strong>
         </p>
       )}
-      {booking?.seats?.length > 0 && (
+
+      {booking.seats?.length > 0 && (
         <div>
           <p>Platser:</p>
           <ul>
@@ -114,15 +119,17 @@ export function BookingCards({ bookingNumber }) {
               <li key={index}>
                 <strong>
                   Rad {seat.seat_rowNumber}, plats {seat.seat_number} (
-                  {seat.bookingSeat_ticketType}) - {seat.bookingSeat_price} kr
+                  {seat.bookingSeat_ticketType}) – {seat.bookingSeat_price} kr
                 </strong>
               </li>
             ))}
           </ul>
         </div>
       )}
+
       <p>
-        Totalpris: <br /> <strong>{totalPrice} kr </strong>
+        Totalpris: <br />
+        <strong>{totalPrice} kr</strong>
       </p>
     </div>
   );

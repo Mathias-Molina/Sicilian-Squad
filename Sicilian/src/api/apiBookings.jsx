@@ -31,3 +31,12 @@ export const getDetailedBookingsByUserId = (
     {},
     errorMessage
   );
+export const getBookingByNumber = (
+  bookingNumber,
+  errorMessage = 'Fel vid hämta bokning'
+) =>
+  apiRequest(
+    `http://localhost:3000/bookings/number/${bookingNumber}`,
+    {},
+    errorMessage
+  );
