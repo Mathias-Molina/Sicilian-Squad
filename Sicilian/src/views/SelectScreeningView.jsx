@@ -82,7 +82,7 @@ export function SelectScreeningView() {
 
   return (
     <section>
-      <StepIndicator activeSteps={[1]} />
+      <StepIndicator currentStep={1} />
       <h1>Välj framtida visning</h1>
       <ul>
         {screeningList.map(screening => {
