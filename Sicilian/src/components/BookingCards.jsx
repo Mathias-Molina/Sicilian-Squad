@@ -73,64 +73,70 @@ export function BookingCards({ bookingNumber }) {
     }, 0) || 0;
 
   return (
-    <div>
-      <h1>Bokningsbekräftelse</h1>
-      <p>
-        Bokningsnummer: <br />
-        <strong>{bookingNumber}</strong>
-      </p>
+    <div className='booking-confirmation-wrapper'>
+      <div className='booking-card'>
+        <h1 className='booking-title'>Bokningsbekräftelse</h1>
 
-      <p>
-        Film: <br />
-        <strong>{booking.movie?.movie_title || 'Ingen titel hittades'}</strong>
-      </p>
+        <section className='section'>
+          <p className='section-label'>Bokningsnummer:</p>
+          <p>{bookingNumber}</p>
+        </section>
 
-      {booking.movie?.movie_poster && (
-        <img
-          src={booking.movie.movie_poster}
-          alt={booking.movie.movie_title || 'Filmposter'}
-        />
-      )}
+        <section className='section'>
+          <p className='section-label'>Film: </p>
+          <p>{booking.movie?.movie_title || 'Ingen titel hittades'}</p>
+        </section>
 
-      {booking.screening?.screening_time && (
-        <p>
-          Visningstid: <br />
-          <strong>
-            {new Date(booking.screening.screening_time).toLocaleString(
-              'sv-SE',
-              { dateStyle: 'long', timeStyle: 'short' }
-            )}
-          </strong>
-        </p>
-      )}
+        {booking.movie?.movie_poster && (
+          <section className='section'>
+            <img
+              className='movie-poster'
+              src={booking.movie.movie_poster}
+              alt={booking.movie.movie_title || 'Filmposter'}
+            />
+          </section>
+        )}
 
-      {booking.salon?.salon_name && (
-        <p>
-          Salong: <br />
-          <strong>{booking.salon.salon_name}</strong>
-        </p>
-      )}
+        {booking.screening?.screening_time && (
+          <section className='section'>
+            <p className='section-label'>Visningstid: </p>
+            <p>
+              {new Date(booking.screening.screening_time).toLocaleString(
+                'sv-SE',
+                { dateStyle: 'long', timeStyle: 'short' }
+              )}
+            </p>
+          </section>
+        )}
 
-      {booking.seats?.length > 0 && (
-        <div>
-          <p>Platser:</p>
-          <ul>
-            {booking.seats.map((seat, index) => (
-              <li key={index}>
-                <strong>
-                  Rad {seat.seat_rowNumber}, plats {seat.seat_number} (
-                  {seat.bookingSeat_ticketType}) – {seat.bookingSeat_price} kr
-                </strong>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        {booking.salon?.salon_name && (
+          <section className='section'>
+            <p className='section-label'>Salong: </p>
+            <p>{booking.salon.salon_name}</p>
+          </section>
+        )}
 
-      <p>
-        Totalpris: <br />
-        <strong>{totalPrice} kr</strong>
-      </p>
+        {booking.seats?.length > 0 && (
+          <section className='section'>
+            <p className='section-label'>Platser:</p>
+            <ul className='seat-list'>
+              {booking.seats.map((seat, index) => (
+                <li key={index}>
+                  <p>
+                    Rad {seat.seat_rowNumber}, plats {seat.seat_number} (
+                    {seat.bookingSeat_ticketType}) – {seat.bookingSeat_price} kr
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        <section className='section total-price'>
+          <p className='section-label'>Totalpris: </p>
+          <p>{totalPrice} kr</p>
+        </section>
+      </div>
     </div>
   );
 }

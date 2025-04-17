@@ -1,0 +1,121 @@
+/* Grundläggande layout och animation */
+.booking-confirmation-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Bokningskortet med skugga och animation */
+.booking-card {
+  background-color: #1e1f29;
+  color: #f4f4f4;
+  max-width: 500px;
+  width: 100%;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 204, 112, 0.1);
+  animation: fade-in 0.6s ease-in-out 0.2s 1 normal both;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  animation: fade-in 0.6s ease-in-out 0.2s both;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.booking-card:hover {
+  box-shadow: 0 0 12px #ffcc70;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+/* Animationseffekt */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Sektionsstil med avskiljare */
+.section {
+  margin-bottom: 2.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+/* Label-stil för sektioner */
+.section-label {
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffcc70;
+  display: block;
+}
+
+/* Titelstil med gradient */
+.booking-title {
+  font-size: 2.25rem;
+  margin-bottom: 2.5rem;
+  text-align: center;
+  font-weight: 800;
+  background: linear-gradient(to right, #ffcc70, #ffffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+/* Underlinje under titeln */
+.booking-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background-color: #ffcc70;
+  border-radius: 3px;
+}
+
+/* Filmaffisch-stil */
+.movie-poster {
+  width: 100%;
+  border-radius: 0.75rem;
+  margin: 1rem 0 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Platslista */
+.seat-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 0.5rem;
+}
+
+.seat-list li {
+  background-color: rgba(255, 255, 255, 0.05);
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border-left: 3px solid #ffcc70;
+}
+
+/* Totalpris-sektion */
+.total-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffcc70;
+  margin-top: 0.5rem;
+}
