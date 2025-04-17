@@ -3,7 +3,8 @@ import { getMovies, deleteMovie } from "../api/apiMovies";
 import { MovieCard } from "../components/MovieCards";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
-import { ConfirmDialog } from "../components/ConfirmDialog"; //maricel
+import { ConfirmDialog } from "../components/ConfirmDialog";
+import { LoadingSkeleton } from "../components/LoadingSkeleton";
 
 export const Hem = () => {
   const [movies, setMovies] = useState([]);
@@ -11,63 +12,37 @@ export const Hem = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const [movieToDelete, setMovieToDelete] = useState(null); //maricel
+  const [movieToDelete, setMovieToDelete] = useState(null);
+
+  // Minsta skeleton-vistelse
+  const [minDelayPassed, setMinDelayPassed] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setMinDelayPassed(true), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     getMovies()
-      .then((data) => {
-        setMovies(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message || "Något gick fel");
-        setLoading(false);
-      });
+      .then((data) => setMovies(data))
+      .catch((err) => setError(err.message || "Något gick fel"))
+      .finally(() => setLoading(false));
   }, []);
 
-  /* const handleDelete = async (movieId) => {
-    if (!user?.user_admin) {
-      setError("Du måste vara admin för att kunna radera filmer");
-      return;
-    }
-    try {
-      await deleteMovie(movieId);
-      getMovies().then((data) => setMovies(data));
-    } catch (err) {
-      setError(err.message || "Något gick fel");
-    }
-  }; */
-  const confirmDelete = (movieId) => {
-    if (!user?.user_admin) {
-      setError("Du måste vara admin för att kunna radera filmer");
-      return;
-    }
-    const movie = movies.find((m) => Number(m.movie_id) === Number(movieId));
-    setMovieToDelete(movie);
+  // Visa skeleton tills både data laddat och min-delay gått
+  if (loading || !minDelayPassed) {
+    return (
+      <div className="movie-cards-container">
+        {Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="movie-card">
+            <LoadingSkeleton height="200px" style={{ marginBottom: "1rem" }} />
+            <LoadingSkeleton width="60%" height="1.2rem" />
+            <LoadingSkeleton width="40%" height="1rem" />
+          </div>
+        ))}
+      </div>
+    );
+  }
 
-  };
-  const handleConfirm = async () => {
-    try {
-      await deleteMovie(movieToDelete.movie_id);
-      const updatedMovies = await getMovies();
-      setMovies(updatedMovies);
-    } catch (err) {
-      setError(err.message || "Något gick fel");
-    } finally {
-      setMovieToDelete(null);
-    }
-  };
-
-  const handleCancel = () => {
-    setMovieToDelete(null);
-  };
-
-
-  const handleAddMovie = () => {
-    navigate("/addmovie");
-  };
-
-  if (loading) return <div>Laddar filmer...</div>;
   if (error) return <div>{error}</div>;
 
   return (
@@ -75,7 +50,10 @@ export const Hem = () => {
       <h1>Aktuella filmer</h1>
       {user && user.user_admin === 1 && (
         <div>
-          <button onClick={handleAddMovie} className="admin-add-button">
+          <button
+            onClick={() => navigate("/addmovie")}
+            className="admin-add-button"
+          >
             Lägg till film
           </button>
           <button
@@ -93,7 +71,7 @@ export const Hem = () => {
               <div className="admin-controls">
                 <button
                   className="delete-button"
-                  onClick={() => confirmDelete(movie.movie_id)}
+                  onClick={() => setMovieToDelete(movie)}
                 >
                   ❌
                 </button>
@@ -103,12 +81,20 @@ export const Hem = () => {
           </div>
         ))}
       </div>
-      {/* Add this here --Maricel */}
       {movieToDelete && (
         <ConfirmDialog
-          message={`Are you sure you want to delete the film "${movieToDelete.movie_title}"?`}
-          onConfirm={handleConfirm}
-          onCancel={handleCancel}
+          message={`Vill du verkligen ta bort "${movieToDelete.movie_title}"?`}
+          onConfirm={async () => {
+            try {
+              await deleteMovie(movieToDelete.movie_id);
+              setMovies(await getMovies());
+            } catch (e) {
+              setError(e.message || "Fel vid borttagning");
+            } finally {
+              setMovieToDelete(null);
+            }
+          }}
+          onCancel={() => setMovieToDelete(null)}
         />
       )}
     </div>

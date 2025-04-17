@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getScreenings } from "../api/apiScreenings";
 import { getAvailableSeats } from "../api/apiSeats";
 import { StepIndicator } from "../components/StepIndicator";
+import { LoadingSkeleton } from "../components/LoadingSkeleton";
 
 export function SelectScreeningView() {
   const { movieId } = useParams();
@@ -73,7 +74,20 @@ export function SelectScreeningView() {
   }
 
   if (isLoadingScreenings) {
-    return <div>Laddar visningar...</div>;
+    return (
+      <ul>
+        {[...Array(4)].map((_, i) => (
+          <li key={i} style={{ marginBottom: "8px" }}>
+            <LoadingSkeleton width="60%" height="1.5rem" />
+            <LoadingSkeleton
+              width="30%"
+              height="1rem"
+              style={{ marginLeft: "1rem" }}
+            />
+          </li>
+        ))}
+      </ul>
+    );
   }
 
   if (loadingErrorMessage) {
