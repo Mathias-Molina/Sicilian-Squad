@@ -6,7 +6,9 @@ export function App() {
   return (
     <>
       <Navbar />
-      <Outlet />
+      <main className="fade-container">
+        <Outlet />
+      </main>
     </>
   );
 }
