@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { getDetailedBookingsByUserId } from '../api/apiBookings';
 import { BookingListItem } from '../components/BookingListItem';
-import '../styling/MinaBokningar.css';
 
 export const MinaBokningar = () => {
   const { user, isLoading } = useContext(UserContext);
