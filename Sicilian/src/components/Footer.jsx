@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export const Footer = () => {
   return (
     <footer>
@@ -34,8 +36,8 @@ export const Footer = () => {
         </a>
 
         <div className="footer-nav">
-          <a href="/">Hem</a>
-          <a href="/contact">Kontakta oss</a>
+          <Link to="/">Hem</Link>
+          <Link to="/contact">Kontakta oss</Link>
         </div>
       </div>
       <p>

@@ -14,6 +14,7 @@ import { SelectSeatsView } from "./views/SelectSeatsView";
 import { ProtectedAdminRoutes } from "./ProtectedAdminRoutes";
 import { AddScreening } from "./views/AddScreening";
 import { BookingDetailsView } from "./views/BookingDetailsView";
+import { ContactUs } from "./views/ContactUs";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -27,6 +28,7 @@ export const router = createBrowserRouter(
         path="*"
       />
       <Route path="/" element={<Hem />} />
+      <Route path="/contact" element={<ContactUs />} />
       <Route path="/min-sida" element={<MinaBokningar />} />
       <Route path="/logga-in" element={<LoggaIn />} />
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
