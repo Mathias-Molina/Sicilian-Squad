@@ -26,3 +26,73 @@
   visibility: visible;
   opacity: 1;
 }
+.select-with-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.info-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.info-icon {
+  font-size: 1rem;
+  user-select: none;
+}
+
+/* Tooltip - visas vid hover */
+.info-icon-wrapper .tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #111;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-size: 0.75rem;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.info-icon-wrapper:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+.ticket-info-popup {
+  background-color: #222;
+  color: white;
+  padding: 1rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.ticket-info-popup ul {
+  padding-left: 1rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.info-toggle-button {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.info-toggle-button:hover {
+  color: #1e40af;
+  text-decoration: underline;
+}

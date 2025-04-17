@@ -8,14 +8,13 @@ import { useSalon } from "../hooks/useSalon";
 import { useSeat } from "../hooks/useSeat";
 import { useBooking } from "../hooks/useBooking";
 import { StepIndicator } from "../components/StepIndicator";
+import { TicketTypeInfo } from "../components/TicketTypeInfo";
 
 export const SelectSeatsView = () => {
   const { screeningId, salonId } = useParams();
   const navigate = useNavigate();
-
   const [numPersons, setNumPersons] = useState(1);
   const [currentStep, setCurrentStep] = useState(2);
-
   const { pricePerTicket, movieTitle, loadingScreening, errorScreening } =
     useScreening(screeningId);
   const { salon, loadingSalon, errorSalon } = useSalon(salonId);
@@ -31,6 +30,7 @@ export const SelectSeatsView = () => {
     setSeatTicketTypes,
   } = useSeat(screeningId, numPersons);
   const { bookingError, handleBooking, setBookingError } = useBooking();
+  const [showInfo, setShowInfo] = useState(false);
 
   const getMultiplier = type => {
     if (type === "barn") return 0.5;
@@ -107,6 +107,17 @@ export const SelectSeatsView = () => {
   return (
     <section className="page">
       <StepIndicator currentStep={currentStep} />
+      <div className="info-top-right">
+        <button
+          className="info-toggle-button"
+          onClick={() => setShowInfo(!showInfo)}
+          aria-label="Visa biljettinformation"
+        >
+          ℹ️
+        </button>
+      </div>
+
+      {showInfo && <TicketTypeInfo />}
 
       <BookingForm
         movieTitle={movieTitle}
@@ -114,7 +125,7 @@ export const SelectSeatsView = () => {
         handleNumPersonsChange={handleNumChange}
         totalPrice={totalPrice}
       />
-
+      
       <SeatMap
         seats={seats}
         salon={salon}
