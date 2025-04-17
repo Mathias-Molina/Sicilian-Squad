@@ -7,13 +7,14 @@ import { useScreening } from "../hooks/useScreening";
 import { useSalon } from "../hooks/useSalon";
 import { useSeat } from "../hooks/useSeat";
 import { useBooking } from "../hooks/useBooking";
+import { StepIndicator } from "../components/StepIndicator";
+import { TicketTypeInfo } from "../components/TicketTypeInfo";
 
 export const SelectSeatsView = () => {
   const { screeningId, salonId } = useParams();
   const navigate = useNavigate();
-
   const [numPersons, setNumPersons] = useState(1);
-
+  const [currentStep, setCurrentStep] = useState(2);
   const { pricePerTicket, movieTitle, loadingScreening, errorScreening } =
     useScreening(screeningId);
   const { salon, loadingSalon, errorSalon } = useSalon(salonId);
@@ -29,6 +30,7 @@ export const SelectSeatsView = () => {
     setSeatTicketTypes,
   } = useSeat(screeningId, numPersons);
   const { bookingError, handleBooking, setBookingError } = useBooking();
+  const [showInfo, setShowInfo] = useState(false);
 
   const getMultiplier = type => {
     if (type === "barn") return 0.5;
@@ -41,22 +43,41 @@ export const SelectSeatsView = () => {
     return sum + pricePerTicket * getMultiplier(ticketType);
   }, 0);
 
-  const handleNumPersonsChange = e => {
-    const newNum = parseInt(e.target.value);
+  const handleNumChange = e => {
+    const newNum = parseInt(e.target.value, 10);
     setNumPersons(newNum);
+    setBookingError("");
+    setCurrentStep(3);
 
-    if (selectedSeats.length === newNum) {
-      setBookingError("");
-    }
     if (selectedSeats.length > newNum) {
-      const newSelected = selectedSeats.slice(0, newNum);
-      setSelectedSeats(newSelected);
-      const newTicketTypes = {};
-      newSelected.forEach(seatId => {
-        newTicketTypes[seatId] = seatTicketTypes[seatId] || "vuxen";
+      const trimmed = selectedSeats.slice(0, newNum);
+      setSelectedSeats(trimmed);
+      const newTypes = {};
+      trimmed.forEach(id => {
+        newTypes[id] = seatTicketTypes[id] || "vuxen";
       });
-      setSeatTicketTypes(newTicketTypes);
+      setSeatTicketTypes(newTypes);
     }
+  };
+
+  const handleSeatClickWrapper = (seatId, available) => {
+    const isSelected = selectedSeats.includes(seatId);
+    let newSelected;
+    if (isSelected) {
+      newSelected = selectedSeats.filter(id => id !== seatId);
+    } else if (selectedSeats.length < numPersons) {
+      newSelected = [...selectedSeats, seatId];
+    } else {
+      newSelected = selectedSeats;
+    }
+
+    if (newSelected.length === numPersons) {
+      setCurrentStep(4);
+    } else {
+      setCurrentStep(3);
+    }
+
+    toggleSeatSelection(seatId, available);
   };
 
   const onBookingClick = async () => {
@@ -85,18 +106,33 @@ export const SelectSeatsView = () => {
 
   return (
     <section className="page">
+      <StepIndicator currentStep={currentStep} />
+      <div className="info-top-right">
+        <button
+          className="info-toggle-button"
+          onClick={() => setShowInfo(!showInfo)}
+          aria-label="Visa biljettinformation"
+        >
+          ℹ️
+        </button>
+      </div>
+
+      {showInfo && <TicketTypeInfo />}
+
       <BookingForm
         movieTitle={movieTitle}
         numPersons={numPersons}
-        handleNumPersonsChange={handleNumPersonsChange}
+        handleNumPersonsChange={handleNumChange}
         totalPrice={totalPrice}
       />
+      
       <SeatMap
         seats={seats}
         salon={salon}
-        toggleSeatSelection={toggleSeatSelection}
+        toggleSeatSelection={handleSeatClickWrapper}
         selectedSeats={selectedSeats}
       />
+
       <BookingFooter
         selectedSeats={selectedSeats}
         seatTicketTypes={seatTicketTypes}
