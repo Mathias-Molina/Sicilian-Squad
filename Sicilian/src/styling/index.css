@@ -1,6 +1,6 @@
-@import "./DeleteButton.css";
-@import url("./SelectSeatsView.css");
-@import "./Moviecards.css";
-@import "./Footer.css";
-@import "./App.css";
-
+@import url('./DeleteButton.css');
+@import url('./SelectSeatsView.css');
+@import url('./Moviecards.css');
+@import url('./MinaBokningar.css');
+@import url('./Navbar.css');
+@import url('./ConfirmDialog.css');
