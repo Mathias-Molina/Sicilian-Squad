@@ -5,18 +5,18 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    color: white;
 }
 
 h3 {
-    margin:0;
+    margin: 0;
     font-size: 1.5rem;
 }
 
 .footer-icons i {
     color: white;
     font-size: 1.5rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 0 2rem;
     margin-bottom: 2rem;
 }
 
@@ -25,8 +25,8 @@ h3 {
     flex-direction: row;
     gap: 2rem;
     justify-content: center;
-    
 }
+
 .footer-nav a {
     color: white;
     text-decoration: none;
