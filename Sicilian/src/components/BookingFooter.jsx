@@ -1,4 +1,3 @@
-import React from "react";
 import { ErrorMessage } from "../components/Errormessage";
 
 export const BookingFooter = ({
