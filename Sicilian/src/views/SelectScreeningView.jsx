@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getScreenings } from "../api/apiScreenings";
 import { getAvailableSeats } from "../api/apiSeats";
+import { StepIndicator } from "../components/StepIndicator";
 
 export function SelectScreeningView() {
   const { movieId } = useParams();
@@ -81,6 +82,7 @@ export function SelectScreeningView() {
 
   return (
     <section>
+      <StepIndicator activeSteps={[1]} />
       <h1>Välj framtida visning</h1>
       <ul>
         {screeningList.map(screening => {
