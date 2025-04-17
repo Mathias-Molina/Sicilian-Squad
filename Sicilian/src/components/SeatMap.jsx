@@ -25,7 +25,7 @@ export const SeatMap = ({
             }`}
             disabled={!seat.available}
           >
-            {seat.available && `${seat.seat_rowNumber} - ${seat.seat_number}`}
+            {`${seat.seat_rowNumber} - ${seat.seat_number}`}
           </button>
         ))}
       </div>

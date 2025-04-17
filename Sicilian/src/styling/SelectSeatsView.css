@@ -42,6 +42,7 @@
 
 .salon-seat.occupied {
   background-color: red;
+  color: white;
 }
 
 .salon-seat.selected {
