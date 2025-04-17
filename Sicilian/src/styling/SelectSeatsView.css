@@ -26,23 +26,61 @@
 }
 
 .salon-seat {
-  font-size: 80%;
-  background-color: #595963;
-  height: 2.5rem;
-  width: 2.5rem;
-  margin: 3px;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  position: relative;
+  background-color: #3b3b3b;
+  color: white;
+  width: 2.2rem;
+  height: 1.8rem;
+  border-radius: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.4);
+  margin: 6px;
+}
+.salon-seat::before {
+  content: "";
+  position: absolute;
+  bottom: -0.9rem;
+  left: 0;
+  right: 0;
+  height: 0.9rem;
+  background-color: #4a4a4a;
+  border-bottom-left-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  z-index: -1;
+}
+.salon-seat::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -0.3rem;
+  right: -0.3rem;
+  height: 100%;
+  border-left: 4px solid #555;
+  border-right: 4px solid #555;
+  z-index: -1;
+  border-radius: 0.2rem;
 }
 
 .salon-seat:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.salon-seat:active {
+  transform: scale(0.95);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .salon-seat.occupied {
   background-color: red;
   color: white;
+  cursor: not-allowed;
 }
 
 .salon-seat.selected {
