@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getMovieById } from "../api/apiMovies";
+import "../styling/MovieDetails.css";
 
 export const MovieDetailsView = () => {
   const { movieId } = useParams();
@@ -23,44 +24,62 @@ export const MovieDetailsView = () => {
   const videoId = movie.movie_trailer; //  Fetching from database --Maricel--
 
   return (
-    <section>
-      <h1>{movie.movie_title}</h1>
-      <img
-        src={movie.movie_poster}
-        alt={movie.movie_title}
-        style={{ width: "300px" }}
-      />
-      <p>{movie.movie_description}</p>
-      <p>
-        <strong>Genre:</strong> {movie.movie_genre}
-      </p>
-      <p>
-        <strong>Betyg:</strong> {movie.movie_rated}
-      </p>
-      <p>
-        <strong>Speltid:</strong> {movie.movie_runtime}
-      </p>
-      <p>
-        <strong>Released:</strong> {movie.movie_releaseDate}
-      </p>
-      {/* 🎬 Trailer section --Maricel*/} 
-     {videoId && (
-        <div style={{ marginTop: "20px" }}>
-          <h3>Trailer:</h3>
-          <iframe
-            width="400"
-            height="240"
-            src={`https://www.youtube.com/embed/${videoId}`}
-            title="YouTube trailer"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          ></iframe> 
+    <section className="movie-details-container">
+      <div className="movie-content">
+        <div className="poster-container">
+          <img
+            src={movie.movie_poster}
+            alt={movie.movie_title}
+            className="movie-poster"
+          />
+        </div>
+        
+        <div className="movie-details">
+          <h1 className="movie-title">{movie.movie_title}</h1>
+          <p className="movie-description">{movie.movie_description}</p>
+          
+          <div className="info-grid">
+            <div className="info-item">
+              <div className="info-label">Genre</div>
+              <div className="info-value">{movie.movie_genre}</div>
+            </div>
+            
+            <div className="info-item">
+              <div className="info-label">Betyg</div>
+              <div className="info-value">{movie.movie_rated}</div>
+            </div>
+            
+            <div className="info-item">
+              <div className="info-label">Speltid</div>
+              <div className="info-value">{movie.movie_runtime}</div>
+            </div>
+            
+            <div className="info-item">
+              <div className="info-label">Released</div>
+              <div className="info-value">{movie.movie_releaseDate}</div>
+            </div>
+          </div>
+          
+          <Link to={`/boka/${movie.movie_id}`} className="book-button">
+            Boka film
+          </Link>
+        </div>
+      </div>
+
+      {videoId && (
+        <div className="trailer-section">
+          <h3>Trailer</h3>
+          <div className="trailer-container">
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}`}
+              title="YouTube trailer"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
         </div>
       )}
-      <Link to={`/boka/${movie.movie_id}`}>
-        <button>Boka film</button>
-      </Link>
     </section>
   );
 };
