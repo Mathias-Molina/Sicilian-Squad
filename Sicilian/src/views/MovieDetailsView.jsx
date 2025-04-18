@@ -37,44 +37,41 @@ export const MovieDetailsView = () => {
 
       <div className="movie-info-section">
         <h1>{movie.movie_title}</h1>
+
+        {videoId && (
+          <div className="trailer-container">
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}`}
+              title="YouTube trailer"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
         
         <div className="movie-description">
           {movie.movie_description}
         </div>
 
-        <div className="movie-metadata">
-          <div className="metadata-item">
-            <span className="label">Genre:</span>
-            <span className="value">{movie.movie_genre}</span>
+        <div className="movie-metadata-grid">
+          <div className="metadata-block">
+            <h3>Genre</h3>
+            <p>{movie.movie_genre}</p>
           </div>
-          <div className="metadata-item">
-            <span className="label">Betyg:</span>
-            <span className="value">{movie.movie_rated}</span>
+          <div className="metadata-block">
+            <h3>Betyg</h3>
+            <p>{movie.movie_rated}</p>
           </div>
-          <div className="metadata-item">
-            <span className="label">Speltid:</span>
-            <span className="value">{movie.movie_runtime}</span>
+          <div className="metadata-block">
+            <h3>Speltid</h3>
+            <p>{movie.movie_runtime}</p>
           </div>
-          <div className="metadata-item">
-            <span className="label">Released:</span>
-            <span className="value">{movie.movie_releaseDate}</span>
+          <div className="metadata-block">
+            <h3>Released</h3>
+            <p>{movie.movie_releaseDate}</p>
           </div>
         </div>
-
-        {videoId && (
-          <div className="trailer-section">
-            <h2>Trailer</h2>
-            <div className="trailer-container">
-              <iframe
-                src={`https://www.youtube.com/embed/${videoId}`}
-                title="YouTube trailer"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
