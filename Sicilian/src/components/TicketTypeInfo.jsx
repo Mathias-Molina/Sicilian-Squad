@@ -7,7 +7,7 @@ export const TicketTypeInfo = () => {
           <strong>Vuxen</strong>: Ordinarie pris
         </li>
         <li>
-          <strong>Student</strong>: 80% – studentkort krävs
+          <strong>Pensionär</strong>: 80% – pensionärskort krävs
         </li>
         <li>
           <strong>Barn</strong>: 50% – gäller upp till 12 år
