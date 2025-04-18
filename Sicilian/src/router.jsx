@@ -14,6 +14,7 @@ import { SelectSeatsView } from "./views/SelectSeatsView";
 import { ProtectedAdminRoutes } from "./ProtectedAdminRoutes";
 import { AddScreening } from "./views/AddScreening";
 import { BookingDetailsView } from "./views/BookingDetailsView";
+import { ContactUs } from "./views/ContactUs";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -32,6 +33,7 @@ export const router = createBrowserRouter(
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
       <Route path="/boka/:movieId" element={<SelectScreeningView />} />
       <Route path="/bookings/:bookingId" element={<BookingDetailsView />} />
+      <Route path="/contact" element={<ContactUs />} />
       <Route
         path="/boka/screening/:screeningId/:salonId"
         element={<SelectSeatsView />}
