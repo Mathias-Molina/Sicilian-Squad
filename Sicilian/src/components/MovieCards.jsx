@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
+import "../styling/MovieCardsGrid.css";
 
 export const MovieCard = ({ movie, movieTrailerId }) => {
   // Pass the movieTrailerId as a prop--Maricel
   return (
-    <Link to={`/film/${movie.movie_id}`} className="movie-card__link">
+    <Link to={`/film/${movie.movie_id}`} className="movie-card movie-card__link">
         <img
           src={movie.movie_poster}
           alt={movie.movie_title}

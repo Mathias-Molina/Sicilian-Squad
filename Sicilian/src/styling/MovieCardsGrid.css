@@ -6,6 +6,7 @@
     padding: 2rem;
     background-color: #0e0e1b;
 }
+
 /* Individual movie card */
 .movie-card {
     background: #0e0e1b;
@@ -22,7 +23,6 @@
 .movie-card:hover {
     transform: translateY(-5px);
     box-shadow: rgba(151, 65, 252, 0.2) 0 10px 300px -5px;
-
 }
 
 .movie-card__link {
@@ -31,7 +31,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
 }
 
 .movie-card__image {
@@ -47,11 +47,6 @@
 .movie-card__info {
     padding: 1rem;
     color: #fff;
-    text-align: center;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 .movie-card__title {
@@ -69,6 +64,33 @@
     border-radius: 4px;
     display: inline-block;
     margin-right: 0.5rem;
+}
+
+/* Movie card wrapper and admin controls */
+.movie-card-wrapper {
+    position: relative;
+}
+
+.delete-button {
+    position: absolute;
+    top: 1px;
+    right: 130px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.delete-button:hover {
+    background: rgba(255, 0, 0, 0.9);
+    transform: scale(1.1);
 }
 
 .admin-add-button {
@@ -92,14 +114,5 @@
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 1rem;
         padding: 1rem;
-    }
-
-    .movie-card__image {
-        height: 300px;
-    }
-
-    .admin-add-button {
-        margin: 0.5rem;
-        font-size: 0.9rem;
     }
 }

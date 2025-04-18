@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getMovieById } from "../api/apiMovies";
-import "../styling/MovieDetails.css";
 
 export const MovieDetailsView = () => {
   const { movieId } = useParams();
@@ -32,10 +31,28 @@ export const MovieDetailsView = () => {
             alt={movie.movie_title}
             className="movie-poster"
           />
+          <Link to={`/boka/${movie.movie_id}`} className="book-button">
+            Boka film
+          </Link>
         </div>
         
         <div className="movie-details">
           <h1 className="movie-title">{movie.movie_title}</h1>
+          
+          {videoId && (
+            <div className="trailer-section">
+              <div className="trailer-container">
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoId}`}
+                  title="YouTube trailer"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          )}
+
           <p className="movie-description">{movie.movie_description}</p>
           
           <div className="info-grid">
@@ -48,7 +65,7 @@ export const MovieDetailsView = () => {
               <div className="info-label">Betyg</div>
               <div className="info-value">{movie.movie_rated}</div>
             </div>
-            
+
             <div className="info-item">
               <div className="info-label">Speltid</div>
               <div className="info-value">{movie.movie_runtime}</div>
@@ -59,27 +76,8 @@ export const MovieDetailsView = () => {
               <div className="info-value">{movie.movie_releaseDate}</div>
             </div>
           </div>
-          
-          <Link to={`/boka/${movie.movie_id}`} className="book-button">
-            Boka film
-          </Link>
         </div>
       </div>
-
-      {videoId && (
-        <div className="trailer-section">
-          <h3>Trailer</h3>
-          <div className="trailer-container">
-            <iframe
-              src={`https://www.youtube.com/embed/${videoId}`}
-              title="YouTube trailer"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      )}
     </section>
   );
 };
