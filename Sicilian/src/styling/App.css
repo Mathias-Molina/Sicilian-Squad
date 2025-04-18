@@ -22,7 +22,6 @@ body {
   min-height: 100vh;
   background-color: #0e0e1b;
 }
-
 @keyframes fadeIn {
   from {
     opacity: 0;
