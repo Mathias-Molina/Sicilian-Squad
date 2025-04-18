@@ -66,56 +66,89 @@ export const AddScreening = () => {
       setSalon(undefined);
       setScreeningPrice(0);
       setScreeningTime("");
+
     } catch (err) {
-      setError(err);
+      setError(err.message || "Something went wrong.");
     }
   };
 
   return (
-    <div>
-      {(error && (error.message || error)) || null}
-      {message && message}
+    <div className="add-screening-container">
+
+      <h2>Lägg till visning</h2>
+
+      <div className="selection-section">
+        <h3>Välj en film</h3>
+        <ul className="movie-list">
+          {movies &&
+            movies.map((m) => (
+              <div
+                className={`movie-item ${movie && movie.movie_id === m.movie_id ? "selected" : ""}`}
+                key={m.movie_id}
+                onClick={() => setMovie(m)}
+              >
+                {m.movie_title}
+                <img
+                  className="movie-poster"
+                  src={m.movie_poster}
+                  alt={m.movie_title}
+                />
+              </div>
+            ))}
+        </ul>
+        <br />
+        <h3>Välj en salong</h3>
+        <ul className="salon-list"> {/* I separated the buttons into two classnames so I can style them with different colors --Maricel*/}
+          {salons &&
+            salons.map((s, index) => (
+              <div
+                className={`salon-item 
+                  ${index === 0 ? "salon-primary" : "salon-secondary"} 
+                  ${salon && salon.salon_id === s.salon_id ? "selected" : ""}`
+                }
+                key={s.salon_id}
+                onClick={() => setSalon(s)}
+              >
+                {s.salon_name}
+              </div>
+            ))}
+        </ul>
+      </div>
+      <br />
+      <hr />
+      {error && <div className="error-message">{error}</div>}
+      {message && <div className="success-message">{message}</div>}
+
       <form
+        className="add-screening-form"
         onSubmit={(e) =>
           handleAddScreening(e, movie, salon, screeningTime, screeningPrice)
         }
       >
-        <p>{`Chosen movie: ${movie ? movie.movie_title : ""}`}</p>
-        <p>{`Chosen salon: ${salon ? salon.salon_name : ""}`}</p>
+        <p className="selection-info">
+          Vald Film: <strong>{movie ? movie.movie_title : ""}</strong>
+        </p>
+        <p className="selection-info">
+          Vald Salong: <strong>{salon ? salon.salon_name : ""}</strong>
+        </p>
+
         <input
+          className="input"
           type="datetime-local"
           placeholder="screening_time"
           value={screeningTime}
           onChange={(e) => setScreeningTime(e.target.value)}
         />
-        <label>Ticket Price</label>
+        <label className="label">Biljettpris</label>
         <input
+          className="input"
           type="number"
-          placeholder="price"
+          placeholder="Pris"
           value={screeningPrice}
           onChange={(e) => setScreeningPrice(e.target.value)}
         />
-        <button type="submit">Submit</button>
+        <button className="submit-button" type="submit">Lägg film till visning</button>
       </form>
-      <ul>
-        {movies &&
-          movies.map((movie) => (
-            <div key={movie.movie_id} onClick={() => setMovie(movie)}>
-              {movie.movie_title}
-              <img
-                src={movie.movie_poster}
-                alt={movie.movie_title}
-                width={"40px"}
-              />
-            </div>
-          ))}
-      </ul>
-      {salons &&
-        salons.map((salon) => (
-          <div key={salon.salon_id} onClick={() => setSalon(salon)}>
-            {salon.salon_name}
-          </div>
-        ))}
     </div>
   );
 };

@@ -1,0 +1,160 @@
+.add-screening-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(39, 38, 38, 0.527);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+
+
+
+}
+
+h2 {
+    font-family: "Playfair Display", serif;
+    text-align: center;
+    color: #ffcc70;
+
+}
+
+h3 {
+    font-family: "Playfair Display", serif;
+
+}
+
+.error-message {
+    color: #d32f2f;
+    background: #ffebee;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.success-message {
+    color: #2e7d32;
+    background: #e8f5e9;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.add-screening-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.input {
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.label {
+    font-weight: bold;
+    margin-top: 0.5rem;
+}
+
+.submit-button {
+    background-color: #4F959D;
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #156169;
+}
+
+.selection-info {
+    font-family: "Playfair Display", serif;
+    font-size: 1rem;
+    font-style: bold;
+}
+
+.selection-info strong {
+    font-size: 1.4rem;
+    color: #4F959D;
+    /* optional: highlight color */
+}
+
+.selection-section {
+    margin-top: 2rem;
+}
+
+.movie-list,
+.salon-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.movie-item {
+    padding: 0.5rem 1rem;
+    background-color: #484545;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.movie-item.selected {
+    background-color: #9c9898;
+    transform: scale(1.05);
+}
+
+.movie-item:hover {
+    background-color: #9c9898;
+    transform: scale(1.05);
+}
+
+.salon-item {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+}
+
+.salon-item.selected {
+    outline: 3px solid #fff;
+    transform: scale(1.05);
+}
+
+.salon-item:hover {
+    transform: scale(1.05);
+}
+
+/* Custom styles per salon */
+.salon-primary {
+    background-color: #244a73;
+    color: white;
+}
+
+.salon-secondary {
+    background-color: #b83143;
+    color: white;
+}
+
+.salon-primary:hover {
+    background-color: #3674B5;
+}
+
+.salon-secondary:hover {
+    background-color: #d45969;
+}
+
+.movie-poster {
+    display: block;
+    margin-top: 0.5rem;
+    width: 40px;
+    border-radius: 4px;
+    width: 100px;
+    height: 150px;
+}
