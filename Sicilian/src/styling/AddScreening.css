@@ -150,10 +150,9 @@ h3 {
     background-color: #d45969;
 }
 
-.movie-poster {
+.movie-poster-add-screening {
     display: block;
     margin-top: 0.5rem;
-    width: 40px;
     border-radius: 4px;
     width: 100px;
     height: 150px;
