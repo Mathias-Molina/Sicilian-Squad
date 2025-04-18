@@ -6,7 +6,6 @@
     padding: 2rem;
     background-color: #0e0e1b;
 }
-/* test kommentar för git push */ 
 /* Individual movie card */
 .movie-card {
     background: #0e0e1b;
@@ -22,7 +21,7 @@
 
 .movie-card:hover {
     transform: translateY(-5px);
-    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 10px 300px -5px;
 
 }
 
