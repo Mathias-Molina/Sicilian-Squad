@@ -28,12 +28,12 @@ export const router = createBrowserRouter(
         path="*"
       />
       <Route path="/" element={<Hem />} />
-      <Route path="/contact" element={<ContactUs />} />
       <Route path="/min-sida" element={<MinaBokningar />} />
       <Route path="/logga-in" element={<LoggaIn />} />
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
       <Route path="/boka/:movieId" element={<SelectScreeningView />} />
       <Route path="/bookings/:bookingId" element={<BookingDetailsView />} />
+      <Route path="/contact" element={<ContactUs />} />
       <Route
         path="/boka/screening/:screeningId/:salonId"
         element={<SelectSeatsView />}
