@@ -28,6 +28,7 @@ export const router = createBrowserRouter(
         path="*"
       />
       <Route path="/" element={<Hem />} />
+      <Route path="/contact" element={<ContactUs />} />
       <Route path="/min-sida" element={<MinaBokningar />} />
       <Route path="/logga-in" element={<LoggaIn />} />
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
