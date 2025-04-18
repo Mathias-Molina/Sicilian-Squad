@@ -1,6 +1,6 @@
-import "../styling/App.css";
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
+import "../styling/App.css";
 import { Footer } from "./Footer";
 
 export function App() {
@@ -13,4 +13,4 @@ export function App() {
       <Footer />
     </div>
   );
-}
+};
