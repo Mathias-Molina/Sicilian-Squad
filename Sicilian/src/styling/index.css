@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
 @import url("./DeleteButton.css");
 @import url("./SelectSeatsView.css");
 @import url("./Moviecards.css");
@@ -11,6 +10,7 @@
 @import url("./BookingCards.css");
 @import url("./MovieDetails.css");
 @import url("./Footer.css");
+@import url("./AddScreening.css");
 
 /* Global styles */
 * {
