@@ -56,7 +56,7 @@ export const BookingFooter = ({
 
       {/* Show booking error if exists */}
       {bookingError && (
-        <div style={{ color: 'red', marginBottom: '1rem', fontWeight: '500', textAlign: 'center' }}>
+        <div style={{ color: 'red', marginBottom: '1rem', fontWeight: '500',fontSize: '1.1rem', textAlign: 'center' }}>
           {bookingError}
         </div>
       )}
