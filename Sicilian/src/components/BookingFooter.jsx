@@ -14,8 +14,8 @@ export const BookingFooter = ({
     switch (type) {
       case "barn":
         return "Barn: 50% rabatt (upp till 12 år)";
-      case "student":
-        return "Student: 80% – studentkort krävs";
+      case "pensionär":
+        return "Pensionär: 80% – pensionärskort krävs";
       case "vuxen":
         return "Vuxen: Ordinarie pris";
       default:
@@ -44,7 +44,7 @@ export const BookingFooter = ({
                   }
                 >
                   <option value="vuxen">Vuxen (100%)</option>
-                  <option value="student">Student (80%)</option>
+                  <option value="pensionär">Pensionär (80%)</option>
                   <option value="barn">Barn (50%)</option>
                 </select>
                 <span className="tooltip-text">{getTooltipText(type)}</span>

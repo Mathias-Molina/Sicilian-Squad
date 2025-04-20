@@ -89,7 +89,7 @@ export const AddScreening = () => {
               >
                 {m.movie_title}
                 <img
-                  className="movie-poster"
+                  className="movie-poster-add-screening"
                   src={m.movie_poster}
                   alt={m.movie_title}
                 />
