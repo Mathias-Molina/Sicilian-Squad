@@ -39,7 +39,7 @@
   margin-bottom: 2.5rem;
   font-weight: 800;
   text-align: center;
-  background: linear-gradient(to right, #ffcc70, #ffffff);
+  background: linear-gradient(to right, #9013fe, #c280ff);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -54,7 +54,7 @@
   transform: translateX();
   width: 50px;
   height: 3px;
-  background-color: #ffcc70;
+  background-color: #9013fe;
   border-radius: 3px;
 }
 
@@ -64,3 +64,81 @@
 }
 
 /*Etiketter för fält*/
+.form-label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #a64aff;
+}
+
+/*Textfält och andra inputs*/
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #272a3a;
+  border: 1px rgba(255, 255, 255, 0.1);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  color: #f4f4f4;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-input:focus {
+  border-color: #9013fe;
+  box-shadow: 0 0 0 2px rgba(144, 19, 254, 0.2);
+  outline: none;
+}
+
+/*Knappen för att lägga till film*/
+.add-movie-button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(to right, #9013fe, #7b10d5);
+  border: none;
+  border-radius: 0.5rem;
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  margin-top: 2rem;
+}
+
+.add-movie-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(144, 19, 254, 0.4);
+}
+
+.add-movie-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/*Meddelandestilar*/
+.message.success {
+  background-color: rgba(39, 174, 96, 0.2);
+  border-left: 4px solid #27ae60;
+  color: #2ecc71;
+}
+
+.message.error {
+  background-color: rgba(231, 76, 60, 0.2);
+  border-left: 4px solid #e74c3c;
+  color: #f9a7a1;
+}
+
+/* Responsiv design */
+@media (max-width: 768px) {
+  .add-movie-card {
+    padding: 2rem;
+  }
+
+  .add-movie-title {
+    font-size: 1.75rem;
+  }
+}
