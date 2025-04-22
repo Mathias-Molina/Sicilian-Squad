@@ -54,6 +54,14 @@ export const BookingFooter = ({
         })}
       </div>
 
+      {/* Show booking error if exists */}
+      {bookingError && (
+        <div style={{ color: 'red', marginBottom: '0.1rem', marginTop: '0.5rem', fontWeight: '400',fontSize: '1.1rem', textAlign: 'center' }}>
+          {bookingError}
+        </div>
+      )}
+
+
       <div>
         <button className="book-button" onClick={onBooking}>
           Boka film

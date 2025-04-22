@@ -73,6 +73,7 @@ export const SelectSeatsView = () => {
 
     if (newSelected.length === numPersons) {
       setCurrentStep(4);
+      setBookingError(""); 
     } else {
       setCurrentStep(3);
     }
@@ -85,6 +86,7 @@ export const SelectSeatsView = () => {
       setBookingError(`Vänligen välj exakt ${numPersons} säten.`);
       return;
     }
+    
     const ticketTypes = selectedSeats.map(
       seatId => seatTicketTypes[seatId] || "vuxen"
     );
