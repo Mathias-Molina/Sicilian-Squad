@@ -55,7 +55,7 @@ export const LoggaIn = () => {
   };
 
   return (
-    <section>
+    <section className="login-section">
       <h1>{isRegister ? "Registrera dig" : "Logga in"}</h1>
       <form onSubmit={handleSubmit}>
         {isRegister && (
@@ -66,6 +66,7 @@ export const LoggaIn = () => {
               id="name"
               value={name}
               onChange={e => setName(e.target.value)}
+              placeholder="Ditt fullständiga namn"
             />
           </>
         )}
@@ -75,6 +76,7 @@ export const LoggaIn = () => {
           id="username"
           value={username}
           onChange={e => setUsername(e.target.value)}
+          placeholder="Användarnamn"
         />
         <label htmlFor="password">Lösenord</label>
         <input
@@ -82,15 +84,18 @@ export const LoggaIn = () => {
           id="password"
           value={password}
           onChange={e => setPassword(e.target.value)}
+          placeholder="Lösenord"
         />
-        <button type="submit">{isRegister ? "Registrera" : "Logga in"}</button>
+        <button type="submit" className="submit-btn">
+          {isRegister ? "Registrera" : "Logga in"}
+        </button>
       </form>
-      <button onClick={() => setIsRegister(!isRegister)}>
+      <button className="toggle-btn" onClick={() => setIsRegister(!isRegister)}>
         {isRegister
           ? "Har redan ett konto? Logga in"
           : "Inget konto? Registrera dig"}
       </button>
-      {message && <p>{message}</p>}
+      {message && <p className="error-message">{message}</p>}
     </section>
   );
 };
