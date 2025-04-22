@@ -5,8 +5,8 @@ export const ConfirmDialog = ({ message, onConfirm, onCancel }) => {
             <div className="confirm-box">
                 <p>{message}</p>
                 <div className="button-group">
-                    <button className="yes-button" onClick={onConfirm}>Yes</button>
-                    <button className="cancel-button" onClick={onCancel}>Cancel</button>
+                    <button className="yes-button" onClick={onConfirm}>Ja</button>
+                    <button className="cancel-button" onClick={onCancel}>Avbryt</button>
                 </div>
             </div>
         </div>
