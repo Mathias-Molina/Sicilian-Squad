@@ -1,0 +1,66 @@
+/*Grunndläggande lahout för hela sida*/
+.add-movie-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/*Container för formuläret*/
+.add-movie-card {
+  background-color: #1e1f29;
+  color: #f4f4f4;
+  max-width: 600px;
+  width: 100%;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  animation: fade-in 0.6s ease-in-out both;
+}
+
+/*Animation för kortet*/
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*Rubrik med gradient*/
+.add-movie-title {
+  font-size: 2.25rem;
+  margin-bottom: 2.5rem;
+  font-weight: 800;
+  text-align: center;
+  background: linear-gradient(to right, #ffcc70, #ffffff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+}
+
+.add-movie-title::after {
+  content: '';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX();
+  width: 50px;
+  height: 3px;
+  background-color: #ffcc70;
+  border-radius: 3px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+/*Etiketter för fält*/
