@@ -106,7 +106,7 @@ export const Hem = () => {
       {/* Add this here --Maricel */}
       {movieToDelete && (
         <ConfirmDialog
-          message={`Are you sure you want to delete the film "${movieToDelete.movie_title}"?`}
+          message={`Är du säker på att du vill ta bort filmen "${movieToDelete.movie_title}"?`}
           onConfirm={handleConfirm}
           onCancel={handleCancel}
         />

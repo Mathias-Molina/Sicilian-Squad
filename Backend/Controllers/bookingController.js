@@ -47,7 +47,7 @@ export const createBookingHandler = (req, res) => {
     // Funktion för att få multiplikator baserat på vald biljett-typ
     const getMultiplier = ticketType => {
       if (ticketType === 'barn') return 0.5;
-      if (ticketType === 'student') return 0.8;
+      if (ticketType === 'pensionär') return 0.8;
       return 1.0; // vuxen
     };
 

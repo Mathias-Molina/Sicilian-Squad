@@ -89,7 +89,7 @@ export const AddScreening = () => {
               >
                 {m.movie_title}
                 <img
-                  className="movie-poster"
+                  className="movie-poster-add-screening"
                   src={m.movie_poster}
                   alt={m.movie_title}
                 />
@@ -125,28 +125,37 @@ export const AddScreening = () => {
           handleAddScreening(e, movie, salon, screeningTime, screeningPrice)
         }
       >
-        <p className="selection-info">
-          Vald Film: <strong>{movie ? movie.movie_title : ""}</strong>
-        </p>
-        <p className="selection-info">
-          Vald Salong: <strong>{salon ? salon.salon_name : ""}</strong>
-        </p>
+        <div className="selection-container">
+          <p className="selection-info">
+            🎬 Vald Film: <strong>{movie ? movie.movie_title : ""}</strong>
+          </p>
+          <p className="selection-info">
+            🏛️ Vald Salong: <strong>{salon ? salon.salon_name : ""}</strong>
+          </p>
+        </div>
 
-        <input
-          className="input"
-          type="datetime-local"
-          placeholder="screening_time"
-          value={screeningTime}
-          onChange={(e) => setScreeningTime(e.target.value)}
-        />
-        <label className="label">Biljettpris</label>
-        <input
-          className="input"
-          type="number"
-          placeholder="Pris"
-          value={screeningPrice}
-          onChange={(e) => setScreeningPrice(e.target.value)}
-        />
+
+        <div className="input-group">
+          <label className="label1">Visningsdatum</label>
+          <input
+            className="input1"
+            type="datetime-local"
+            placeholder="screening_time"
+            value={screeningTime}
+            onChange={(e) => setScreeningTime(e.target.value)}
+          />
+
+          <label className="label2">Biljettpris</label>
+
+          <input
+            className="input2"
+            type="number"
+            placeholder="Pris"
+            value={screeningPrice}
+            onChange={(e) => setScreeningPrice(e.target.value)}
+          />
+        </div>
+
         <button className="submit-button" type="submit">Lägg film till visning</button>
       </form>
     </div>
