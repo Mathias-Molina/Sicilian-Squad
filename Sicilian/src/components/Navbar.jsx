@@ -9,7 +9,6 @@ export const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
   const location = useLocation();
   const { pathname } = location;
-  console.log(pathname);
 
   const handleLogout = async () => {
     try {
@@ -45,7 +44,7 @@ export const Navbar = () => {
         <div className="nav-left">
           <ul className="navbar-list">
             {routes.map((route) => (
-              <li className="navbar-item">
+              <li key={route.name} className="navbar-item">
                 <NavLink to={route.path}>
                   {route.name.substring(0, 1).toUpperCase() +
                     route.name.slice(1)}
@@ -86,6 +85,12 @@ export const Navbar = () => {
                 <NavLink to="/logga-in">
                   <FaUser />
                 </NavLink>
+                {pathname === "/logga-in" && (
+                  <motion.div
+                    layoutId="header-active-link"
+                    className="navbar-highlight"
+                  ></motion.div>
+                )}
               </li>
             )}
           </ul>
