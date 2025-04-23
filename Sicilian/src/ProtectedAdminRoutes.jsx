@@ -7,5 +7,5 @@ export const ProtectedAdminRoutes = () => {
 
   if (isLoading) return null;
 
-  return user && user.user_admin === 1 ? <Outlet /> : <Navigate to="/home" />;
+  return user && user.user_admin === 1 ? <Outlet /> : <Navigate to="/" />;
 };
