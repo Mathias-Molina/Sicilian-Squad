@@ -5,6 +5,7 @@ import {
   getAllMovies,
   getMovieById,
   softDeleteMovie,
+  checkIfMovieExist,
 } from "../Models/movieModel.js";
 
 export const getMovieHandler = async (req, res) => {
@@ -30,6 +31,12 @@ export const getMovieHandler = async (req, res) => {
     const trailer = null; // OMDB ger ej trailerdata
     const runtime = data.Runtime;
     const releaseDate = data.Released;
+
+    const movieExist = checkIfMovieExist(title);
+
+    if (movieExist) {
+      return res.status(400).json({ error: "Filmen finns redan" });
+    }
 
     // Infoga filmdata i databasen
     const info = insertMovie(

@@ -30,14 +30,14 @@ export const getAllMovies = () => {
   return stmt.all();
 };
 
-export const getMovieById = movieId => {
+export const getMovieById = (movieId) => {
   const stmt = db.prepare(
     "SELECT * FROM movies WHERE movie_id = ? AND movie_isDeleted = 0"
   );
   return stmt.get(movieId);
 };
 
-export const softDeleteMovie = movieId => {
+export const softDeleteMovie = (movieId) => {
   const stmt = db.prepare(
     "UPDATE movies SET movie_isDeleted = 1 WHERE movie_id = ?"
   );
@@ -46,4 +46,16 @@ export const softDeleteMovie = movieId => {
     throw new Error("Filmen hittades inte");
   }
   return info;
+};
+
+export const checkIfMovieExist = (movie_title) => {
+  const stmt = db.prepare(
+    "SELECT movie_title FROM movies WHERE movie_title = ? "
+  );
+
+  const movie = stmt.all(movie_title);
+
+  if (movie.length > 0) {
+    return true;
+  }
 };
