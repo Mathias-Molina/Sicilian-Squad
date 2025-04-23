@@ -83,19 +83,7 @@ export function SelectScreeningView() {
   return (
     <section className='screening-section'>
       <StepIndicator currentStep={1} />
-<<<<<<< HEAD
-      <h1 className='section-title'>Välj framtida visning</h1>
-=======
-      <h1>Välj visning</h1>
-      <ul>
-        {screeningList.map(screening => {
-          const availability =
-            seatAvailabilityMap[screening.screening_id] || {};
-          const availabilityText =
-            availability.availableSeats != null
-              ? `Lediga platser: ${availability.availableSeats} av ${availability.totalSeats}`
-              : "Laddar lediga platser...";
->>>>>>> origin
+      <h1 className='section-title'>Välj visning</h1>
 
       {screeningList.length === 0 ? (
         <p>Inga kommande visningar tillgängliga.</p>
@@ -151,7 +139,7 @@ export function SelectScreeningView() {
                       }
                       className='select-button'
                     >
-                      Välj biljetter
+                      Välj visning
                     </button>
                   </div>
                 </div>
