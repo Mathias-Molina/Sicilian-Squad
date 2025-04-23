@@ -1,10 +1,15 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import logo from "../assets/The-Sicilian-Squad.jpg";
+import { motion } from "framer-motion";
+import { FaUser } from "react-icons/fa";
 
 export const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
+  const location = useLocation();
+  const { pathname } = location;
+  console.log(pathname);
 
   const handleLogout = async () => {
     try {
@@ -22,18 +27,37 @@ export const Navbar = () => {
     }
   };
 
+  const routes = [
+    {
+      name: "hem",
+      path: "/",
+    },
+    {
+      name: "mina bokningar",
+      path: "/min-sida",
+    },
+  ];
+
   return (
     <nav className="navbar">
       <div className="navbar-content">
         {/* Left section */}
         <div className="nav-left">
           <ul className="navbar-list">
-            <li className="navbar-item">
-              <NavLink to="/">Hem</NavLink>
-            </li>
-            <li className="navbar-item">
-              <NavLink to="/min-sida">Mina bokningar</NavLink>
-            </li>
+            {routes.map((route) => (
+              <li className="navbar-item">
+                <NavLink to={route.path}>
+                  {route.name.substring(0, 1).toUpperCase() +
+                    route.name.slice(1)}
+                </NavLink>
+                {pathname === route.path && (
+                  <motion.div
+                    layoutId="header-active-link"
+                    className="navbar-highlight"
+                  ></motion.div>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
 
@@ -50,15 +74,18 @@ export const Navbar = () => {
             {user ? (
               <>
                 <li className="navbar-item">
-                  Inloggad som: <strong>{user.username}</strong>
-                </li>
-                <li className="navbar-item">
-                  <button onClick={handleLogout}>Logga ut</button>
+                  <div className="user-navbar-item ">
+                    <FaUser />
+                    Inloggad som: <strong>{user.username}</strong>
+                    <button onClick={handleLogout}>Logga ut</button>
+                  </div>
                 </li>
               </>
             ) : (
               <li className="navbar-item">
-                <NavLink to="/logga-in">Logga in</NavLink>
+                <NavLink to="/logga-in">
+                  <FaUser />
+                </NavLink>
               </li>
             )}
           </ul>
