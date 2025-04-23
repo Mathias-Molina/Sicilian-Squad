@@ -15,6 +15,10 @@
 @import url('./BookingGuestLookUp.css');
 @import url('./LoggaIn.css');
 @import url('./SelectScreening.css');
+@import url('./BookingForm.css');
+@import url('./SeatMap.css');
+@import url('./BookingFooter.css');
+@import url('./TicketTypeInfo.css');
 
 /* Global styles */
 * {

@@ -47,3 +47,20 @@ export const softDeleteMovie = movieId => {
   }
   return info;
 };
+
+export const checkIfMovieExist = movie_title => {
+  const stmt = db.prepare(
+    "SELECT movie_title FROM movies WHERE movie_title = ? "
+  );
+
+  const movie = stmt.all(movie_title);
+
+  if (movie.length > 0) {
+    return true;
+  }
+};
+
+export const getAllMoviesIncludingDeleted = () => {
+  const stmt = db.prepare("SELECT * FROM movies");
+  return stmt.all();
+};

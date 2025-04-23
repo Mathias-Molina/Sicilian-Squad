@@ -5,6 +5,8 @@ import {
   getAllMovies,
   getMovieById,
   softDeleteMovie,
+  checkIfMovieExist,
+  getAllMoviesIncludingDeleted,
 } from "../Models/movieModel.js";
 
 export const getMovieHandler = async (req, res) => {
@@ -31,6 +33,12 @@ export const getMovieHandler = async (req, res) => {
     const runtime = data.Runtime;
     const releaseDate = data.Released;
 
+    const movieExist = checkIfMovieExist(title);
+
+    if (movieExist) {
+      return res.status(400).json({ error: "Filmen finns redan" });
+    }
+
     // Infoga filmdata i databasen
     const info = insertMovie(
       title,
@@ -56,7 +64,10 @@ export const getMovieHandler = async (req, res) => {
 
 export const getAllMoviesHandler = (req, res) => {
   try {
-    const movies = getAllMovies();
+    const includeDeleted = req.query.includeDeleted === "true";
+    const movies = includeDeleted
+      ? getAllMoviesIncludingDeleted()
+      : getAllMovies();
     res.json(movies);
   } catch (error) {
     console.error("Fel vid hämtning av filmer:", error);

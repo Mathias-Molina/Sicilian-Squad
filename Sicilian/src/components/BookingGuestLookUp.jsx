@@ -22,7 +22,7 @@ export const BookingGuestLookUp = () => {
         s => String(s.screening_id) === String(bookingInfo.screening_id)
       );
 
-      const movies = await getMovies();
+      const movies = await getMovies("?includeDeleted=true");
       const movie = screening
         ? movies.find(m => m.movie_id === screening.movie_id)
         : null;

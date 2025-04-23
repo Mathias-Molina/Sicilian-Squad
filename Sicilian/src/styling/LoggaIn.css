@@ -2,13 +2,11 @@
     max-width: 400px;
     margin: 4rem auto;
     padding: 2rem;
-    background: #1f1f1f;
+    background: #1e1f29 ;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     color: #f0f0f0;
     font-family: "Segoe UI", sans-serif;
-
-
 }
 
 
@@ -16,9 +14,7 @@
     text-align: center;
     margin-bottom: 2rem;
     color: #4f959d;
-    font-family: "Playfair Display", serif;
 }
-
 
 .login-container form {
     display: flex;
@@ -26,12 +22,10 @@
     gap: 1rem;
 }
 
-
 .login-container label {
     font-weight: bold;
     font-size: 0.95rem;
 }
-
 
 .login-container input {
     padding: 0.6rem 1rem;
@@ -42,11 +36,9 @@
     color: white;
 }
 
-
 .login-container input::placeholder {
     color: #aaa;
 }
-
 
 /* Main submit button: Logga in / Registrera */
 .login-button {
@@ -76,11 +68,6 @@
     text-decoration: underline;
     font-size: 0.95rem;
 }
-
-
-
-
-
 
 .login-message {
     margin-top: 1rem;
