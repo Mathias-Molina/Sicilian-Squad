@@ -43,7 +43,7 @@ export const MovieDetailsView = () => {
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
               title="YouTube trailer"
-              frameBorder="0"
+              border="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
