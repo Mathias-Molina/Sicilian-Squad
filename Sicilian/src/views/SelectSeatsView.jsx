@@ -123,17 +123,6 @@ export const SelectSeatsView = () => {
         toggleSeatSelection={handleSeatClickWrapper}
         selectedSeats={selectedSeats}
       />
-      <div className="info-top-right">
-        <button
-          className="info-toggle-button"
-          onClick={() => setShowInfo(!showInfo)}
-          aria-label="Visa biljettinformation"
-        >
-          ℹ️
-        </button>
-      </div>
-
-      {showInfo && <TicketTypeInfo />}
 
       <BookingFooter
         selectedSeats={selectedSeats}
@@ -141,6 +130,8 @@ export const SelectSeatsView = () => {
         handleTicketTypeChange={handleTicketTypeChange}
         bookingError={bookingError}
         onBooking={onBookingClick}
+        showInfo={showInfo}
+        toggleInfo={() => setShowInfo(!showInfo)}
       />
     </section>
   );

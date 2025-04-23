@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { TicketTypeInfo } from "./TicketTypeInfo";
 
 export const BookingFooter = ({
@@ -7,37 +6,49 @@ export const BookingFooter = ({
   handleTicketTypeChange,
   bookingError,
   onBooking,
+  showInfo,
+  toggleInfo,
 }) => {
-  const [showInfo, setShowInfo] = useState(false);
-
   const getTooltipText = type => {
     switch (type) {
       case "barn":
         return "Barn: 50% rabatt (upp till 12 år)";
       case "pensionär":
         return "Pensionär: 80% – Identifiering krävs";
-      case "vuxen":
-        return "Vuxen: Ordinarie pris";
       default:
-        return "";
+        return "Vuxen: Ordinarie pris";
     }
   };
 
   return (
-    <>
-      <div className="chosen-seats">
-        <h2>Valda platser</h2>
+    <div className="booking-footer">
+      <div className="booking-footer__chosen-seats">
+        {/* NY HEADER MED INFOKNAPP */}
+        <div className="booking-footer__header">
+          <h2>Valda platser</h2>
+          <button
+            className="booking-footer__info-button"
+            onClick={toggleInfo}
+            aria-label="Visa biljettinformation"
+          >
+            ℹ️
+          </button>
+        </div>
 
+        {/* Visa popupen direkt under headern */}
         {showInfo && <TicketTypeInfo />}
 
+        {/* Resten av listan med valda säten */}
         {selectedSeats.map(seatNumber => {
           const type = seatTicketTypes[seatNumber] || "vuxen";
           return (
-            <div className="selected-seat" key={seatNumber}>
-              <span>Säte {seatNumber}: </span>
-
-              <div className="tooltip-wrapper">
+            <div className="booking-footer__seat" key={seatNumber}>
+              <span className="booking-footer__seat-label">
+                Säte {seatNumber}:
+              </span>
+              <div className="booking-footer__tooltip">
                 <select
+                  className="booking-footer__select"
                   value={type}
                   onChange={e =>
                     handleTicketTypeChange(seatNumber, e.target.value)
@@ -47,34 +58,26 @@ export const BookingFooter = ({
                   <option value="pensionär">Pensionär (80%)</option>
                   <option value="barn">Barn (50%)</option>
                 </select>
-                <span className="tooltip-text">{getTooltipText(type)}</span>
+                <div className="booking-footer__tooltip-text">
+                  {getTooltipText(type)}
+                </div>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Show booking error if exists */}
       {bookingError && (
-        <div
-          style={{
-            color: "red",
-            marginBottom: "0.1rem",
-            marginTop: "0.5rem",
-            fontWeight: "400",
-            fontSize: "1.1rem",
-            textAlign: "center",
-          }}
-        >
-          {bookingError}
-        </div>
+        <div className="booking-footer__error">{bookingError}</div>
       )}
 
-      <div>
-        <button className="book-button" onClick={onBooking}>
-          Boka film
-        </button>
-      </div>
-    </>
+      <button
+        className="booking-footer__button"
+        onClick={onBooking}
+        disabled={selectedSeats.length === 0}
+      >
+        Boka film
+      </button>
+    </div>
   );
 };

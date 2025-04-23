@@ -1,0 +1,89 @@
+.seat-map {
+  padding: 1.5rem;
+  background-color: grey;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 5px;
+  perspective: 1000px;
+}
+
+.seat-map__screen {
+  background-color: #fff;
+  height: 70px;
+  width: 100%;
+  margin: 15px 0;
+  transform: rotateX(-45deg);
+  box-shadow: 0 3px 10px rgba(255, 255, 255, 0.7);
+}
+
+.seat-map__grid {
+  display: grid;
+  grid-gap: 1rem;
+}
+
+.seat-map__seat {
+  position: relative;
+  background-color: #3b3b3b;
+  color: #fff;
+  width: 2.2rem;
+  height: 1.8rem;
+  border-radius: 0.3rem;
+  font-size: 0.7rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: inset 0 -2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.seat-map__seat::before,
+.seat-map__seat::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+}
+
+.seat-map__seat::before {
+  bottom: -0.9rem;
+  left: 0;
+  right: 0;
+  height: 0.9rem;
+  background-color: #4a4a4a;
+  border-bottom-left-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+}
+
+.seat-map__seat::after {
+  top: 0;
+  left: -0.3rem;
+  right: -0.3rem;
+  height: 100%;
+  border-left: 4px solid #555;
+  border-right: 4px solid #555;
+  border-radius: 0.2rem;
+}
+
+.seat-map__seat:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.seat-map__seat:active {
+  transform: scale(0.95);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Modifier när plats är upptagen */
+.seat-map__seat--occupied {
+  background-color: red;
+  cursor: not-allowed;
+}
+
+/* Modifier när plats är vald */
+.seat-map__seat--selected {
+  background-color: #ffffff;
+  color: #3b3b3b;
+}

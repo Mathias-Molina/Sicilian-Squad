@@ -1,0 +1,114 @@
+.booking-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.booking-footer__chosen-seats {
+  width: 100%;
+  max-width: 400px;
+}
+
+.booking-footer__chosen-seats h2 {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #ffffff;
+}
+
+.booking-footer__seat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.booking-footer__seat-label {
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.booking-footer__select {
+  padding: 0.3rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.9rem;
+  appearance: none;
+}
+
+.booking-footer__tooltip {
+  position: relative;
+}
+
+.booking-footer__tooltip:hover .booking-footer__tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.booking-footer__tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e1f29;
+  color: #fff;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.booking-footer__error {
+  color: red;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.booking-footer__button {
+  padding: 0.6rem 1.2rem;
+  background-color: #a242f7;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.booking-footer__button:hover {
+  background-color: #9013fe;
+}
+
+.booking-footer__button:disabled {
+  background-color: #b06ceb;
+  cursor: not-allowed;
+}
+.booking-footer__header {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.booking-footer__info-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: #2563eb;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s ease;
+  margin-top: 2px;
+}
+
+.booking-footer__info-button:hover {
+  color: #1e40af;
+}
