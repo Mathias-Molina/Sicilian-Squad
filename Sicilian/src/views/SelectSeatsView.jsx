@@ -73,7 +73,7 @@ export const SelectSeatsView = () => {
 
     if (newSelected.length === numPersons) {
       setCurrentStep(4);
-      setBookingError(""); 
+      setBookingError("");
     } else {
       setCurrentStep(3);
     }
@@ -86,7 +86,7 @@ export const SelectSeatsView = () => {
       setBookingError(`Vänligen välj exakt ${numPersons} säten.`);
       return;
     }
-    
+
     const ticketTypes = selectedSeats.map(
       seatId => seatTicketTypes[seatId] || "vuxen"
     );
@@ -109,6 +109,20 @@ export const SelectSeatsView = () => {
   return (
     <section className="page">
       <StepIndicator currentStep={currentStep} />
+
+      <BookingForm
+        movieTitle={movieTitle}
+        numPersons={numPersons}
+        handleNumPersonsChange={handleNumChange}
+        totalPrice={totalPrice}
+      />
+
+      <SeatMap
+        seats={seats}
+        salon={salon}
+        toggleSeatSelection={handleSeatClickWrapper}
+        selectedSeats={selectedSeats}
+      />
       <div className="info-top-right">
         <button
           className="info-toggle-button"
@@ -120,20 +134,6 @@ export const SelectSeatsView = () => {
       </div>
 
       {showInfo && <TicketTypeInfo />}
-
-      <BookingForm
-        movieTitle={movieTitle}
-        numPersons={numPersons}
-        handleNumPersonsChange={handleNumChange}
-        totalPrice={totalPrice}
-      />
-      
-      <SeatMap
-        seats={seats}
-        salon={salon}
-        toggleSeatSelection={handleSeatClickWrapper}
-        selectedSeats={selectedSeats}
-      />
 
       <BookingFooter
         selectedSeats={selectedSeats}

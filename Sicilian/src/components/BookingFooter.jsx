@@ -15,7 +15,7 @@ export const BookingFooter = ({
       case "barn":
         return "Barn: 50% rabatt (upp till 12 år)";
       case "pensionär":
-        return "Pensionär: 80% – pensionärskort krävs";
+        return "Pensionär: 80% – Identifiering krävs";
       case "vuxen":
         return "Vuxen: Ordinarie pris";
       default:
@@ -56,11 +56,19 @@ export const BookingFooter = ({
 
       {/* Show booking error if exists */}
       {bookingError && (
-        <div style={{ color: 'red', marginBottom: '0.1rem', marginTop: '0.5rem', fontWeight: '400',fontSize: '1.1rem', textAlign: 'center' }}>
+        <div
+          style={{
+            color: "red",
+            marginBottom: "0.1rem",
+            marginTop: "0.5rem",
+            fontWeight: "400",
+            fontSize: "1.1rem",
+            textAlign: "center",
+          }}
+        >
           {bookingError}
         </div>
       )}
-
 
       <div>
         <button className="book-button" onClick={onBooking}>
