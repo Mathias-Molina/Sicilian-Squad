@@ -1,0 +1,111 @@
+.screening-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 25px 0;
+}
+
+.loading-message,
+.error-message,
+.no-screenings {
+  color: white;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.error-message {
+  color: #f56565;
+}
+
+.screening-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.screening-item {
+  background-color: rgba(30, 30, 40, 0.5);
+  border: 1px solid #333;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.screening-item:hover {
+  border-color: #555;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .screening-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.screening-info {
+  flex: 1;
+}
+
+.screening-time {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.screening-salon {
+  color: #ccc;
+  margin: 0;
+}
+
+.screening-availability {
+  margin-top: 12px;
+}
+
+@media (min-width: 768px) {
+  .screening-availability {
+    margin-top: 0;
+    text-align: right;
+  }
+}
+
+.seat-info {
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.high-availability {
+  color: #48bb78; /* green */
+}
+
+.medium-availability {
+  color: yellow; /* yellow */
+}
+
+.low-availability {
+  color: #f56565; /* red */
+}
+
+.select-button {
+  background-color: #a855f7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.select-button:hover {
+  background-color: #c53030;
+}

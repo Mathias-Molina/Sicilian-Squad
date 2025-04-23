@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { getScreenings } from "../api/apiScreenings";
-import { getAvailableSeats } from "../api/apiSeats";
-import { StepIndicator } from "../components/StepIndicator";
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { getScreenings } from '../api/apiScreenings';
+import { getAvailableSeats } from '../api/apiSeats';
+import { StepIndicator } from '../components/StepIndicator';
 
 export function SelectScreeningView() {
   const { movieId } = useParams();
@@ -10,13 +10,13 @@ export function SelectScreeningView() {
   const [screeningList, setScreeningList] = useState([]);
   const [seatAvailabilityMap, setSeatAvailabilityMap] = useState({});
   const [isLoadingScreenings, setIsLoadingScreenings] = useState(true);
-  const [loadingErrorMessage, setLoadingErrorMessage] = useState("");
+  const [loadingErrorMessage, setLoadingErrorMessage] = useState('');
 
   useEffect(() => {
     async function fetchScreeningsAndSeatAvailability() {
       try {
         setIsLoadingScreenings(true);
-        setLoadingErrorMessage("");
+        setLoadingErrorMessage('');
 
         const screeningsFromServer = await getScreenings(movieId);
 
@@ -58,7 +58,7 @@ export function SelectScreeningView() {
         setSeatAvailabilityMap(availabilityObject);
       } catch (error) {
         setLoadingErrorMessage(
-          error.message || "Ett fel uppstod vid hämtning av visningar."
+          error.message || 'Ett fel uppstod vid hämtning av visningar.'
         );
       } finally {
         setIsLoadingScreenings(false);
@@ -77,45 +77,77 @@ export function SelectScreeningView() {
   }
 
   if (loadingErrorMessage) {
-    return <div className="text-red-600">Fel: {loadingErrorMessage}</div>;
+    return <div className='text-red-600'>Fel: {loadingErrorMessage}</div>;
   }
 
   return (
-    <section>
+    <section className='screening-section'>
       <StepIndicator currentStep={1} />
-      <h1>Välj visning</h1>
-      <ul>
-        {screeningList.map(screening => {
-          const availability =
-            seatAvailabilityMap[screening.screening_id] || {};
-          const availabilityText =
-            availability.availableSeats != null
-              ? `Lediga platser: ${availability.availableSeats} av ${availability.totalSeats}`
-              : "Laddar lediga platser...";
+      <h1 className='section-title'>Välj visning</h1>
 
-          return (
-            <li key={screening.screening_id} style={{ marginBottom: "8px" }}>
-              <button
-                style={{
-                  marginRight: "12px",
-                  textDecoration: "underline",
-                  color: "#2563EB",
-                }}
-                onClick={() =>
-                  handleScreeningClick(
-                    screening.screening_id,
-                    screening.salon_id
-                  )
-                }
-              >
-                {new Date(screening.screening_time).toLocaleString()} –{" "}
-                {screening.salon_name} – {screening.movie_title}
-              </button>
-              <span>{availabilityText}</span>
-            </li>
-          );
-        })}
-      </ul>
+      {screeningList.length === 0 ? (
+        <p>Inga kommande visningar tillgängliga.</p>
+      ) : (
+        <ul className='screening-list'>
+          {screeningList.map(screening => {
+            const availability =
+              seatAvailabilityMap[screening.screening_id] || {};
+            const availableSeats = availability.availableSeats || 0;
+            const totalSeats = availability.totalSeats || 0;
+            const percentAvailable = totalSeats
+              ? (availableSeats / totalSeats) * 100
+              : 0;
+
+            let availabilityClass = 'high-availability';
+            if (percentAvailable < 30) availabilityClass = 'low-availability';
+            else if (percentAvailable < 70)
+              availabilityClass = 'medium-availability';
+
+            const availabilityText =
+              availability.availableSeats != null
+                ? `Lediga platser: ${availability.availableSeats} av ${availability.totalSeats}`
+                : 'Laddar lediga platser...';
+
+            return (
+              <li key={screening.screening_id} className='screening-item'>
+                <div className='screening-content'>
+                  <div className='screening-info'>
+                    <p className='screening-time'>
+                      {new Date(screening.screening_time).toLocaleDateString()}{' '}
+                      •{' '}
+                      {new Date(screening.screening_time).toLocaleTimeString(
+                        [],
+                        { hour: '2-digit', minute: '2-digit' }
+                      )}
+                    </p>
+                    <p className='screening-salon'>{screening.salon_name}</p>
+                  </div>
+
+                  <div className='screening-availability'>
+                    <p className={`seat-info ${availabilityClass}`}>
+                      Lediga platser:
+                      {availability.availableSeats !== null
+                        ? ` ${availability.availableSeats} av ${availability.totalSeats}`
+                        : 'Laddar lediga platser...'}
+                    </p>
+                    <button
+                      onClick={() =>
+                        handleScreeningClick(
+                          screening.screening_id,
+                          screening.salon_id
+                        )
+                      }
+                      className='select-button'
+                    >
+                      Välj visning
+                    </button>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
     </section>
   );
 }
