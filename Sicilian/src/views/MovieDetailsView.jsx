@@ -9,10 +9,10 @@ export const MovieDetailsView = () => {
 
   useEffect(() => {
     getMovieById(movieId)
-      .then((data) => {
+      .then(data => {
         setMovie(data);
       })
-      .catch((err) => {
+      .catch(err => {
         setError(err);
       });
   }, [movieId]);
@@ -49,10 +49,8 @@ export const MovieDetailsView = () => {
             />
           </div>
         )}
-        
-        <div className="movie-description">
-          {movie.movie_description}
-        </div>
+
+        <div className="movie-description">{movie.movie_description}</div>
 
         <div className="movie-metadata-grid">
           <div className="metadata-block">
@@ -60,7 +58,7 @@ export const MovieDetailsView = () => {
             <p>{movie.movie_genre}</p>
           </div>
           <div className="metadata-block">
-            <h3>Betyg</h3>
+            <h3>Åldersgräns</h3>
             <p>{movie.movie_rated}</p>
           </div>
           <div className="metadata-block">
@@ -68,7 +66,7 @@ export const MovieDetailsView = () => {
             <p>{movie.movie_runtime}</p>
           </div>
           <div className="metadata-block">
-            <h3>Released</h3>
+            <h3>Premiärdatum</h3>
             <p>{movie.movie_releaseDate}</p>
           </div>
         </div>
