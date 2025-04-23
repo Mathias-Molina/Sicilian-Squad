@@ -1,0 +1,68 @@
+.screening-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section-title {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  margin: 25px 0;
+}
+
+.loading-message,
+.error-message,
+.no-screenings {
+  color: white;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.error-message {
+  color: #f56565;
+}
+
+.screening-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.screening-item {
+  background-color: rgba(30, 30, 40, 0.5);
+  border: 1px solid #333;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+
+.screening-item:hover {
+  border-color: #555;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .screening-content {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.screening-info {
+  flex: 1;
+}
+
+.screening-time {
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.screening-salon {
+  color: #ccc;
+  margin: 0;
+}
