@@ -17,7 +17,7 @@ export const MinaBokningar = () => {
       try {
         const data = await getDetailedBookingsByUserId(user.user_id);
         setUpcomingBookings(data.upcomingBookings || []);
-        setPastBookings(data.pastBookings || []);
+        setPastBookings(data.pastBookings.reverse() || []);
         setLoadingBookings(false);
       } catch (error) {
         console.error("Fel vid hämtning av bokningar:", error);
@@ -38,7 +38,7 @@ export const MinaBokningar = () => {
       <h2 className="section-title">Kommande bokningar</h2>
       {upcomingBookings && upcomingBookings.length > 0 ? (
         <ul>
-          {upcomingBookings.map(booking => (
+          {upcomingBookings.map((booking) => (
             <BookingListItem key={booking.booking_number} booking={booking} />
           ))}
         </ul>
@@ -49,7 +49,7 @@ export const MinaBokningar = () => {
       <h2 className="section-title">Bokningshistorik</h2>
       {pastBookings && pastBookings.length > 0 ? (
         <ul>
-          {pastBookings.map(booking => (
+          {pastBookings.map((booking) => (
             <BookingListItem key={booking.booking_number} booking={booking} />
           ))}
         </ul>
