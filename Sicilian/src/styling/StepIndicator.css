@@ -63,7 +63,7 @@
 .step.active .step-number {
   background-color: white;
   color: black;
-  transform: scale(1.2);
+  transform: scale(1.4);
   animation: pulse-glow 1.5s infinite ease-in-out;
   transition: transform 0.3s ease;
 }

@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import logo from "../assets/The-Sicilian-Squad.jpg";
 import { motion } from "framer-motion";
@@ -9,6 +9,7 @@ export const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
   const location = useLocation();
   const { pathname } = location;
+  const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
@@ -18,6 +19,7 @@ export const Navbar = () => {
       });
       if (response.ok) {
         setUser(null);
+        navigate("/", { replace: true });
       } else {
         console.error("Logout failed");
       }
@@ -43,7 +45,7 @@ export const Navbar = () => {
         {/* Left section */}
         <div className="nav-left">
           <ul className="navbar-list">
-            {routes.map((route) => (
+            {routes.map(route => (
               <li key={route.name} className="navbar-item">
                 <NavLink to={route.path}>
                   {route.name.substring(0, 1).toUpperCase() +
