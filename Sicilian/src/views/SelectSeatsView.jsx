@@ -73,7 +73,7 @@ export const SelectSeatsView = () => {
 
     if (newSelected.length === numPersons) {
       setCurrentStep(4);
-      setBookingError(""); 
+      setBookingError("");
     } else {
       setCurrentStep(3);
     }
@@ -86,7 +86,7 @@ export const SelectSeatsView = () => {
       setBookingError(`Vänligen välj exakt ${numPersons} säten.`);
       return;
     }
-    
+
     const ticketTypes = selectedSeats.map(
       seatId => seatTicketTypes[seatId] || "vuxen"
     );
@@ -109,17 +109,6 @@ export const SelectSeatsView = () => {
   return (
     <section className="page">
       <StepIndicator currentStep={currentStep} />
-      <div className="info-top-right">
-        <button
-          className="info-toggle-button"
-          onClick={() => setShowInfo(!showInfo)}
-          aria-label="Visa biljettinformation"
-        >
-          ℹ️
-        </button>
-      </div>
-
-      {showInfo && <TicketTypeInfo />}
 
       <BookingForm
         movieTitle={movieTitle}
@@ -127,7 +116,7 @@ export const SelectSeatsView = () => {
         handleNumPersonsChange={handleNumChange}
         totalPrice={totalPrice}
       />
-      
+
       <SeatMap
         seats={seats}
         salon={salon}
@@ -141,6 +130,8 @@ export const SelectSeatsView = () => {
         handleTicketTypeChange={handleTicketTypeChange}
         bookingError={bookingError}
         onBooking={onBookingClick}
+        showInfo={showInfo}
+        toggleInfo={() => setShowInfo(!showInfo)}
       />
     </section>
   );

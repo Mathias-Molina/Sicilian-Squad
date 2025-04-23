@@ -83,7 +83,7 @@ export function SelectScreeningView() {
   return (
     <section>
       <StepIndicator currentStep={1} />
-      <h1>Välj framtida visning</h1>
+      <h1>Välj visning</h1>
       <ul>
         {screeningList.map(screening => {
           const availability =

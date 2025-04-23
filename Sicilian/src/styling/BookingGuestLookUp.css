@@ -29,6 +29,7 @@
 }
 
 .booking-lookup__button {
+  /* Får grundstil via .book-button */
 }
 
 .booking-lookup__error {
@@ -41,9 +42,4 @@
   display: flex;
   justify-content: center;
   box-sizing: border-box;
-}
-
-.booking-lookup__result .booking-confirmation-wrapper .booking-card {
-  max-width: none !important;
-  width: 100% !important;
 }
