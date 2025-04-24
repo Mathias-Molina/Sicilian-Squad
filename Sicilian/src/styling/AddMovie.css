@@ -39,7 +39,7 @@
   margin-bottom: 2.5rem;
   font-weight: 800;
   text-align: center;
-  background: linear-gradient(to right, #9013fe, #c280ff);
+  background: linear-gradient(to right, #ffd700, #f9a825);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -51,10 +51,10 @@
   position: absolute;
   bottom: -0.75rem;
   left: 50%;
-  transform: translateX();
+  transform: translateX(-50%);
   width: 50px;
   height: 3px;
-  background-color: #9013fe;
+  background-color: #ffd700;
   border-radius: 3px;
 }
 
@@ -71,7 +71,7 @@
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: #a64aff;
+  color: #ffd700;
 }
 
 /*Textfält och andra inputs*/
@@ -87,8 +87,8 @@
 }
 
 .form-input:focus {
-  border-color: #9013fe;
-  box-shadow: 0 0 0 2px rgba(144, 19, 254, 0.2);
+  border-color: #ffd700;
+  box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2);
   outline: none;
 }
 
@@ -97,10 +97,10 @@
   display: block;
   width: 100%;
   padding: 1rem;
-  background: linear-gradient(to right, #9013fe, #7b10d5);
+  background: #ffd700;
   border: none;
   border-radius: 0.5rem;
-  color: #ffffff;
+  color: #000000;
   font-size: 1.1rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -111,7 +111,8 @@
 
 .add-movie-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(144, 19, 254, 0.4);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+  background: #e6c200;
 }
 
 .add-movie-button:disabled {
