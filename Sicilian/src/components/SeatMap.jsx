@@ -14,7 +14,7 @@ export const SeatMap = ({
         }}
       >
         {seats.map(seat => {
-          const isSelected = selectedSeats.includes(seat.seat_number);
+          const isSelected = selectedSeats.includes(seat.seat_id);
           const seatClasses = [
             "seat-map__seat",
             !seat.available && "seat-map__seat--occupied",
@@ -25,10 +25,8 @@ export const SeatMap = ({
 
           return (
             <button
-              key={seat.seat_number}
-              onClick={() =>
-                toggleSeatSelection(seat.seat_number, seat.available)
-              }
+              key={seat.seat_id}
+              onClick={() => toggleSeatSelection(seat.seat_id, seat.available)}
               className={seatClasses}
               disabled={!seat.available}
             >

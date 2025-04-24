@@ -33,7 +33,7 @@ export const router = createBrowserRouter(
       <Route path="/logga-in" element={<LoggaIn />} />
       <Route path="/film/:movieId" element={<MovieDetailsView />} />
       <Route path="/boka/:movieId" element={<SelectScreeningView />} />
-      <Route path="/bookings/:bookingId" element={<BookingDetailsView />} />
+      <Route path="/bookings/:bookingNumber" element={<BookingDetailsView />} />
       <Route path="/contact" element={<ContactUs />} />
       <Route
         path="/boka/screening/:screeningId/:salonId"
