@@ -1,26 +1,26 @@
-import { useState, useEffect, useContext } from "react";
-import { getMovies, deleteMovie } from "../api/apiMovies";
-import { MovieCard } from "../components/MovieCards";
-import { useNavigate } from "react-router-dom";
-import { UserContext } from "../context/UserContext";
-import { ConfirmDialog } from "../components/ConfirmDialog"; //maricel
+import { useState, useEffect, useContext } from 'react';
+import { getMovies, deleteMovie } from '../api/apiMovies';
+import { MovieCard } from '../components/MovieCards';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
+import { ConfirmDialog } from '../components/ConfirmDialog'; //maricel
 
 export const Hem = () => {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const [movieToDelete, setMovieToDelete] = useState(null); //maricel
 
   useEffect(() => {
     getMovies()
-      .then((data) => {
+      .then(data => {
         setMovies(data);
         setLoading(false);
       })
-      .catch((err) => {
-        setError(err.message || "Något gick fel");
+      .catch(err => {
+        setError(err.message || 'Något gick fel');
         setLoading(false);
       });
   }, []);
@@ -37,14 +37,13 @@ export const Hem = () => {
       setError(err.message || "Något gick fel");
     }
   }; */
-  const confirmDelete = (movieId) => {
+  const confirmDelete = movieId => {
     if (!user?.user_admin) {
-      setError("Du måste vara admin för att kunna radera filmer");
+      setError('Du måste vara admin för att kunna radera filmer');
       return;
     }
-    const movie = movies.find((m) => Number(m.movie_id) === Number(movieId));
+    const movie = movies.find(m => Number(m.movie_id) === Number(movieId));
     setMovieToDelete(movie);
-
   };
   const handleConfirm = async () => {
     try {
@@ -52,7 +51,7 @@ export const Hem = () => {
       const updatedMovies = await getMovies();
       setMovies(updatedMovies);
     } catch (err) {
-      setError(err.message || "Något gick fel");
+      setError(err.message || 'Något gick fel');
     } finally {
       setMovieToDelete(null);
     }
@@ -62,9 +61,8 @@ export const Hem = () => {
     setMovieToDelete(null);
   };
 
-
   const handleAddMovie = () => {
-    navigate("/addmovie");
+    navigate('/addmovie');
   };
 
   if (loading) return <div>Laddar filmer...</div>;
@@ -72,27 +70,27 @@ export const Hem = () => {
 
   return (
     <div>
-      <h1>Aktuella filmer</h1>
+      <h1 className='section-heading'>Aktuella filmer</h1>
       {user && user.user_admin === 1 && (
         <div>
-          <button onClick={handleAddMovie} className="admin-add-button">
+          <button onClick={handleAddMovie} className='admin-add-button'>
             Lägg till film
           </button>
           <button
-            onClick={() => navigate("/screening/add")}
-            className="admin-add-button"
+            onClick={() => navigate('/screening/add')}
+            className='admin-add-button'
           >
             Lägg till visning
           </button>
         </div>
       )}
-      <div className="movie-cards-container">
-        {movies.map((movie) => (
-          <div key={movie.movie_id} className="movie-card">
+      <div className='movie-cards-container'>
+        {movies.map(movie => (
+          <div key={movie.movie_id} className='movie-card'>
             {user && user.user_admin === 1 && (
-              <div className="admin-controls">
+              <div className='admin-controls'>
                 <button
-                  className="delete-button"
+                  className='delete-button'
                   onClick={() => confirmDelete(movie.movie_id)}
                 >
                   ❌
