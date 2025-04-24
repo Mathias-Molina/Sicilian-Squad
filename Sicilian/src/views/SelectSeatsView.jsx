@@ -96,6 +96,7 @@ export const SelectSeatsView = () => {
       totalPrice,
       ticketTypes,
     });
+    console.log("handleBooking gav:", response);
     if (response) {
       navigate(`/bookings/${response.bookingNumber}`);
     }
