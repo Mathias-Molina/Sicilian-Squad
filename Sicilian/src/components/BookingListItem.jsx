@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import '../styling/BookingListItem.css';
 
-export const BookingListItem = ({ booking }) => {
+export const BookingListItem = ({ booking, type }) => {
+  const bookingClass =
+    type === 'upcoming' ? 'upcoming-booking' : 'past-booking';
   return (
-    <li className='booking-list-item'>
+    <li className={bookingClass}>
       <img
         src={booking.movie_poster}
         alt={`Poster för ${booking.movie_title}`}
