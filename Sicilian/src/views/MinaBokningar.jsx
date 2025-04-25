@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useRef } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../context/UserContext';
 import { getDetailedBookingsByUserId } from '../api/apiBookings';
 import { BookingListItem } from '../components/BookingListItem';
@@ -9,9 +9,6 @@ export const MinaBokningar = () => {
   const [upcomingBookings, setUpcomingBookings] = useState(null);
   const [pastBookings, setPastBookings] = useState(null);
   const [loadingBookings, setLoadingBookings] = useState(true);
-
-  const upcomingRef = useRef(null);
-  const historyRef = useRef(null);
 
   useEffect(() => {
     if (!user?.user_id) return;
@@ -30,28 +27,6 @@ export const MinaBokningar = () => {
     fetchBookings();
   }, [user]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const stickyOffset = 84;
-
-      const updateSticky = ref => {
-        if (!ref.current) return;
-        const rect = ref.current.getBoundingClientRect();
-        if (rect.top <= stickyOffset) {
-          ref.current.classList.add('is-sticky');
-        } else {
-          ref.current.classList.remove('is-sticky');
-        }
-      };
-
-      updateSticky(upcomingRef);
-      updateSticky(historyRef);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   if (isLoading) return <div className='loading'>Laddar användarinfo...</div>;
   if (!user) {
     return <BookingGuestLookUp />;
@@ -62,7 +37,7 @@ export const MinaBokningar = () => {
   return (
     <div className='bookings-container'>
       <div className='section-wrapper'>
-        <div id='upcoming-header' className='section-header' ref={upcomingRef}>
+        <div id='upcoming-header' className='section-header'>
           <h2 className='section-title'>Kommande bokningar</h2>
         </div>
         <div className='section-content'>
@@ -85,7 +60,7 @@ export const MinaBokningar = () => {
       <div className='section-separator'></div>
 
       <div className='section-wrapper'>
-        <div id='history-header' className='section-header' ref={historyRef}>
+        <div id='history-header' className='section-header'>
           <h2 className='section-title'>Bokningshistorik</h2>
         </div>
 

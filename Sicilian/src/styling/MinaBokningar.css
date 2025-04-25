@@ -8,14 +8,14 @@
   margin-top: 2rem;
   position: relative;
   width: 100%;
-  text-align: center;
 }
 
 .section-header {
   position: sticky;
   top: 96px;
   z-index: 10;
-  background-color: #0e0e1b;
+  backdrop-filter: blur(4px);
+  background-color: rgba(14, 14, 27, 0.95);
   width: 100%;
   padding: 1.5rem 10% 1rem;
   margin: 0 auto 2rem;
@@ -25,18 +25,11 @@
   transition: all 0.3s ease;
 }
 
-.section-header.is-sticky {
-  background-color: #1a1a33;
-  color: white;
-  box-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
-  transform: scale(1.02);
-}
-
 .section-content {
   padding-top: 3rem;
 }
 
-.section-header .section-title {
+.section-header h2 {
   font-size: 2rem;
   font-weight: 500;
   color: #ffffff;
