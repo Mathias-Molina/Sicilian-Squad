@@ -8,7 +8,6 @@ import { useSalon } from "../hooks/useSalon";
 import { useSeat } from "../hooks/useSeat";
 import { useBooking } from "../hooks/useBooking";
 import { StepIndicator } from "../components/StepIndicator";
-import { TicketTypeInfo } from "../components/TicketTypeInfo";
 
 export const SelectSeatsView = () => {
   const { screeningId, salonId } = useParams();
@@ -96,9 +95,12 @@ export const SelectSeatsView = () => {
       totalPrice,
       ticketTypes,
     });
-    console.log("handleBooking gav:", response);
-    if (response) {
-      navigate(`/bookings/${response.bookingNumber}`);
+
+    if (response && response.bookingNumber) {
+      const newBookingNumber = response.bookingNumber;
+      navigate(`/bookings/${newBookingNumber}`, {
+        state: { fromNewBooking: true },
+      });
     }
   };
 
