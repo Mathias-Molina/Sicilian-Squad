@@ -20,6 +20,7 @@
 @import url('./TicketTypeInfo.css');
 @import url('./SelectScreening.css');
 @import url('./Home.css');
+@import url('./BookingListItem.css');
 
 /* Global styles */
 * {

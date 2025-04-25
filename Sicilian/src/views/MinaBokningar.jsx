@@ -1,8 +1,8 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../context/UserContext";
-import { getDetailedBookingsByUserId } from "../api/apiBookings";
-import { BookingListItem } from "../components/BookingListItem";
-import { BookingGuestLookUp } from "../components/BookingGuestLookUp";
+import { useContext, useEffect, useState } from 'react';
+import { UserContext } from '../context/UserContext';
+import { getDetailedBookingsByUserId } from '../api/apiBookings';
+import { BookingListItem } from '../components/BookingListItem';
+import { BookingGuestLookUp } from '../components/BookingGuestLookUp';
 
 export const MinaBokningar = () => {
   const { user, isLoading } = useContext(UserContext);
@@ -20,42 +20,69 @@ export const MinaBokningar = () => {
         setPastBookings(data.pastBookings.reverse() || []);
         setLoadingBookings(false);
       } catch (error) {
-        console.error("Fel vid hämtning av bokningar:", error);
+        console.error('Fel vid hämtning av bokningar:', error);
         setLoadingBookings(false);
       }
     };
     fetchBookings();
   }, [user]);
 
-  if (isLoading) return <p>Laddar användarinfo...</p>;
+  if (isLoading) return <div className='loading'>Laddar användarinfo...</div>;
   if (!user) {
     return <BookingGuestLookUp />;
   }
-  if (loadingBookings) return <p>Hämtar bokningar...</p>;
+  if (loadingBookings)
+    return <div className='loading'>Hämtar bokningar...</div>;
 
   return (
-    <div className="section-title-wrapper">
-      <h2 className="section-title">Kommande bokningar</h2>
-      {upcomingBookings && upcomingBookings.length > 0 ? (
-        <ul>
-          {upcomingBookings.map((booking) => (
-            <BookingListItem key={booking.booking_number} booking={booking} />
-          ))}
-        </ul>
-      ) : (
-        <p>Inga kommande bokningar hittades.</p>
-      )}
+    <div className='bookings-container'>
+      <div className='section-wrapper'>
+        <div id='upcoming-header' className='section-header'>
+          <h2 className='section-title'>Kommande bokningar</h2>
+        </div>
+        <div className='section-content'>
+          {upcomingBookings && upcomingBookings.length > 0 ? (
+            <ul className='bookings-list'>
+              {upcomingBookings.map(booking => (
+                <BookingListItem
+                  key={booking.booking_number}
+                  booking={booking}
+                  type='upcoming'
+                />
+              ))}
+            </ul>
+          ) : (
+            <div className='empty-state'>Inga kommande bokningar hittades.</div>
+          )}
+        </div>
+      </div>
 
-      <h2 className="section-title">Bokningshistorik</h2>
-      {pastBookings && pastBookings.length > 0 ? (
-        <ul>
-          {pastBookings.map((booking) => (
-            <BookingListItem key={booking.booking_number} booking={booking} />
-          ))}
-        </ul>
-      ) : (
-        <p>Inga historiska bokningar hittades.</p>
-      )}
+      <div className='section-separator'></div>
+
+      <div className='section-wrapper'>
+        <div id='history-header' className='section-header'>
+          <h2 className='section-title'>Bokningshistorik</h2>
+        </div>
+
+        <div className='section-content'>
+          {pastBookings && pastBookings.length > 0 ? (
+            <ul className='bookings-list'>
+              {pastBookings.map(booking => (
+                <BookingListItem
+                  key={booking.booking_number}
+                  booking={booking}
+                  type='past'
+                />
+              ))}
+            </ul>
+          ) : (
+            <div className='empty-state'>
+              Inga historiska bokningar hittades.
+            </div>
+          )}
+        </div>
+      </div>
+      <div className='spacer-20'></div>
     </div>
   );
 };
