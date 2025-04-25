@@ -7,12 +7,8 @@
     gap: 0.5rem;
 }
 
-.delete-button:hover {
-    background: rgba(255, 0, 0, 0.9);
-    transform: scale(1.1);
-}
-
 .delete-button {
+    position: relative;
     background: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 50%;
@@ -22,4 +18,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.delete-button:hover {
+    background: rgba(255, 0, 0, 0.9);
+    transform: scale(1.1);
+}
+
+.delete-button:hover::after {
+    content: "Delete Movie";
+    position: absolute;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 5px;
+    pointer-events: none;
+    z-index: 1000;
 }
