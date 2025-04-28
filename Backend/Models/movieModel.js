@@ -8,10 +8,11 @@ export const insertMovie = (
   poster,
   trailer,
   runtime,
-  releaseDate
+  releaseDate,
+  actors
 ) => {
   const stmt = db.prepare(
-    "INSERT INTO movies (movie_title, movie_description, movie_genre, movie_rated, movie_poster, movie_trailer, movie_runtime, movie_releaseDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    "INSERT INTO movies (movie_title, movie_description, movie_genre, movie_rated, movie_poster, movie_trailer, movie_runtime, movie_releaseDate, movie_actors) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
   );
   return stmt.run(
     title,
@@ -21,7 +22,8 @@ export const insertMovie = (
     poster,
     trailer,
     runtime,
-    releaseDate
+    releaseDate,
+    actors
   );
 };
 
@@ -29,6 +31,7 @@ export const getAllMovies = () => {
   const stmt = db.prepare("SELECT * FROM movies WHERE movie_isDeleted = 0");
   return stmt.all();
 };
+
 
 export const getMovieById = movieId => {
   const stmt = db.prepare(
