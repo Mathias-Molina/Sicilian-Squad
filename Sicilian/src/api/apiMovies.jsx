@@ -19,3 +19,13 @@ export const deleteMovie = (
     { method: "DELETE" },
     errorMessage
   );
+
+export const getMovieByActor = (
+  actorName,
+  errorMessage = "Fel vid hämtning av film"
+) =>
+  apiRequest(
+    `http://localhost:3000/actors/${movieId}/${actorName}`,
+    {},
+    errorMessage
+  );
