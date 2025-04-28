@@ -32,6 +32,9 @@ export const getMovieHandler = async (req, res) => {
     const trailer = null; // OMDB ger ej trailerdata
     const runtime = data.Runtime;
     const releaseDate = data.Released;
+    const actors = Array.isArray(data.Actors)
+      ? data.Actors.join(", ")
+      : data.Actors || "";
 
     const movieExist = checkIfMovieExist(title);
 
@@ -48,7 +51,8 @@ export const getMovieHandler = async (req, res) => {
       poster,
       trailer,
       runtime,
-      releaseDate
+      releaseDate,
+      actors
     );
 
     res.json({
@@ -102,6 +106,7 @@ export const addMovieHandler = async (req, res) => {
     trailer,
     runtime,
     releaseDate,
+    actors,
   } = req.body;
 
   if (!title || !description) {
@@ -119,7 +124,8 @@ export const addMovieHandler = async (req, res) => {
       poster,
       trailer,
       runtime,
-      releaseDate
+      releaseDate,
+      actors
     );
     res.json({ message: "Filmen har lagts till", id: info.lastInsertRowid });
   } catch (error) {
