@@ -30,3 +30,10 @@ export const getActorsByMovieId = movieId => {
 
   return row.movie_actors.split(",").map(name => name.trim());
 };
+
+export const getMoviesByActor = actorName => {
+  const stmt = db.prepare(
+    "SELECT * FROM movies WHERE movie_isDeleted = 0 AND movie_actors LIKE ? COLLATE NOCASE"
+  );
+  return stmt.all(`%${actorName}%`);
+};

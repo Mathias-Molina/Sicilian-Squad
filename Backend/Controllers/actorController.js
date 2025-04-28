@@ -1,4 +1,4 @@
-import { getAllActors, getActorsByMovieId } from "../Models/actorModel.js";
+import { getAllActors, getActorsByMovieId, getMoviesByActor} from "../Models/actorModel.js";
 
 export const getAllActorsHandler = (req, res) => {
   try {
@@ -27,3 +27,19 @@ export const getActorsByMovieIdHandler = (req, res) => {
     res.status(500).json({ error: "Något gick fel" });
   }
 };
+
+export const getMoviesByActorHandler = (req, res) => {
+    const { actorName } = req.params;
+    if (!actorName) {
+      return res.status(400).json({ error: "Skådespelarens namn saknas" });
+    }
+  
+    try {
+      const movies = getMoviesByActor(actorName);
+      res.json(movies);
+    } catch (error) {
+      console.error("Fel vid hämtning av filmer för skådespelare:", error);
+      res.status(500).json({ error: "Något gick fel" });
+    }
+  };
+  
