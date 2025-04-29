@@ -67,3 +67,9 @@ body {
   opacity: 0;
   animation: fadeIn 0.4s ease-out forwards;
 }
+.date-picker-wrapper {
+  margin-bottom: 1rem; /* ge lite luft under kalendern */
+}
+.date-picker-input {
+  margin-bottom: 1rem;
+}
