@@ -21,6 +21,7 @@
 @import url('./SelectScreening.css');
 @import url('./Home.css');
 @import url('./BookingListItem.css');
+@import url('./MovieFilter.css');
 
 /* Global styles */
 * {
