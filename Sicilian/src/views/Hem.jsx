@@ -88,12 +88,7 @@ export const Hem = () => {
         </div>
       )}
       {user?.user_admin !== 1 && (
-        <div className="toolbar">
-          <MovieFilter onChange={setFilters} />
-          <button onClick={() => setFlipped(true)} className="btn-secondary">
-            Se visningar
-          </button>
-        </div>
+        <MovieFilter onChange={setFilters} onShow={() => setFlipped(true)} />
       )}
 
       {error && <div className="error">{error}</div>}
@@ -134,8 +129,8 @@ export const Hem = () => {
   // --- Back-panel (visningar) ---
   const back = (
     <div>
-      <div className="toolbar">
-        <button onClick={() => setFlipped(false)} className="btn-secondary">
+      <div className="toolbar-buttons">
+        <button onClick={() => setFlipped(false)} className="btn-filter">
           Tillbaka till filmer
         </button>
       </div>

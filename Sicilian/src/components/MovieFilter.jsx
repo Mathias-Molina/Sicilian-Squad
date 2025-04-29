@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { apiRequest } from "../api/apiRequest";
 import { ratingToAge } from "../utils/ratingToAge";
 
-export const MovieFilter = ({ onChange }) => {
+export const MovieFilter = ({ onChange, onShow }) => {
   const [open, setOpen] = useState(false);
   const [genres, setGenres] = useState([]);
   const [actors, setActors] = useState([]);
@@ -14,20 +14,18 @@ export const MovieFilter = ({ onChange }) => {
 
   useEffect(() => {
     apiRequest("http://localhost:3000/movies/genres", {}, "").then(data => {
-      console.log("Genres:", data);
       setGenres(data ?? []);
     });
 
     apiRequest("http://localhost:3000/actor", {}, "").then(data => {
-      console.log("Actors raw:", data);
       setActors(data ?? []);
     });
 
     apiRequest("http://localhost:3000/movies/ratings", {}, "").then(data => {
-      console.log("Ratings raw:", data);
       setRatings(data ?? []);
     });
   }, []);
+
   const applyChange = (nextGenres, nextActors, nextAge) => {
     onChange({
       genres: Array.from(nextGenres),
@@ -56,27 +54,26 @@ export const MovieFilter = ({ onChange }) => {
     applyChange(selGenres, selActors, age);
   };
 
-  // Deduplikera och sortera åldrar
-  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r)))).sort(
-    (a, b) => a - b
-  );
-
-  console.log("Actors state:", actors);
-  console.log("Ratings state:", ratings);
-  console.log("Unique ages:", uniqueAges);
+  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r))))
+    .filter(a => a > 0)
+    .sort((a, b) => a - b);
 
   return (
     <div className="toolbar">
-      <button onClick={() => setOpen(o => !o)} className="btn-filter">
-        Filters
-      </button>
+      <div className="toolbar-buttons">
+        <button onClick={() => setOpen(o => !o)} className="btn-filter">
+          Filters
+        </button>
+        <button onClick={onShow} className="btn-filter">
+          Se visningar
+        </button>
+      </div>
 
       {open && (
         <div className="filter-panel">
-          {/* Genrer */}
           <section>
             <h4>Genrer</h4>
-            {(genres ?? []).map(g => (
+            {genres.map(g => (
               <label key={g}>
                 <input
                   type="checkbox"
@@ -88,7 +85,6 @@ export const MovieFilter = ({ onChange }) => {
             ))}
           </section>
 
-          {/* Ålder */}
           <section>
             <h4>Ålder</h4>
             <select value={selAge} onChange={handleAge}>
@@ -101,10 +97,9 @@ export const MovieFilter = ({ onChange }) => {
             </select>
           </section>
 
-          {/* Skådespelare */}
           <section>
             <h4>Skådespelare</h4>
-            {(actors ?? []).map(a => (
+            {actors.map(a => (
               <label key={a}>
                 <input
                   type="checkbox"

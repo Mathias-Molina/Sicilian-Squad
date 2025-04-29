@@ -8,30 +8,34 @@
   flex: 1;
   -webkit-overflow-scrolling: touch; /* mjukare scroll på iOS */
 }
-.content::-webkit-scrollbar,
-.front::-webkit-scrollbar,
-.back::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 8px;
+  height: 8px; /* för horisontell om det finns */
 }
 
-.content::-webkit-scrollbar-track,
-.front::-webkit-scrollbar-track,
-.back::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.content::-webkit-scrollbar-thumb,
-.front::-webkit-scrollbar-thumb,
-.back::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2);
+/* Bakgrunden på rälsen */
+::-webkit-scrollbar-track {
+  background: #1e1e28; /* matcha gärna din bakgrundsfärg */
   border-radius: 4px;
-  border: 2px solid transparent;
 }
 
-.content::-webkit-scrollbar-thumb:hover,
-.front::-webkit-scrollbar-thumb:hover,
-.back::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(167, 52, 173, 0.266);
+/* Själva knoppen */
+::-webkit-scrollbar-thumb {
+  background-color: #6219a6; /* en mörkare lila */
+  border-radius: 4px;
+  border: 2px solid #1e1e28; /* ger lite luft runt om */
+}
+
+/* Hover-effekt */
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a855f7; /* ljusare lila vid hover */
+}
+
+/* --------- Firefox --------- */
+/* Tunna ner (+ färger) */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #6219a6 #1e1e28; /* tumme, räls */
 }
 
 body {
