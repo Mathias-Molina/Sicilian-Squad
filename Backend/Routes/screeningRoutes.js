@@ -5,14 +5,20 @@ import {
   getAllScreeningsHandler,
   getScreeningsByMovieIdHandler,
   getScreeningDetailsHandler,
+  getScreeningsByDateHandler,
 } from "../Controllers/screeningsController.js";
 import isAdmin from "../Middleware/isAdmin.js";
 import authMiddleware from "../Middleware/auth.js";
 
 export const screeningRouter = express.Router();
 
-// Hämta alla screeningar
-screeningRouter.get("/", getAllScreeningsHandler);
+screeningRouter.get("/", (req, res) => {
+  if (req.query.date) {
+    return getScreeningsByDateHandler(req, res);
+  } else {
+    return getAllScreeningsHandler(req, res);
+  }
+});
 
 // Hämta screeningdetaljer för en specifik screening
 screeningRouter.get("/details/:screeningId", getScreeningDetailsHandler);

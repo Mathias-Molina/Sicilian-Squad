@@ -1,4 +1,3 @@
-// apiScreenings.js
 import { apiRequest } from "./apiRequest";
 
 export const getScreenings = (
@@ -54,5 +53,15 @@ export const addScreenings = (
         screening_price: Number(screening_price),
       }),
     },
+    errorMessage
+  );
+
+export const getScreeningsByDate = (
+  date,
+  errorMessage = "Fel vid hämtning av visningar per datum"
+) =>
+  apiRequest(
+    `http://localhost:3000/screenings?date=${date}`,
+    { method: "GET" },
     errorMessage
   );

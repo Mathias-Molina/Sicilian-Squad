@@ -35,7 +35,7 @@ export const getAllScreenings = () => {
   }
 };
 
-export const getScreeningsByMovieId = (movie_id) => {
+export const getScreeningsByMovieId = movie_id => {
   try {
     const stmt = db.prepare(`SELECT *
 FROM screenings AS S
@@ -48,4 +48,24 @@ WHERE M.movie_id = ?`);
     console.error("Databse query error:", error);
     throw new Error("No screening found");
   }
+};
+
+export const getScreeningsByDate = date => {
+  const start = `${date} 00:00:00`;
+  const end = `${date} 23:59:59`;
+  const stmt = db.prepare(`
+    SELECT 
+      s.screening_id,
+      s.screening_time,
+      s.salon_id,
+      s.screening_price,
+      m.movie_title,
+      m.movie_poster
+    FROM screenings s
+    JOIN movies    m ON m.movie_id = s.movie_id
+    WHERE s.screening_time BETWEEN ? AND ?
+      AND m.movie_isDeleted = 0
+    ORDER BY s.salon_id, s.screening_time
+  `);
+  return stmt.all(start, end);
 };
