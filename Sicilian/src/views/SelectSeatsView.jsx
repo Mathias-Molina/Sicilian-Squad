@@ -61,24 +61,33 @@ export const SelectSeatsView = () => {
 
   const handleSeatClickWrapper = (seatId, available) => {
     const isSelected = selectedSeats.includes(seatId);
-    let newSelected;
-    if (isSelected) {
-      newSelected = selectedSeats.filter(id => id !== seatId);
-    } else if (selectedSeats.length < numPersons) {
-      newSelected = [...selectedSeats, seatId];
-    } else {
-      newSelected = selectedSeats;
-    }
 
-    if (newSelected.length === numPersons) {
-      setCurrentStep(4);
-      setBookingError("");
-    } else {
+
+    if (isSelected) {
+      setBookingError(""); // clear error when deselecting
+      const newSelected = selectedSeats.filter(id => id !== seatId);
+      setSelectedSeats(newSelected);
       setCurrentStep(3);
+    } else {
+      if (selectedSeats.length >= numPersons) {
+        setBookingError(`Du kan bara välja ${numPersons} säten.`);
+        return;
+      }
+      
+
+      setBookingError(""); // clear error if adding is allowed
+      const newSelected = [...selectedSeats, seatId];
+      setSelectedSeats(newSelected);
+      if (newSelected.length === numPersons) {
+        setCurrentStep(4);
+      } else {
+        setCurrentStep(3);
+      }
     }
 
     toggleSeatSelection(seatId, available);
   };
+
 
   const onBookingClick = async () => {
     if (selectedSeats.length !== numPersons) {
