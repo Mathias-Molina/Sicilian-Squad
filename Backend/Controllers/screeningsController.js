@@ -3,6 +3,7 @@ import {
   addScreenings,
   getAllScreenings,
   getScreeningsByMovieId,
+  getScreeningsByDate,
 } from "../Models/screeningModel.js";
 
 export const addScreeningsHandler = (req, res) => {
@@ -76,5 +77,19 @@ export const getScreeningDetailsHandler = (req, res) => {
   } catch (error) {
     console.error("Fel vid hämtning av screening:", error);
     res.status(500).json({ message: "Fel vid hämtning av screening" });
+  }
+};
+
+export const getScreeningsByDateHandler = (req, res) => {
+  try {
+    const date = req.query.date;
+    if (!date) {
+      return res.status(400).json({ error: "Datum saknas (YYYY-MM-DD)" });
+    }
+    const screenings = getScreeningsByDate(date);
+    res.json(screenings);
+  } catch (e) {
+    console.error("Fel vid hämtning av visningar per datum:", e);
+    res.status(500).json({ error: "Något gick fel" });
   }
 };
