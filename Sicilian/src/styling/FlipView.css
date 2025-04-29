@@ -1,0 +1,32 @@
+/* FlipView.css */
+.flip-container {
+  width: 100%;
+  perspective: 1000px;
+}
+
+.flipper {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.flip-container.flipped .flipper {
+  transform: rotateY(180deg);
+}
+
+.front,
+.back {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%; /* ska inte scrolla själva */
+  backface-visibility: hidden;
+  /* ta bort overflow här */
+}
+
+.back {
+  transform: rotateY(180deg);
+  position: absolute;
+}

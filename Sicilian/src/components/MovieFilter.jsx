@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { apiRequest } from '../api/apiRequest';
-import { ratingToAge } from '../utils/ratingToAge';
+import { useState, useEffect } from "react";
+import { apiRequest } from "../api/apiRequest";
+import { ratingToAge } from "../utils/ratingToAge";
 
-export function MovieFilter({ onChange }) {
+export const MovieFilter = ({ onChange, onShow }) => {
   const [open, setOpen] = useState(false);
   const [genres, setGenres] = useState([]);
   const [actors, setActors] = useState([]);
@@ -10,19 +10,27 @@ export function MovieFilter({ onChange }) {
 
   const [selGenres, setSelGenres] = useState(new Set());
   const [selActors, setSelActors] = useState(new Set());
-  const [selAge, setSelAge] = useState('');
+  const [selAge, setSelAge] = useState("");
 
   useEffect(() => {
-    apiRequest('http://localhost:3000/movies/genres', {}, '').then(setGenres);
-    apiRequest('http://localhost:3000/actor', {}, '').then(setActors);
-    apiRequest('http://localhost:3000/movies/ratings', {}, '').then(setRatings);
+    apiRequest("http://localhost:3000/movies/genres", {}, "").then(data => {
+      setGenres(data ?? []);
+    });
+
+    apiRequest("http://localhost:3000/actor", {}, "").then(data => {
+      setActors(data ?? []);
+    });
+
+    apiRequest("http://localhost:3000/movies/ratings", {}, "").then(data => {
+      setRatings(data ?? []);
+    });
   }, []);
 
   const applyChange = (nextGenres, nextActors, nextAge) => {
     onChange({
       genres: Array.from(nextGenres),
       actors: Array.from(nextActors),
-      age: nextAge === '0' ? null : nextAge,
+      age: nextAge === "0" ? null : nextAge,
     });
   };
 
@@ -47,10 +55,11 @@ export function MovieFilter({ onChange }) {
   };
 
   const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r))))
-    .filter(age => age > 0)
+    .filter(a => a > 0)
     .sort((a, b) => a - b);
 
   return (
+<<<<<<< HEAD
     <div className="filter-wrapper">
       <button onClick={() => setOpen(o => !o)} className="btn-filter">
         Filters
@@ -72,6 +81,32 @@ export function MovieFilter({ onChange }) {
                 </label>
               ))}
             </div>
+=======
+    <div className="toolbar">
+      <div className="toolbar-buttons">
+        <button onClick={() => setOpen(o => !o)} className="btn-filter">
+          Filters
+        </button>
+        <button onClick={onShow} className="btn-filter">
+          Se visningar
+        </button>
+      </div>
+
+      {open && (
+        <div className="filter-panel">
+          <section>
+            <h4>Genrer</h4>
+            {genres.map(g => (
+              <label key={g}>
+                <input
+                  type="checkbox"
+                  checked={selGenres.has(g)}
+                  onChange={() => toggleGenre(g)}
+                />
+                {g}
+              </label>
+            ))}
+>>>>>>> origin
           </section>
 
           <section className="filter-section">
@@ -88,6 +123,7 @@ export function MovieFilter({ onChange }) {
 
           <section className="filter-section">
             <h4>Skådespelare</h4>
+<<<<<<< HEAD
             <div className="checkbox-group scrollable">
               {actors.map(a => (
                 <label key={a} className="filter-label">
@@ -100,9 +136,21 @@ export function MovieFilter({ onChange }) {
                 </label>
               ))}
             </div>
+=======
+            {actors.map(a => (
+              <label key={a}>
+                <input
+                  type="checkbox"
+                  checked={selActors.has(a)}
+                  onChange={() => toggleActor(a)}
+                />
+                {a}
+              </label>
+            ))}
+>>>>>>> origin
           </section>
         </div>
       )}
     </div>
   );
-}
+};
