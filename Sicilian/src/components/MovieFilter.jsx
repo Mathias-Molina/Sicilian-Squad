@@ -1,31 +1,38 @@
-import { useState, useEffect } from 'react';
-import { apiRequest } from '../api/apiRequest';
-import { ratingToAge } from '../utils/ratingToAge';
+import { useState, useEffect } from "react";
+import { apiRequest } from "../api/apiRequest";
+import { ratingToAge } from "../utils/ratingToAge";
 
-export function MovieFilter({ onChange }) {
+export const MovieFilter = ({ onChange }) => {
   const [open, setOpen] = useState(false);
   const [genres, setGenres] = useState([]);
   const [actors, setActors] = useState([]);
   const [ratings, setRatings] = useState([]);
 
-  // De val som användaren gjort
   const [selGenres, setSelGenres] = useState(new Set());
   const [selActors, setSelActors] = useState(new Set());
-  const [selAge, setSelAge] = useState('');
+  const [selAge, setSelAge] = useState("");
 
-  // Hämta alternativ på mount
   useEffect(() => {
-    apiRequest('http://localhost:3000/movies/genres', {}, '').then(setGenres);
-    apiRequest('http://localhost:3000/actor', {}, '').then(setActors);
-    apiRequest('http://localhost:3000/movies/ratings', {}, '').then(setRatings);
-  }, []);
+    apiRequest("http://localhost:3000/movies/genres", {}, "").then(data => {
+      console.log("Genres:", data);
+      setGenres(data ?? []);
+    });
 
-  // Hjälpfunktion för att skicka vidare state
+    apiRequest("http://localhost:3000/actor", {}, "").then(data => {
+      console.log("Actors raw:", data);
+      setActors(data ?? []);
+    });
+
+    apiRequest("http://localhost:3000/movies/ratings", {}, "").then(data => {
+      console.log("Ratings raw:", data);
+      setRatings(data ?? []);
+    });
+  }, []);
   const applyChange = (nextGenres, nextActors, nextAge) => {
     onChange({
       genres: Array.from(nextGenres),
       actors: Array.from(nextActors),
-      age: nextAge === '0' ? null : nextAge,
+      age: nextAge === "0" ? null : nextAge,
     });
   };
 
@@ -50,24 +57,29 @@ export function MovieFilter({ onChange }) {
   };
 
   // Deduplikera och sortera åldrar
-  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r))))
-    .filter(age => age > 0)
-    .sort((a, b) => a - b);
+  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r)))).sort(
+    (a, b) => a - b
+  );
+
+  console.log("Actors state:", actors);
+  console.log("Ratings state:", ratings);
+  console.log("Unique ages:", uniqueAges);
 
   return (
-    <>
-      <button onClick={() => setOpen(o => !o)} className='btn-filter'>
+    <div className="toolbar">
+      <button onClick={() => setOpen(o => !o)} className="btn-filter">
         Filters
       </button>
 
       {open && (
-        <div className='filter-panel'>
+        <div className="filter-panel">
+          {/* Genrer */}
           <section>
             <h4>Genrer</h4>
-            {genres.map(g => (
+            {(genres ?? []).map(g => (
               <label key={g}>
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   checked={selGenres.has(g)}
                   onChange={() => toggleGenre(g)}
                 />
@@ -76,10 +88,11 @@ export function MovieFilter({ onChange }) {
             ))}
           </section>
 
+          {/* Ålder */}
           <section>
             <h4>Ålder</h4>
             <select value={selAge} onChange={handleAge}>
-              <option value=''>Alla åldrar</option>
+              <option value="">Alla åldrar</option>
               {uniqueAges.map(age => (
                 <option key={age} value={age}>
                   Upp till {age} år
@@ -88,12 +101,13 @@ export function MovieFilter({ onChange }) {
             </select>
           </section>
 
+          {/* Skådespelare */}
           <section>
             <h4>Skådespelare</h4>
-            {actors.map(a => (
+            {(actors ?? []).map(a => (
               <label key={a}>
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   checked={selActors.has(a)}
                   onChange={() => toggleActor(a)}
                 />
@@ -103,6 +117,6 @@ export function MovieFilter({ onChange }) {
           </section>
         </div>
       )}
-    </>
+    </div>
   );
-}
+};

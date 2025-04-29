@@ -1,0 +1,58 @@
+/* --- Toolbar --- */
+.toolbar {
+  position: relative; /* Viktigt: så att .filter-panel kan positioneras inuti */
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* --- Overlay-panelen --- */
+.filter-panel {
+  position: static;
+  display: flex;
+  flex-wrap: wrap; /* flytta ned kolumner som inte får plats */
+  gap: 24px;
+  width: 100%;
+  background-color: rgba(30, 30, 40, 0.9);
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 1rem;
+}
+/* --- Checkbox-sektioner i två kolumner --- */
+.filter-panel section {
+  display: flex;
+  flex-wrap: wrap; /* Gör att <label> flyter på rad */
+  gap: 8px 16px; /* rad- och kolumn-gap */
+  flex: 1; /* Jämna kolumnbredder */
+}
+
+.filter-panel section h4 {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.filter-panel label {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap; /* På rad utan radbrytning */
+}
+
+/* --- Knappar lila + hover --- */
+.btn-filter,
+.btn-secondary {
+  background-color: #a855f7;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.btn-filter:hover,
+.btn-secondary:hover {
+  background-color: #c53030;
+}

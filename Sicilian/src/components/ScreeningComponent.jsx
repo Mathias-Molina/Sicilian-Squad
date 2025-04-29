@@ -1,18 +1,16 @@
 import { useState, useEffect } from "react";
 import { getScreeningsByDate } from "../api/apiScreenings";
+import { getAvailableSeats } from "../api/apiSeats";
 import { useNavigate } from "react-router-dom";
 
 export const ScreeningComponent = () => {
   const navigate = useNavigate();
-
-  // Dagens datum i YYYY-MM-DD
   const today = new Date().toISOString().slice(0, 10);
+
   const [date, setDate] = useState(today);
-
-  // Är vi i custom-läge (endast valt datum)?
   const [isCustom, setIsCustom] = useState(false);
-
   const [screenings, setScreenings] = useState([]);
+  const [seatAvailabilityMap, setSeatAvailabilityMap] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -21,13 +19,11 @@ export const ScreeningComponent = () => {
       setLoading(true);
       setError("");
       try {
+        // 1) Hämta visningar
         let data = [];
-
         if (isCustom) {
-          // Custom: bara valet datum
           data = await getScreeningsByDate(date);
         } else {
-          // Standard: tre dagar från 'date'
           const dates = [0, 1, 2].map(offset => {
             const d = new Date(date);
             d.setDate(d.getDate() + offset);
@@ -38,16 +34,37 @@ export const ScreeningComponent = () => {
           );
           data = results.flat();
         }
-
-        // Sortera oavsett
+        // Sortera på tid
         data.sort(
           (a, b) => new Date(a.screening_time) - new Date(b.screening_time)
         );
-
         setScreenings(data);
+
+        // 2) Hämta sätes-tillgänglighet parallellt
+        const availabilityArray = await Promise.all(
+          data.map(async s => {
+            const seats = await getAvailableSeats(s.screening_id);
+            const totalSeats = seats.length;
+            const availableSeats = seats.filter(seat => seat.available).length;
+            return {
+              screeningId: s.screening_id,
+              totalSeats,
+              availableSeats,
+            };
+          })
+        );
+        const availabilityMap = availabilityArray.reduce((acc, cur) => {
+          acc[cur.screeningId] = {
+            totalSeats: cur.totalSeats,
+            availableSeats: cur.availableSeats,
+          };
+          return acc;
+        }, {});
+        setSeatAvailabilityMap(availabilityMap);
       } catch (err) {
         setError(err.message || "Ett fel uppstod vid hämtning av visningar.");
         setScreenings([]);
+        setSeatAvailabilityMap({});
       } finally {
         setLoading(false);
       }
@@ -58,7 +75,7 @@ export const ScreeningComponent = () => {
 
   const handleChangeDate = e => {
     setDate(e.target.value);
-    setIsCustom(true); // slår på custom‐läge
+    setIsCustom(true);
   };
 
   const handleClick = (screeningId, salonId) => {
@@ -66,15 +83,13 @@ export const ScreeningComponent = () => {
   };
 
   return (
-    <div>
-      <h1>Visningar de närmaste tre dagarna</h1>
+    <section className="screening-section">
+      <h1 className="section-title">Visningar de närmaste tre dagarna</h1>
 
-      {/* Hjälp­text för kalendern */}
       <div className="date-picker-wrapper">
         <label htmlFor="screening-date" className="date-picker-label">
           Välj datum för visningar att boka:
         </label>
-
         <input
           id="screening-date"
           type="date"
@@ -85,41 +100,65 @@ export const ScreeningComponent = () => {
         />
       </div>
 
-      {error && <div className="error">{error}</div>}
+      {error && <div className="error-message">{error}</div>}
 
       {loading ? (
-        <div>Laddar visningar...</div>
+        <div className="loading-message">Laddar visningar…</div>
       ) : screenings.length === 0 ? (
-        <p>
+        <p className="no-screenings">
           {isCustom
             ? "Inga visningar det datumet."
             : "Inga visningar de närmaste tre dagarna."}
         </p>
       ) : (
         <ul className="screening-list">
-          {screenings.map(s => (
-            <li
-              key={s.screening_id}
-              className="screening-item"
-              onClick={() => handleClick(s.screening_id, s.salon_id)}
-              style={{ cursor: "pointer" }}
-            >
-              <div>
-                <strong>
-                  {new Date(s.screening_time).toLocaleDateString()}{" "}
-                  {new Date(s.screening_time).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </strong>{" "}
-                – Salong {s.salon_id}
-              </div>
-              <div>{s.movie_title}</div>
-              <div>{s.screening_price} kr</div>
-            </li>
-          ))}
+          {screenings.map(s => {
+            const dt = new Date(s.screening_time);
+            const dateStr = dt.toLocaleDateString();
+            const timeStr = dt.toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+
+            const avail = seatAvailabilityMap[s.screening_id] || {};
+            const { availableSeats = null, totalSeats = null } = avail;
+            const percent = totalSeats
+              ? (availableSeats / totalSeats) * 100
+              : 0;
+            let availabilityClass = "high-availability";
+            if (percent < 30) availabilityClass = "low-availability";
+            else if (percent < 70) availabilityClass = "medium-availability";
+            const availabilityText =
+              availableSeats != null
+                ? `Lediga platser: ${availableSeats} av ${totalSeats}`
+                : "Laddar lediga platser…";
+
+            return (
+              <li key={s.screening_id} className="screening-item">
+                <div className="screening-content">
+                  <div className="screening-info">
+                    <p className="screening-time">
+                      {dateStr} • {timeStr}
+                    </p>
+                    <p className="screening-salon">{s.salon_name}</p>
+                  </div>
+                  <div className="screening-availability">
+                    <p className={`seat-info ${availabilityClass}`}>
+                      {availabilityText}
+                    </p>
+                    <button
+                      className="select-button"
+                      onClick={() => handleClick(s.screening_id, s.salon_id)}
+                    >
+                      Välj visning
+                    </button>
+                  </div>
+                </div>
+              </li>
+            );
+          })}
         </ul>
       )}
-    </div>
+    </section>
   );
 };
