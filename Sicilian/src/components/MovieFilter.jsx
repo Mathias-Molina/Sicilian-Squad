@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { apiRequest } from "../api/apiRequest";
-import { ratingToAge } from "../utils/ratingToAge";
+import { useState, useEffect } from 'react';
+import { apiRequest } from '../api/apiRequest';
+import { ratingToAge } from '../utils/ratingToAge';
 
 export function MovieFilter({ onChange }) {
   const [open, setOpen] = useState(false);
@@ -11,13 +11,13 @@ export function MovieFilter({ onChange }) {
   // De val som användaren gjort
   const [selGenres, setSelGenres] = useState(new Set());
   const [selActors, setSelActors] = useState(new Set());
-  const [selAge, setSelAge] = useState("");
+  const [selAge, setSelAge] = useState('');
 
   // Hämta alternativ på mount
   useEffect(() => {
-    apiRequest("http://localhost:3000/movies/genres", {}, "").then(setGenres);
-    apiRequest("http://localhost:3000/actor", {}, "").then(setActors);
-    apiRequest("http://localhost:3000/movies/ratings", {}, "").then(setRatings);
+    apiRequest('http://localhost:3000/movies/genres', {}, '').then(setGenres);
+    apiRequest('http://localhost:3000/actor', {}, '').then(setActors);
+    apiRequest('http://localhost:3000/movies/ratings', {}, '').then(setRatings);
   }, []);
 
   // Hjälpfunktion för att skicka vidare state
@@ -25,7 +25,7 @@ export function MovieFilter({ onChange }) {
     onChange({
       genres: Array.from(nextGenres),
       actors: Array.from(nextActors),
-      age: nextAge,
+      age: nextAge === '0' ? null : nextAge,
     });
   };
 
@@ -50,24 +50,24 @@ export function MovieFilter({ onChange }) {
   };
 
   // Deduplikera och sortera åldrar
-  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r)))).sort(
-    (a, b) => a - b
-  );
+  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r))))
+    .filter(age => age > 0)
+    .sort((a, b) => a - b);
 
   return (
     <>
-      <button onClick={() => setOpen(o => !o)} className="btn-filter">
+      <button onClick={() => setOpen(o => !o)} className='btn-filter'>
         Filters
       </button>
 
       {open && (
-        <div className="filter-panel">
+        <div className='filter-panel'>
           <section>
             <h4>Genrer</h4>
             {genres.map(g => (
               <label key={g}>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   checked={selGenres.has(g)}
                   onChange={() => toggleGenre(g)}
                 />
@@ -79,10 +79,10 @@ export function MovieFilter({ onChange }) {
           <section>
             <h4>Ålder</h4>
             <select value={selAge} onChange={handleAge}>
-              <option value="">Alla åldrar</option>
+              <option value=''>Alla åldrar</option>
               {uniqueAges.map(age => (
                 <option key={age} value={age}>
-                  {age}+
+                  Upp till {age} år
                 </option>
               ))}
             </select>
@@ -93,7 +93,7 @@ export function MovieFilter({ onChange }) {
             {actors.map(a => (
               <label key={a}>
                 <input
-                  type="checkbox"
+                  type='checkbox'
                   checked={selActors.has(a)}
                   onChange={() => toggleActor(a)}
                 />
