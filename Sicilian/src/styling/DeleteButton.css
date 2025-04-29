@@ -1,43 +1,45 @@
-/* Admin controls */
 .admin-controls {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    padding: 0.5rem;
-    gap: 0.5rem;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem;
+  gap: 0.5rem;
+  position: relative; /* Viktigt för stacking context */
+  z-index: 10; /* Se till att den inte hamnar bakom andra saker */
+  overflow: visible; /* Tillåt tooltip att sticka ut */
 }
 
 .delete-button {
-    position: relative;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  position: relative;
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .delete-button:hover {
-    background: rgba(255, 0, 0, 0.9);
-    transform: scale(1.1);
+  background: rgba(255, 0, 0, 0.9);
+  transform: scale(1.1);
 }
 
 .delete-button:hover::after {
-    content: "Delete Movie";
-    position: absolute;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-    white-space: nowrap;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-top: 5px;
-    pointer-events: none;
-    z-index: 1000;
+  content: 'Delete Movie';
+  position: absolute;
+  background: rgba(0, 0, 0, 0.95);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+  bottom: 130%;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 9999;
+  border: 1px solid yellow; /* <-- Hjälper dig se var tooltipen faktiskt hamnar */
 }
