@@ -1,0 +1,108 @@
+import { useState, useEffect } from "react";
+import { apiRequest } from "../api/apiRequest";
+import { ratingToAge } from "../utils/ratingToAge";
+
+export function MovieFilter({ onChange }) {
+  const [open, setOpen] = useState(false);
+  const [genres, setGenres] = useState([]);
+  const [actors, setActors] = useState([]);
+  const [ratings, setRatings] = useState([]);
+
+  // De val som användaren gjort
+  const [selGenres, setSelGenres] = useState(new Set());
+  const [selActors, setSelActors] = useState(new Set());
+  const [selAge, setSelAge] = useState("");
+
+  // Hämta alternativ på mount
+  useEffect(() => {
+    apiRequest("http://localhost:3000/movies/genres", {}, "").then(setGenres);
+    apiRequest("http://localhost:3000/actor", {}, "").then(setActors);
+    apiRequest("http://localhost:3000/movies/ratings", {}, "").then(setRatings);
+  }, []);
+
+  // Hjälpfunktion för att skicka vidare state
+  const applyChange = (nextGenres, nextActors, nextAge) => {
+    onChange({
+      genres: Array.from(nextGenres),
+      actors: Array.from(nextActors),
+      age: nextAge,
+    });
+  };
+
+  const toggleGenre = g => {
+    const s = new Set(selGenres);
+    s.has(g) ? s.delete(g) : s.add(g);
+    setSelGenres(s);
+    applyChange(s, selActors, selAge);
+  };
+
+  const toggleActor = a => {
+    const s = new Set(selActors);
+    s.has(a) ? s.delete(a) : s.add(a);
+    setSelActors(s);
+    applyChange(selGenres, s, selAge);
+  };
+
+  const handleAge = e => {
+    const age = e.target.value;
+    setSelAge(age);
+    applyChange(selGenres, selActors, age);
+  };
+
+  // Deduplikera och sortera åldrar
+  const uniqueAges = Array.from(new Set(ratings.map(r => ratingToAge(r)))).sort(
+    (a, b) => a - b
+  );
+
+  return (
+    <>
+      <button onClick={() => setOpen(o => !o)} className="btn-filter">
+        Filters
+      </button>
+
+      {open && (
+        <div className="filter-panel">
+          <section>
+            <h4>Genrer</h4>
+            {genres.map(g => (
+              <label key={g}>
+                <input
+                  type="checkbox"
+                  checked={selGenres.has(g)}
+                  onChange={() => toggleGenre(g)}
+                />
+                {g}
+              </label>
+            ))}
+          </section>
+
+          <section>
+            <h4>Ålder</h4>
+            <select value={selAge} onChange={handleAge}>
+              <option value="">Alla åldrar</option>
+              {uniqueAges.map(age => (
+                <option key={age} value={age}>
+                  {age}+
+                </option>
+              ))}
+            </select>
+          </section>
+
+          <section>
+            <h4>Skådespelare</h4>
+            {actors.map(a => (
+              <label key={a}>
+                <input
+                  type="checkbox"
+                  checked={selActors.has(a)}
+                  onChange={() => toggleActor(a)}
+                />
+                {a}
+              </label>
+            ))}
+          </section>
+        </div>
+      )}
+    </>
+  );
+}
