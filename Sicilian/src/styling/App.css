@@ -6,6 +6,32 @@
 
 .content {
   flex: 1;
+  -webkit-overflow-scrolling: touch; /* mjukare scroll på iOS */
+}
+.content::-webkit-scrollbar,
+.front::-webkit-scrollbar,
+.back::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content::-webkit-scrollbar-track,
+.front::-webkit-scrollbar-track,
+.back::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb,
+.front::-webkit-scrollbar-thumb,
+.back::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  border: 2px solid transparent;
+}
+
+.content::-webkit-scrollbar-thumb:hover,
+.front::-webkit-scrollbar-thumb:hover,
+.back::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(167, 52, 173, 0.266);
 }
 
 body {

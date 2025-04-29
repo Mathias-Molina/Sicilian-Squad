@@ -82,14 +82,15 @@ export const getScreeningDetailsHandler = (req, res) => {
 
 export const getScreeningsByDateHandler = (req, res) => {
   try {
-    const date = req.query.date;
-    if (!date) {
-      return res.status(400).json({ error: "Datum saknas (YYYY-MM-DD)" });
+    // Om ?date=YYYY-MM-DD är satt, hämta per datum
+    if (req.query.date) {
+      const screenings = getScreeningsByDate(req.query.date);
+      return res.json(screenings);
     }
-    const screenings = getScreeningsByDate(date);
-    res.json(screenings);
+    const all = getAllScreenings();
+    return res.json(all);
   } catch (e) {
-    console.error("Fel vid hämtning av visningar per datum:", e);
+    console.error("Fel vid hämtning av visningar:", e);
     res.status(500).json({ error: "Något gick fel" });
   }
 };

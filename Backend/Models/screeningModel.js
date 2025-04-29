@@ -58,9 +58,9 @@ export const getScreeningsByDate = date => {
       s.screening_id,
       s.screening_time,
       s.salon_id,
+      s.screening_price,
       m.movie_title,
-      m.movie_poster,
-      s.screening_price
+      m.movie_poster
     FROM screenings s
     JOIN movies    m ON m.movie_id = s.movie_id
     WHERE s.screening_time BETWEEN ? AND ?
