@@ -59,29 +59,6 @@ export const MovieFilter = ({ onChange, onShow }) => {
     .sort((a, b) => a - b);
 
   return (
-<<<<<<< HEAD
-    <div className="filter-wrapper">
-      <button onClick={() => setOpen(o => !o)} className="btn-filter">
-        Filters
-      </button>
-
-      {open && (
-        <div className="filter-panel">
-          <section className="filter-section">
-            <h4>Genrer</h4>
-            <div className="checkbox-group">
-              {genres.map(g => (
-                <label key={g} className="filter-label">
-                  <input
-                    type="checkbox"
-                    checked={selGenres.has(g)}
-                    onChange={() => toggleGenre(g)}
-                  />
-                  {g}
-                </label>
-              ))}
-            </div>
-=======
     <div className="toolbar">
       <div className="toolbar-buttons">
         <button onClick={() => setOpen(o => !o)} className="btn-filter">
@@ -106,7 +83,6 @@ export const MovieFilter = ({ onChange, onShow }) => {
                 {g}
               </label>
             ))}
->>>>>>> origin
           </section>
 
           <section className="filter-section">
@@ -123,20 +99,6 @@ export const MovieFilter = ({ onChange, onShow }) => {
 
           <section className="filter-section">
             <h4>Skådespelare</h4>
-<<<<<<< HEAD
-            <div className="checkbox-group scrollable">
-              {actors.map(a => (
-                <label key={a} className="filter-label">
-                  <input
-                    type="checkbox"
-                    checked={selActors.has(a)}
-                    onChange={() => toggleActor(a)}
-                  />
-                  {a}
-                </label>
-              ))}
-            </div>
-=======
             {actors.map(a => (
               <label key={a}>
                 <input
@@ -147,7 +109,6 @@ export const MovieFilter = ({ onChange, onShow }) => {
                 {a}
               </label>
             ))}
->>>>>>> origin
           </section>
         </div>
       )}
