@@ -28,31 +28,28 @@ export const insertMovie = (
   );
 };
 
-export const getAllMovies = (genre = null, age = null, actor = null) => {
-  let query = "SELECT * FROM movies WHERE movie_isDeleted = 0";
+export const getAllMovies = (genres = [], age = null, actors = []) => {
+  let sql = "SELECT * FROM movies WHERE movie_isDeleted = 0";
   const params = [];
 
-  if (genre) {
-    query += " AND movie_genre LIKE ?";
-    params.push(`%${genre.toLowerCase()}%`);
+  if (genres.length) {
+    const clauses = genres.map(() => "LOWER(movie_genre) LIKE ?").join(" OR ");
+    sql += ` AND (${clauses})`;
+    genres.forEach(g => params.push(`%${g.toLowerCase()}%`));
   }
 
-  if (actor) {
-    query += " AND movie_actors LIKE ?";
-    params.push(`%${actor.toLowerCase()}%`);
+  if (actors.length) {
+    const clauses = actors.map(() => "LOWER(movie_actors) LIKE ?").join(" OR ");
+    sql += ` AND (${clauses})`;
+    actors.forEach(a => params.push(`%${a.toLowerCase()}%`));
   }
 
-  const stmt = db.prepare(query);
-  let movies = stmt.all(...params);
+  const rows = db.prepare(sql).all(...params);
 
   if (age !== null) {
-    movies = movies.filter(movie => {
-      const movieAge = ratingToAge(movie.movie_rated);
-      return movieAge <= age;
-    });
+    return rows.filter(m => ratingToAge(m.movie_rated) <= Number(age));
   }
-
-  return movies;
+  return rows;
 };
 
 export const getMovieById = movieId => {
