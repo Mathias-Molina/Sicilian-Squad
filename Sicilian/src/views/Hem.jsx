@@ -15,7 +15,9 @@ export const Hem = () => {
   const [filters, setFilters] = useState({ genres: [], actors: [], age: "" });
   const debouncedFilters = useDebounce(filters, 300);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const [movieToDelete, setMovieToDelete] = useState(null);
 
   const { user } = useContext(UserContext);
@@ -25,27 +27,27 @@ export const Hem = () => {
   useEffect(() => {
     if (flipped) return;
     setLoading(true);
-    setError("");
+    setError('');
 
     const params = new URLSearchParams();
     if (debouncedFilters.genres.length)
-      params.append("genres", debouncedFilters.genres.join(","));
+      params.append('genres', debouncedFilters.genres.join(','));
     if (debouncedFilters.actors.length)
-      params.append("actors", debouncedFilters.actors.join(","));
-    if (debouncedFilters.age) params.append("age", debouncedFilters.age);
+      params.append('actors', debouncedFilters.actors.join(','));
+    if (debouncedFilters.age) params.append('age', debouncedFilters.age);
 
-    const query = params.toString() ? `?${params.toString()}` : "";
+    const query = params.toString() ? `?${params.toString()}` : '';
 
     getMovies(query)
       .then(data => setMovies(data))
-      .catch(e => setError(e.message || "Något gick fel"))
+      .catch(e => setError(e.message || 'Något gick fel'))
       .finally(() => setLoading(false));
   }, [debouncedFilters, flipped]);
 
   // --- Admin-funktioner för radering ---
   const confirmDelete = movieId => {
     if (!user?.user_admin) {
-      setError("Du måste vara admin för att kunna radera filmer");
+      setError('Du måste vara admin för att kunna radera filmer');
       return;
     }
     const m = movies.find(m => Number(m.movie_id) === Number(movieId));
@@ -64,14 +66,16 @@ export const Hem = () => {
     }
   };
 
-  const handleCancelDelete = () => setMovieToDelete(null);
+  const handleCancel = () => setMovieToDelete(null);
+  const handleAddMovie = () => navigate('/addmovie');
 
   // --- Front-panel (filmer + filter + admin + knapp till visningar) ---
   const front = (
     <div>
-      <h1 className="section-heading">Aktuella filmer</h1>
+      <h1 className='section-heading'>Aktuella filmer</h1>
 
-      {/* Admin-knappar */}
+      {user?.user_admin !== 1 && <MovieFilter onChange={setFilters} />}
+
       {user?.user_admin === 1 && (
         <div style={{ marginBottom: "1rem" }}>
           <button
@@ -81,8 +85,8 @@ export const Hem = () => {
             Lägg till film
           </button>
           <button
-            onClick={() => navigate("/screening/add")}
-            className="admin-add-button"
+            onClick={() => navigate('/screening/add')}
+            className='admin-add-button'
           >
             Lägg till visning
           </button>
@@ -96,20 +100,19 @@ export const Hem = () => {
         </button>
       </div>
 
-      {error && <div className="error">{error}</div>}
+      {error && <div className='error'>{error}</div>}
 
       {loading ? (
         <div>Laddar filmer…</div>
       ) : (
-        <div className="movie-cards-container">
-          {movies.map(m => (
-            <div key={m.movie_id} className="movie-card">
-              {/* Radera-knapp per kort */}
+        <div className='movie-cards-container'>
+          {movies.map(movie => (
+            <div key={movie.movie_id} className='movie-card'>
               {user?.user_admin === 1 && (
-                <div className="admin-controls">
+                <div className='admin-controls'>
                   <button
-                    className="delete-button"
-                    onClick={() => confirmDelete(m.movie_id)}
+                    className='delete-button'
+                    onClick={() => confirmDelete(movie.movie_id)}
                   >
                     ❌
                   </button>
