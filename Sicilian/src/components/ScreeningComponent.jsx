@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { getScreeningsByDate } from "../api/apiScreenings";
 import { getAvailableSeats } from "../api/apiSeats";
-import { useNavigate } from "react-router-dom";
+import { getSalons } from "../api/apiSalons";
 
 export const ScreeningComponent = () => {
   const navigate = useNavigate();
@@ -18,11 +19,12 @@ export const ScreeningComponent = () => {
     const fetchData = async () => {
       setLoading(true);
       setError("");
+
       try {
-        // 1) Hämta visningar
-        let data = [];
+        // 1) Hämta alla relevanta visningar
+        let rawData = [];
         if (isCustom) {
-          data = await getScreeningsByDate(date);
+          rawData = await getScreeningsByDate(date);
         } else {
           const dates = [0, 1, 2].map(offset => {
             const d = new Date(date);
@@ -32,24 +34,36 @@ export const ScreeningComponent = () => {
           const results = await Promise.all(
             dates.map(d => getScreeningsByDate(d))
           );
-          data = results.flat();
+          rawData = results.flat();
         }
-        // Sortera på tid
-        data.sort(
+
+        const salons = await getSalons();
+        const salonMap = salons.reduce((acc, salon) => {
+          acc[salon.salon_id ?? salon.id] =
+            salon.salon_name ?? salon.name ?? "Okänd salong";
+          return acc;
+        }, {});
+
+        // 3) Blanda in salon_name i varje visning
+        const enriched = rawData.map(s => ({
+          ...s,
+          salon_name: salonMap[s.salon_id] || "Okänd salong",
+        }));
+
+        // 4) Sortera på tid
+        enriched.sort(
           (a, b) => new Date(a.screening_time) - new Date(b.screening_time)
         );
-        setScreenings(data);
+        setScreenings(enriched);
 
-        // 2) Hämta sätes-tillgänglighet parallellt
+        // 5) Hämta sätes-availability parallellt
         const availabilityArray = await Promise.all(
-          data.map(async s => {
+          enriched.map(async s => {
             const seats = await getAvailableSeats(s.screening_id);
-            const totalSeats = seats.length;
-            const availableSeats = seats.filter(seat => seat.available).length;
             return {
               screeningId: s.screening_id,
-              totalSeats,
-              availableSeats,
+              totalSeats: seats.length,
+              availableSeats: seats.filter(seat => seat.available).length,
             };
           })
         );
@@ -120,18 +134,14 @@ export const ScreeningComponent = () => {
               minute: "2-digit",
             });
 
-            const avail = seatAvailabilityMap[s.screening_id] || {};
-            const { availableSeats = null, totalSeats = null } = avail;
+            const { availableSeats = null, totalSeats = null } =
+              seatAvailabilityMap[s.screening_id] || {};
             const percent = totalSeats
               ? (availableSeats / totalSeats) * 100
               : 0;
             let availabilityClass = "high-availability";
             if (percent < 30) availabilityClass = "low-availability";
             else if (percent < 70) availabilityClass = "medium-availability";
-            const availabilityText =
-              availableSeats != null
-                ? `Lediga platser: ${availableSeats} av ${totalSeats}`
-                : "Laddar lediga platser…";
 
             return (
               <li key={s.screening_id} className="screening-item">
@@ -140,11 +150,15 @@ export const ScreeningComponent = () => {
                     <p className="screening-time">
                       {dateStr} • {timeStr}
                     </p>
+                    {/* Här dyker salongsnamnet upp precis som i SelectScreeningView */}
                     <p className="screening-salon">{s.salon_name}</p>
                   </div>
+
                   <div className="screening-availability">
                     <p className={`seat-info ${availabilityClass}`}>
-                      {availabilityText}
+                      {availableSeats != null
+                        ? `Lediga platser: ${availableSeats} av ${totalSeats}`
+                        : "Laddar lediga platser…"}
                     </p>
                     <button
                       className="select-button"
