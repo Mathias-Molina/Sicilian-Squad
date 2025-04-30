@@ -35,8 +35,8 @@ export const MovieFilter = ({ onChange, onShow }) => {
   };
 
   const toggleGenre = g => {
-    const s = new Set(selGenres);
-    s.has(g) ? s.delete(g) : s.add(g);
+    const s = new Set();
+    if (g) s.add(g); // Only one genre selected at a time
     setSelGenres(s);
     applyChange(s, selActors, selAge);
   };
@@ -59,9 +59,9 @@ export const MovieFilter = ({ onChange, onShow }) => {
     .sort((a, b) => a - b);
 
   return (
-    <div className="toolbar">
+    <div className="toolbar-wrapper">
       <div className="toolbar-buttons">
-        <button onClick={() => setOpen(o => !o)} className="btn-filter">
+        <button onClick={() => setOpen(o => !o)} className="btn-filter1">
           Filters
         </button>
         <button onClick={onShow} className="btn-filter">
@@ -71,18 +71,19 @@ export const MovieFilter = ({ onChange, onShow }) => {
 
       {open && (
         <div className="filter-panel">
-          <section>
+          <section className="filter-section">
             <h4>Genrer</h4>
-            {genres.map(g => (
-              <label key={g}>
-                <input
-                  type="checkbox"
-                  checked={selGenres.has(g)}
-                  onChange={() => toggleGenre(g)}
-                />
-                {g}
-              </label>
-            ))}
+            <div className="clickable-list">
+              {genres.map(g => (
+                <span
+                  key={g}
+                  className={`clickable-item ${selGenres.has(g) ? "selected" : ""}`}
+                  onClick={() => toggleGenre(g)}
+                >
+                  {g}
+                </span>
+              ))}
+            </div>
           </section>
 
           <section className="filter-section">
@@ -99,16 +100,17 @@ export const MovieFilter = ({ onChange, onShow }) => {
 
           <section className="filter-section">
             <h4>Skådespelare</h4>
-            {actors.map(a => (
-              <label key={a}>
-                <input
-                  type="checkbox"
-                  checked={selActors.has(a)}
-                  onChange={() => toggleActor(a)}
-                />
-                {a}
-              </label>
-            ))}
+            <div className="clickable-list scrollable-actors">
+              {actors.map(a => (
+                <span
+                  key={a}
+                  className={`clickable-item ${selActors.has(a) ? "selected" : ""}`}
+                  onClick={() => toggleActor(a)}
+                >
+                  {a}
+                </span>
+              ))}
+            </div>
           </section>
         </div>
       )}
