@@ -48,15 +48,15 @@ export const ScreeningComponent = () => {
             const availableSeats = seats.filter(seat => seat.available).length;
             return {
               screeningId: s.screening_id,
-              totalSeats,
               availableSeats,
+              totalSeats,
             };
           })
         );
         const availabilityMap = availabilityArray.reduce((acc, cur) => {
           acc[cur.screeningId] = {
-            totalSeats: cur.totalSeats,
             availableSeats: cur.availableSeats,
+            totalSeats: cur.totalSeats,
           };
           return acc;
         }, {});
@@ -113,32 +113,38 @@ export const ScreeningComponent = () => {
       ) : (
         <ul className="screening-list">
           {screenings.map(s => {
-            const dt = new Date(s.screening_time);
-            const dateStr = dt.toLocaleDateString();
-            const timeStr = dt.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-
             const avail = seatAvailabilityMap[s.screening_id] || {};
-            const { availableSeats = null, totalSeats = null } = avail;
+            const availableSeats = avail.availableSeats ?? 0;
+            const totalSeats = avail.totalSeats ?? 0;
             const percent = totalSeats
               ? (availableSeats / totalSeats) * 100
               : 0;
-            let availabilityClass = "high-availability";
-            if (percent < 30) availabilityClass = "low-availability";
-            else if (percent < 70) availabilityClass = "medium-availability";
+
+            // Sätt text och klass: fullbokad om inga platser kvar
             const availabilityText =
-              availableSeats != null
-                ? `Lediga platser: ${availableSeats} av ${totalSeats}`
-                : "Laddar lediga platser…";
+              availableSeats === 0
+                ? "Fullbokad"
+                : `Lediga platser: ${availableSeats} av ${totalSeats}`;
+
+            let availabilityClass = "high-availability";
+            if (availableSeats === 0) {
+              availabilityClass = "fullbooked-availability";
+            } else if (percent < 30) {
+              availabilityClass = "low-availability";
+            } else if (percent < 70) {
+              availabilityClass = "medium-availability";
+            }
 
             return (
               <li key={s.screening_id} className="screening-item">
                 <div className="screening-content">
                   <div className="screening-info">
                     <p className="screening-time">
-                      {dateStr} • {timeStr}
+                      {new Date(s.screening_time).toLocaleDateString()} •{" "}
+                      {new Date(s.screening_time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                     <p className="screening-salon">{s.salon_name}</p>
                   </div>
@@ -149,6 +155,7 @@ export const ScreeningComponent = () => {
                     <button
                       className="select-button"
                       onClick={() => handleClick(s.screening_id, s.salon_id)}
+                      disabled={availableSeats === 0}
                     >
                       Välj visning
                     </button>
