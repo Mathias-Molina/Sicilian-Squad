@@ -1,143 +1,109 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getScreenings } from '../api/apiScreenings';
-import { getAvailableSeats } from '../api/apiSeats';
-import { StepIndicator } from '../components/StepIndicator';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { getScreenings } from "../api/apiScreenings";
+import { getAvailableSeats } from "../api/apiSeats";
+import { StepIndicator } from "../components/StepIndicator";
 
 export function SelectScreeningView() {
   const { movieId } = useParams();
   const navigate = useNavigate();
   const [screeningList, setScreeningList] = useState([]);
   const [seatAvailabilityMap, setSeatAvailabilityMap] = useState({});
-  const [isLoadingScreenings, setIsLoadingScreenings] = useState(true);
-  const [loadingErrorMessage, setLoadingErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    async function fetchScreeningsAndSeatAvailability() {
+    async function fetchData() {
       try {
-        setIsLoadingScreenings(true);
-        setLoadingErrorMessage('');
+        setIsLoading(true);
+        setErrorMessage("");
 
-        const screeningsFromServer = await getScreenings(movieId);
-
+        const all = await getScreenings(movieId);
         const now = new Date();
-        const futureScreenings = screeningsFromServer.filter(
-          screening => new Date(screening.screening_time) > now
-        );
+        const future = all.filter(s => new Date(s.screening_time) > now);
 
-        const availabilityArray = await Promise.all(
-          futureScreenings.map(async screening => {
-            const seatsForThisScreening = await getAvailableSeats(
-              screening.screening_id
-            );
-            const totalNumberOfSeats = seatsForThisScreening.length;
-            const numberOfAvailableSeats = seatsForThisScreening.filter(
-              seat => seat.available
-            ).length;
-
-            return {
-              screeningId: screening.screening_id,
-              numberOfAvailableSeats,
-              totalNumberOfSeats,
-            };
+        const availabilityArr = await Promise.all(
+          future.map(async s => {
+            const seats = await getAvailableSeats(s.screening_id);
+            const total = seats.length;
+            const available = seats.filter(seat => seat.available).length;
+            return { screeningId: s.screening_id, available, total };
           })
         );
 
-        const availabilityObject = availabilityArray.reduce(
-          (accumulator, availabilityItem) => {
-            accumulator[availabilityItem.screeningId] = {
-              availableSeats: availabilityItem.numberOfAvailableSeats,
-              totalSeats: availabilityItem.totalNumberOfSeats,
-            };
-            return accumulator;
-          },
-          {}
-        );
+        const availabilityObj = availabilityArr.reduce((acc, cur) => {
+          acc[cur.screeningId] = { available: cur.available, total: cur.total };
+          return acc;
+        }, {});
 
-        setScreeningList(futureScreenings);
-        setSeatAvailabilityMap(availabilityObject);
-      } catch (error) {
-        setLoadingErrorMessage(
-          error.message || 'Ett fel uppstod vid hämtning av visningar.'
+        setScreeningList(future);
+        setSeatAvailabilityMap(availabilityObj);
+      } catch (err) {
+        setErrorMessage(
+          err.message || "Ett fel uppstod vid hämtning av visningar."
         );
       } finally {
-        setIsLoadingScreenings(false);
+        setIsLoading(false);
       }
     }
-
-    fetchScreeningsAndSeatAvailability();
+    fetchData();
   }, [movieId]);
 
-  function handleScreeningClick(screeningId, salonId) {
+  const handleClick = (screeningId, salonId) => {
     navigate(`/boka/screening/${screeningId}/${salonId}`);
-  }
+  };
 
-  if (isLoadingScreenings) {
-    return <div>Laddar visningar...</div>;
-  }
-
-  if (loadingErrorMessage) {
-    return <div className='text-red-600'>Fel: {loadingErrorMessage}</div>;
-  }
+  if (isLoading) return <div>Laddar visningar...</div>;
+  if (errorMessage)
+    return <div className="error-message">Fel: {errorMessage}</div>;
 
   return (
-    <section className='screening-section'>
+    <section className="screening-section">
       <StepIndicator currentStep={1} />
-      <h1 className='section-title'>Välj visning</h1>
+      <h1 className="section-title">Välj visning</h1>
 
       {screeningList.length === 0 ? (
         <p>Inga kommande visningar tillgängliga.</p>
       ) : (
-        <ul className='screening-list'>
-          {screeningList.map(screening => {
-            const availability =
-              seatAvailabilityMap[screening.screening_id] || {};
-            const availableSeats = availability.availableSeats || 0;
-            const totalSeats = availability.totalSeats || 0;
-            const percentAvailable = totalSeats
-              ? (availableSeats / totalSeats) * 100
-              : 0;
+        <ul className="screening-list">
+          {screeningList.map(s => {
+            const avail = seatAvailabilityMap[s.screening_id] || {
+              available: 0,
+              total: 0,
+            };
+            const { available, total } = avail;
+            const percent = total ? (available / total) * 100 : 0;
 
-            let availabilityClass = 'high-availability';
-            if (percentAvailable < 30) availabilityClass = 'low-availability';
-            else if (percentAvailable < 70)
-              availabilityClass = 'medium-availability';
+            // Text och klass
+            const text =
+              available === 0
+                ? "Fullbokad"
+                : `Lediga platser: ${available} av ${total}`;
 
-            const availabilityText =
-              availability.availableSeats != null
-                ? `Lediga platser: ${availability.availableSeats} av ${availability.totalSeats}`
-                : 'Laddar lediga platser...';
+            let cls = "high-availability";
+            if (available === 0) cls = "fullbooked-availability";
+            else if (percent < 30) cls = "low-availability";
+            else if (percent < 70) cls = "medium-availability";
 
             return (
-              <li key={screening.screening_id} className='screening-item'>
-                <div className='screening-content'>
-                  <div className='screening-info'>
-                    <p className='screening-time'>
-                      {new Date(screening.screening_time).toLocaleDateString()}{' '}
-                      •{' '}
-                      {new Date(screening.screening_time).toLocaleTimeString(
-                        [],
-                        { hour: '2-digit', minute: '2-digit' }
-                      )}
+              <li key={s.screening_id} className="screening-item">
+                <div className="screening-content">
+                  <div className="screening-info">
+                    <p className="screening-time">
+                      {new Date(s.screening_time).toLocaleDateString()} •{" "}
+                      {new Date(s.screening_time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
-                    <p className='screening-salon'>{screening.salon_name}</p>
+                    <p className="screening-salon">{s.salon_name}</p>
                   </div>
-
-                  <div className='screening-availability'>
-                    <p className={`seat-info ${availabilityClass}`}>
-                      Lediga platser:
-                      {availability.availableSeats !== null
-                        ? ` ${availability.availableSeats} av ${availability.totalSeats}`
-                        : 'Laddar lediga platser...'}
-                    </p>
+                  <div className="screening-availability">
+                    <p className={`seat-info ${cls}`}>{text}</p>
                     <button
-                      onClick={() =>
-                        handleScreeningClick(
-                          screening.screening_id,
-                          screening.salon_id
-                        )
-                      }
-                      className='select-button'
+                      className="select-button"
+                      onClick={() => handleClick(s.screening_id, s.salon_id)}
+                      disabled={available === 0}
                     >
                       Välj visning
                     </button>

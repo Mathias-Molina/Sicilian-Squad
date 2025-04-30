@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { apiRequest } from "../api/apiRequest";
+import { getActors, getGenres, getRatings } from "../api/apiMovies";
 import { ratingToAge } from "../utils/ratingToAge";
 
 export const MovieFilter = ({ onChange, onShow }) => {
@@ -13,17 +13,9 @@ export const MovieFilter = ({ onChange, onShow }) => {
   const [selAge, setSelAge] = useState("");
 
   useEffect(() => {
-    apiRequest("http://localhost:3000/movies/genres", {}, "").then(data => {
-      setGenres(data ?? []);
-    });
-
-    apiRequest("http://localhost:3000/actor", {}, "").then(data => {
-      setActors(data ?? []);
-    });
-
-    apiRequest("http://localhost:3000/movies/ratings", {}, "").then(data => {
-      setRatings(data ?? []);
-    });
+    getGenres().then(data => setGenres(data ?? []));
+    getActors().then(data => setActors(data ?? []));
+    getRatings().then(data => setRatings(data ?? []));
   }, []);
 
   const applyChange = (nextGenres, nextActors, nextAge) => {
@@ -62,7 +54,7 @@ export const MovieFilter = ({ onChange, onShow }) => {
     <div className="toolbar">
       <div className="toolbar-buttons">
         <button onClick={() => setOpen(o => !o)} className="btn-filter">
-          Filters
+          Filtrera
         </button>
         <button onClick={onShow} className="btn-filter">
           Se visningar

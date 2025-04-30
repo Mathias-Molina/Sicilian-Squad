@@ -69,8 +69,8 @@ export const ScreeningComponent = () => {
         );
         const availabilityMap = availabilityArray.reduce((acc, cur) => {
           acc[cur.screeningId] = {
-            totalSeats: cur.totalSeats,
             availableSeats: cur.availableSeats,
+            totalSeats: cur.totalSeats,
           };
           return acc;
         }, {});
@@ -139,6 +139,13 @@ export const ScreeningComponent = () => {
             const percent = totalSeats
               ? (availableSeats / totalSeats) * 100
               : 0;
+
+            // Sätt text och klass: fullbokad om inga platser kvar
+            const availabilityText =
+              availableSeats === 0
+                ? "Fullbokad"
+                : `Lediga platser: ${availableSeats} av ${totalSeats}`;
+
             let availabilityClass = "high-availability";
             if (percent < 30) availabilityClass = "low-availability";
             else if (percent < 70) availabilityClass = "medium-availability";
@@ -148,7 +155,11 @@ export const ScreeningComponent = () => {
                 <div className="screening-content">
                   <div className="screening-info">
                     <p className="screening-time">
-                      {dateStr} • {timeStr}
+                      {new Date(s.screening_time).toLocaleDateString()} •{" "}
+                      {new Date(s.screening_time).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
                     </p>
                     {/* Här dyker salongsnamnet upp precis som i SelectScreeningView */}
                     <p className="screening-salon">{s.salon_name}</p>
@@ -163,6 +174,7 @@ export const ScreeningComponent = () => {
                     <button
                       className="select-button"
                       onClick={() => handleClick(s.screening_id, s.salon_id)}
+                      disabled={availableSeats === 0}
                     >
                       Välj visning
                     </button>

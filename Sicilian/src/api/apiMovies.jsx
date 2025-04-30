@@ -29,3 +29,26 @@ export const getMovieByActor = (
     {},
     errorMessage
   );
+  export const getGenres = (
+    errorMessage = "Fel vid hämtning av genrer"
+  ) => apiRequest(
+    "http://localhost:3000/movies/genres",
+    {},
+    errorMessage
+  );
+  
+  export const getActors = (
+    errorMessage = "Fel vid hämtning av skådespelare"
+  ) => apiRequest(
+    "http://localhost:3000/actor",
+    {},
+    errorMessage
+  );
+  
+  export const getRatings = (
+    errorMessage = "Fel vid hämtning av betyg"
+  ) => apiRequest(
+    "http://localhost:3000/movies/ratings",
+    {},
+    errorMessage
+  );
