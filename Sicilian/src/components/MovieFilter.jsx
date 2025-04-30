@@ -62,7 +62,7 @@ export const MovieFilter = ({ onChange, onShow }) => {
     <div className="toolbar">
       <div className="toolbar-buttons">
         <button onClick={() => setOpen(o => !o)} className="btn-filter">
-          Filters
+          Filtrera
         </button>
         <button onClick={onShow} className="btn-filter">
           Se visningar
