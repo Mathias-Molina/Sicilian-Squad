@@ -94,7 +94,9 @@
 .low-availability {
   color: #f56565; /* red */
 }
-
+.fullbooked-availability {
+  color: #e53e3e; /* eller annan röd ton */
+}
 .select-button {
   background-color: #a855f7;
   color: white;
