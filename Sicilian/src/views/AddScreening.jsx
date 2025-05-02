@@ -14,150 +14,144 @@ export const AddScreening = () => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
 
+  // Fetch movies
   useEffect(() => {
     getMovies()
-      .then((data) => {
-        setMovies(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message || "Något gick fel");
-        setLoading(false);
-      });
+      .then(data => setMovies(data))
+      .catch(err =>
+        setError(err.message || "Något gick fel vid hämtning av filmer")
+      )
+      .finally(() => setLoading(false));
   }, []);
 
+  // Fetch salons
   useEffect(() => {
     getSalons()
-      .then((data) => {
-        setSalons(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
+      .then(data => setSalons(data))
+      .catch(err =>
+        setError(err.message || "Något gick fel vid hämtning av salonger")
+      )
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleAddScreening = async (
-    e,
-    movie,
-    salon,
-    screening_time,
-    screening_price
-  ) => {
+  const handleAddScreening = async e => {
     e.preventDefault();
     setMessage(null);
+    setError(null);
 
-    if (!movie || !salon || !screening_time || !screening_price) {
-      return setError("All fields required");
+    if (!movie || !salon || !screeningTime || !screeningPrice) {
+      return setError("Alla fält är obligatoriska");
     }
+
+    // Format "YYYY-MM-DDTHH:mm" to "YYYY-MM-DD HH:mm:00"
+    const [datePart, timePart] = screeningTime.split("T");
+    const timeWithSeconds = timePart.length === 5 ? `${timePart}:00` : timePart;
+    const formattedTime = `${datePart} ${timeWithSeconds}`;
 
     try {
       const response = await addScreenings(
         movie.movie_id,
         salon.salon_id,
-        screening_time,
-        screening_price
+        formattedTime,
+        Number(screeningPrice)
       );
+
       setMessage(
-        `${response.message} ${movie.movie_title} ${salon.salon_id} ${screeningTime} ${screeningPrice}KR`
+        `${response.message}: ${movie.movie_title} i salong ${salon.salon_name} kl ${formattedTime} för ${screeningPrice} KR`
       );
-      setError(null);
       setMovie(undefined);
       setSalon(undefined);
-      setScreeningPrice(0);
       setScreeningTime("");
+      setScreeningPrice(0);
 
+      // Dispatch event to refresh screening lists
+      window.dispatchEvent(new Event("screeningAdded"));
     } catch (err) {
-      setError(err.message || "Something went wrong.");
+      setError(err.message || "Något gick fel vid tillägg av visning");
     }
   };
 
   return (
     <div className="add-screening-container">
+      <h2>Lägg till visning</h2>
+      {loading && <p>Laddar...</p>}
+      {!loading && (
+        <>
+          <div className="selection-section">
+            <h3>Välj en film</h3>
+            <ul className="movie-list">
+              {movies?.map(m => (
+                <li
+                  key={m.movie_id}
+                  className={`movie-item ${
+                    movie?.movie_id === m.movie_id ? "selected" : ""
+                  }`}
+                  onClick={() => setMovie(m)}
+                >
+                  <img
+                    src={m.movie_poster}
+                    alt={m.movie_title}
+                    className="movie-poster-add-screening"
+                  />
+                  <span>{m.movie_title}</span>
+                </li>
+              ))}
+            </ul>
+            <h3>Välj en salong</h3>
+            <ul className="salon-list">
+              {salons?.map((s, idx) => (
+                <li
+                  key={s.salon_id}
+                  className={`salon-item ${
+                    idx === 0 ? "salon-primary" : "salon-secondary"
+                  } ${salon?.salon_id === s.salon_id ? "selected" : ""}`}
+                  onClick={() => setSalon(s)}
+                >
+                  {s.salon_name}
+                </li>
+              ))}
+            </ul>
+          </div>
 
-      <h2>Lägg till visning</h2>
+          <hr />
+          {error && <div className="error-message">{error}</div>}
+          {message && <div className="success-message">{message}</div>}
 
-      <div className="selection-section">
-        <h3>Välj en film</h3>
-        <ul className="movie-list">
-          {movies &&
-            movies.map((m) => (
-              <div
-                className={`movie-item ${movie && movie.movie_id === m.movie_id ? "selected" : ""}`}
-                key={m.movie_id}
-                onClick={() => setMovie(m)}
-              >
-                {m.movie_title}
-                <img
-                  className="movie-poster-add-screening"
-                  src={m.movie_poster}
-                  alt={m.movie_title}
-                />
-              </div>
-            ))}
-        </ul>
-        <br />
-        <h3>Välj en salong</h3>
-        <ul className="salon-list"> {/* I separated the buttons into two classnames so I can style them with different colors --Maricel*/}
-          {salons &&
-            salons.map((s, index) => (
-              <div
-                className={`salon-item 
-                  ${index === 0 ? "salon-primary" : "salon-secondary"} 
-                  ${salon && salon.salon_id === s.salon_id ? "selected" : ""}`
-                }
-                key={s.salon_id}
-                onClick={() => setSalon(s)}
-              >
-                {s.salon_name}
-              </div>
-            ))}
-        </ul>
-      </div>
-      <br />
-      <hr />
-      {error && <div className="error-message">{error}</div>}
-      {message && <div className="success-message">{message}</div>}
+          <form className="add-screening-form" onSubmit={handleAddScreening}>
+            <div className="selection-container">
+              <p>
+                🎬 Vald Film:{" "}
+                <strong>{movie?.movie_title || "Ingen vald"}</strong>
+              </p>
+              <p>
+                🏛️ Vald Salong:{" "}
+                <strong>{salon?.salon_name || "Ingen vald"}</strong>
+              </p>
+            </div>
 
-      <form
-        className="add-screening-form"
-        onSubmit={(e) =>
-          handleAddScreening(e, movie, salon, screeningTime, screeningPrice)
-        }
-      >
-        <div className="selection-container">
-          <p className="selection-info">
-            🎬 Vald Film: <strong>{movie ? movie.movie_title : ""}</strong>
-          </p>
-          <p className="selection-info">
-            🏛️ Vald Salong: <strong>{salon ? salon.salon_name : ""}</strong>
-          </p>
-        </div>
+            <div className="input-group">
+              <label>Visningsdatum</label>
+              <input
+                type="datetime-local"
+                value={screeningTime}
+                onChange={e => setScreeningTime(e.target.value)}
+              />
 
+              <label>Biljettpris (KR)</label>
+              <input
+                type="number"
+                min="0"
+                value={screeningPrice}
+                onChange={e => setScreeningPrice(e.target.value)}
+              />
+            </div>
 
-        <div className="input-group">
-          <label className="label1">Visningsdatum</label>
-          <input
-            className="input1"
-            type="datetime-local"
-            placeholder="screening_time"
-            value={screeningTime}
-            onChange={(e) => setScreeningTime(e.target.value)}
-          />
-
-          <label className="label2">Biljettpris</label>
-
-          <input
-            className="input2"
-            type="number"
-            placeholder="Pris"
-            value={screeningPrice}
-            onChange={(e) => setScreeningPrice(e.target.value)}
-          />
-        </div>
-
-        <button className="submit-button" type="submit">Lägg film till visning</button>
-      </form>
+            <button type="submit" className="submit-button">
+              Lägg till visning
+            </button>
+          </form>
+        </>
+      )}
     </div>
   );
 };

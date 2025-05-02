@@ -20,7 +20,11 @@ export function SelectScreeningView() {
 
         const all = await getScreenings(movieId);
         const now = new Date();
-        const future = all.filter(s => new Date(s.screening_time) > now);
+        const future = all
+          .filter(s => new Date(s.screening_time) > now)
+          .sort(
+            (a, b) => new Date(a.screening_time) - new Date(b.screening_time)
+          );
 
         const availabilityArr = await Promise.all(
           future.map(async s => {

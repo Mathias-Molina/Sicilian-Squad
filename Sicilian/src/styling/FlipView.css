@@ -1,32 +1,26 @@
-/* FlipView.css */
 .flip-container {
   width: 100%;
   perspective: 1000px;
 }
 
 .flipper {
-  position: relative;
-  width: 100%;
+  display: grid; /* 1) grid-container */
+  grid-template-areas: "flip"; /* 2) en cell som kallas "flip" */
   transform-style: preserve-3d;
   transition: transform 0.6s;
 }
 
-.flip-container.flipped .flipper {
-  transform: rotateY(180deg);
-}
-
 .front,
 .back {
-  position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; /* ska inte scrolla själva */
+  grid-area: flip; /* bägge barnen i samma cell */
   backface-visibility: hidden;
-  /* ta bort overflow här */
 }
 
 .back {
   transform: rotateY(180deg);
-  position: absolute;
+  /* TA BORT position:absolute; */
+}
+
+.flip-container.flipped .flipper {
+  transform: rotateY(180deg);
 }
