@@ -111,3 +111,6 @@
 .select-button:hover {
   background-color: #c53030;
 }
+.screening-movie {
+  font-size: 1.5rem; /* motsvarar ungefär text-3xl */
+}
