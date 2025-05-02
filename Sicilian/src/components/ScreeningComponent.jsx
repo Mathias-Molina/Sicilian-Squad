@@ -21,7 +21,11 @@ export const ScreeningComponent = () => {
 
   return (
     <section className="screening-section">
-      <h1 className="section-title">Visningar de närmaste tre dagarna</h1>
+      <h1 className="section-title">
+        {isCustom
+          ? `Visningar för ${date}`
+          : "Visningar de närmaste tre dagarna"}
+      </h1>
 
       <div className="date-picker-wrapper">
         <label htmlFor="screening-date" className="date-picker-label">
@@ -33,6 +37,8 @@ export const ScreeningComponent = () => {
           value={date}
           min={today}
           onChange={handleChangeDate}
+          onClick={e => e.target.showPicker?.()}
+          onFocus={e => e.target.showPicker?.()}
           className="date-picker-input"
         />
       </div>
