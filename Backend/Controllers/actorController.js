@@ -1,5 +1,6 @@
 import { getAllActors, getActorsByMovieId, getMoviesByActor} from "../Models/actorModel.js";
 
+
 export const getAllActorsHandler = (req, res) => {
   try {
     const actors = getAllActors();
