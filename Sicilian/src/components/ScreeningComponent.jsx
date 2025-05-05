@@ -37,8 +37,6 @@ export const ScreeningComponent = () => {
           value={date}
           min={today}
           onChange={handleChangeDate}
-          onClick={e => e.target.showPicker?.()}
-          onFocus={e => e.target.showPicker?.()}
           className="date-picker-input"
         />
       </div>

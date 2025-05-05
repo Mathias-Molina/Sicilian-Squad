@@ -1,10 +1,11 @@
-# 📽️ Filmvisarna 
+# 📽️ Filmvisarna
 
 ## 🧑‍💻 Team The Sicilian Squad
 
 **Medlemmar:**
+
 - Mathias
-- Adrian 
+- Adrian
 - Maricel
 - Dalavan
 - William
@@ -31,24 +32,28 @@
 ## 🚀 Kom igång
 
 ### Förutsättningar
+
 - Node.js (version 18 eller senare)
 - npm (kommer med Node.js)
 
 ### Installation
 
 1. Klona projektet:
+
 ```powershell
 git clone [repository-url]
-Set-Location 
+Set-Location
 ```
 
 2. Installera backend-dependencies:
+
 ```powershell
 Set-Location cd ./Backend
 npm install
 ```
 
 3. Installera frontend-dependencies:
+
 ```powershell
 Set-Location cd ./Sicilian
 npm install
@@ -57,16 +62,19 @@ npm install
 ### Starta applikationen
 
 1. Starta backend-servern i ett nytt PowerShell-fönster:
+
 ```powershell
 Set-Location cd ./Backend
 node index.js
 ```
 
 2. Öppna ett nytt PowerShell-fönster och starta frontend-utvecklingsservern:
+
 ```powershell
 Set-Location cd ../Sicilian
 npm run dev
 ```
+
 Applikationen körs på `http://localhost:5173`
 
 ## 🔗 Länkar
@@ -76,4 +84,5 @@ Applikationen körs på `http://localhost:5173`
 - 🎨 **Figma** [[Länk till Figma](https://www.figma.com/proto/jUnsiRa3NOVTAF1yAdxb0R/Sicilian-Cinema-Project?node-id=0-1&t=sEFC9L27qtEGGbFS-1)]
 
 ## 📊 Databasdesign
-![ER-diagram](ER-diagram.jpg)
+
+![ER-diagram](ER-diagram.JPG)

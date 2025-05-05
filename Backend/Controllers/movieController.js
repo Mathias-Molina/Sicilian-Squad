@@ -70,11 +70,18 @@ export const getMovieHandler = async (req, res) => {
 
 export const getAllMoviesHandler = (req, res) => {
   try {
+    const includeDeleted = req.query.includeDeleted === "true";
     const genres = req.query.genres ? req.query.genres.split(",") : [];
     const actors = req.query.actors ? req.query.actors.split(",") : [];
     const age = req.query.age ? parseInt(req.query.age, 10) : null;
 
-    const movies = getAllMovies(genres, age, actors);
+    let movies;
+    if (includeDeleted) {
+      movies = getAllMoviesIncludingDeleted();
+    } else {
+      movies = getAllMovies(genres, age, actors);
+    }
+
     res.json(movies);
   } catch (e) {
     console.error("Fel vid hämtning av filmer:", e);
