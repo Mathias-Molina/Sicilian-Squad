@@ -47,16 +47,6 @@ export const getAllMovies = (genres = [], age = null, actors = []) => {
   const rows = db.prepare(sql).all(...params);
 
   if (age !== null) {
-    console.log('=== DEBUG: åldersfiltrering ===');
-    console.log('Filtervärde:', age);
-    console.log(
-      'Filmer:',
-      rows.map(m => ({
-        title: m.movie_title,
-        rated: m.movie_rated,
-        mappedAge: ratingToAge(m.movie_rated),
-      }))
-    );
     return rows.filter(m => ratingToAge(m.movie_rated) === Number(age));
   }
   return rows;
