@@ -43,7 +43,7 @@ export function BookingCards({ bookingData, bookingNumber, compact = false }) {
           s => String(s.screening_id) === String(foundBooking.screening_id)
         );
 
-        const movies = await getMovies();
+        const movies = await getMovies("?includeDeleted=true");
         const movie = screening
           ? movies.find(m => m.movie_id === screening.movie_id)
           : null;
